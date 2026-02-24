@@ -17,11 +17,15 @@ public class ChangeInput : MonoBehaviour
 
     [SerializeField] private GameObject loginPanel;
     private bool isSignUpScreen = false;
+    Networking nt;
+    PlayerData playerData;
+    [SerializeField] GameObject networkmgr;
 
 
     private void Start()
     {
         system = EventSystem.current;
+        nt = networkmgr.GetComponent<Networking>();
     }
 
     private void Update()
@@ -66,6 +70,9 @@ public class ChangeInput : MonoBehaviour
             // should read the input fields and check if the credentials are correct
             // for the now the placeholder is to hide the inputs
 
+
+
+            nt.SendPostRequest(mailField.text, passwordField.text);
             // handle login logic here, for example, send a request to the server to authenticate the user
             // for now the placeholder logic is to hide the login panel
             ResetTextFields();
