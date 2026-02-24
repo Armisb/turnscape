@@ -5,12 +5,13 @@ namespace GameAPI.Models;
 
 public class GameUser
 {
-    public int Id { get; set; }
-
-    [Required]
+    public Guid Id { get; set; } = Guid.NewGuid();
     public string? UserName { get; set; }    
+    public string? PasswordHash { get; set; }
+    public string Role { get; set; } = "GameUser";
 
-    [Required]
-    public string? Password { get; set; }
+    public string? RefreshToken { get; set; }
+
+    public DateTime? RefreshTokenExpiryTime { get; set; }
 
 }
