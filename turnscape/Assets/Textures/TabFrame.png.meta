@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c7d0da44d2599e2448b9c4092ce19cdb
+guid: b3a57a5f2ffeee2459f10e1cfd035eee
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7583528199641241332
-    second: Scrollbar_0
+      213: -7862759284883374174
+    second: TabFrame_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Scrollbar_0
+      name: TabFrame_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 500
+        width: 135
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c09e93c1845e1c690800000000000000
-      internalID: -7583528199641241332
+      spriteID: 2af3f1ec61ed1e290800000000000000
+      internalID: -7862759284883374174
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Scrollbar_0: -7583528199641241332
+      TabFrame_0: -7862759284883374174
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 19b37ac54c0c2e54896d252e6257f7ae
+guid: 22bd3e79ce5e1e54fa7d97c5f1d539bc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7862759284883374174
-    second: TabFrame_0
+      213: -7221689689384595405
+    second: TabBackground_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TabFrame_0
+      name: TabBackground_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2af3f1ec61ed1e290800000000000000
-      internalID: -7862759284883374174
+      spriteID: 330512a5d7767cb90800000000000000
+      internalID: -7221689689384595405
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      TabFrame_0: -7862759284883374174
+      TabBackground_0: -7221689689384595405
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

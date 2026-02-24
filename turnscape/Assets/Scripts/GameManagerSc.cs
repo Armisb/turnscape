@@ -7,6 +7,11 @@ public class GameManagerSc : MonoBehaviour
 {
     public static GameManagerSc instance;
 
+    [Header("UI Elements")]
+    public GameObject loadingPanel;
+    public Image fillImage;
+    public TMP_Text percentageText;
+
     private void Awake()
     {
         if (instance == null)
@@ -28,11 +33,6 @@ public class GameManagerSc : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
-
-    [Header("UI Elements")]
-    public GameObject loadingPanel;
-    public Image fillImage;
-    public TMP_Text percentageText;
 
     public static void LoadScene(string sceneName)
     {
