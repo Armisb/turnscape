@@ -2,6 +2,10 @@ using GameAPI.Models;
 using GameAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using GameAPI.NewFolder;
 
 namespace GameAPI.Controllers
 {
@@ -10,6 +14,7 @@ namespace GameAPI.Controllers
     public class UserController(IUserService service) : ControllerBase
     {
         
+        [Authorize(Roles = "GameUser")]
         [HttpGet]
         public async Task<ActionResult<List<GameUser>>> GetUser()
         {
@@ -22,16 +27,49 @@ namespace GameAPI.Controllers
         public async Task<ActionResult<GameUser>> GetUserById( int Id)
         {
 
-            GameUser user = await service.GetAllUserByIdAsync(Id);
-            return Ok(user);
+            GameUser user = await service.GetUserByIdAsync(Id);
+            return user is null ? NotFound("User with specified id is not found") : Ok(user);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<GameUser>> CreateUser()
+        [HttpPost("signup")]
+        public async Task<ActionResult<GameUser>> Create(CreateUserDto newUser)
         {
+            try
+            {
+            var response = await service.CreateUserAsync(newUser);
+            return Ok(response);
+                
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-            GameUser user = await service.CreateUserAsync();
-            return Ok();
+        [HttpPost("login")]
+        public async Task<ActionResult<TokenResponseDto>> Login(LoginUserDto request)
+        {
+            try
+            {
+            var result = await service.LoginUserAsync(request);
+            return result == null ? BadRequest("Invalid username or password."):Ok(result);
+                
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("Refresh-token")]
+        public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
+        {
+            var result = await service.RefreshTokensAsync(request);
+            if(result is null || result.RefreshToken is null)
+            {
+                return Unauthorized("Invalid refresh token");
+            }
+            return Ok(result);
         }
     }
 }
