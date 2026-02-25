@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 using System.IO.Pipelines;
 using GameAPI.Data;
 using GameAPI.Models;
@@ -11,23 +15,12 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using GameAPI.NewFolder;
 
-namespace GameAPI.Services.User;
-
-public class UserService(AppDbContext context, IConfiguration configuration) : IUserService
+namespace GameAPI.Services.Authentication
 {
-    public async Task<List<GameUser>> GetAllUsersAsync()
+    public class JwtAuthenticationService(AppDbContext context, IConfiguration configuration) : IJwtAuthenticationService
     {
-        List<GameUser> users = await context.GameUsers.ToListAsync<GameUser>();
-        return users;
-    }
 
-    public async Task<GameUser?> GetUserByIdAsync(int Id)
-    {
-        GameUser? user = await context.GameUsers.FindAsync(Id);
-        return user;
-    }
-
-    public async Task<GameUser> CreateUserAsync(CreateUserDto user)
+    public async Task<GameUser> SignupUserAsync(CreateUserDto user)
     {
 
         var usernameTaken = await context.GameUsers.AnyAsync(u => u.UserName == user.UserName);
@@ -88,13 +81,12 @@ public class UserService(AppDbContext context, IConfiguration configuration) : I
             issuer: configuration.GetValue<string>("AppSettings:Issuer"),
             audience: configuration.GetValue<string>("AppSettings:Audience"),
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(1),
+            expires: DateTime.UtcNow.AddMinutes(1),
             signingCredentials: creds
         );
 
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
-
     private string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
@@ -112,7 +104,7 @@ public class UserService(AppDbContext context, IConfiguration configuration) : I
         return refreshToken;
     }
 
-    private async Task<GameUser?> ValidateRefreshTokenAsync(string Id, string refreshToken)
+    private async Task<GameUser?> ValidateRefreshTokenAsync(Guid Id, string refreshToken)
     {
         var user = await context.GameUsers.FindAsync(Id);
         if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
@@ -133,5 +125,6 @@ public class UserService(AppDbContext context, IConfiguration configuration) : I
             RefreshToken = await GenerateAndSaveRefreshTokenAsync(user)
         };
 
+    }
     }
 }

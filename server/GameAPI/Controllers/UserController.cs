@@ -1,5 +1,6 @@
 using GameAPI.Models;
 using GameAPI.Services;
+using GameAPI.Services.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ namespace GameAPI.Controllers
 {
     [Route("user")]
     [ApiController]
-    public class UserController(IUserService service) : ControllerBase
+    public class UserController(IUserService service, IJwtAuthenticationService authenticationService) : ControllerBase
     {
         
         [Authorize(Roles = "GameUser")]
@@ -32,11 +33,11 @@ namespace GameAPI.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<ActionResult<GameUser>> Create(CreateUserDto newUser)
+        public async Task<ActionResult<GameUser>> Singup(CreateUserDto newUser)
         {
             try
             {
-            var response = await service.CreateUserAsync(newUser);
+            var response = await authenticationService.SignupUserAsync(newUser);
             return Ok(response);
                 
             }
@@ -51,7 +52,7 @@ namespace GameAPI.Controllers
         {
             try
             {
-            var result = await service.LoginUserAsync(request);
+            var result = await authenticationService.LoginUserAsync(request);
             return result == null ? BadRequest("Invalid username or password."):Ok(result);
                 
             }
@@ -64,7 +65,7 @@ namespace GameAPI.Controllers
         [HttpPost("Refresh-token")]
         public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
         {
-            var result = await service.RefreshTokensAsync(request);
+            var result = await authenticationService.RefreshTokensAsync(request);
             if(result is null || result.RefreshToken is null)
             {
                 return Unauthorized("Invalid refresh token");

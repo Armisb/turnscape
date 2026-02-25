@@ -1,6 +1,7 @@
 using GameAPI.Data;
 using GameAPI.Services;
 using GameAPI.Services.User;
+using GameAPI.Services.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,20 +10,27 @@ using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Authentication setup and configurations
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options => {
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidIssuer = builder.Configuration["AppSettings:Issuer"],
         ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+
+        ClockSkew = TimeSpan.Zero,
+
+        ValidIssuer = builder.Configuration["AppSettings:Issuer"],
         ValidAudience = builder.Configuration["AppSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"])),
-        ValidateIssuerSigningKey = true
     };
 });
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

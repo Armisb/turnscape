@@ -2,7 +2,7 @@
 {
     public class RefreshTokenRequestDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public required string RefreshToken { get; set; }
 
     }
