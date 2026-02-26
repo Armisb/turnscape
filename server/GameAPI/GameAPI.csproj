@@ -28,4 +28,10 @@
     <Folder Include="Services\Item\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="shared_lib">
+      <HintPath>Shared_DLL\shared_lib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

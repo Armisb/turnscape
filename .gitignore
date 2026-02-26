@@ -3,3 +3,7 @@
 
 *.db-shm
 *.db-wal
+Shared_DLL/
+Shared_DLL.meta
+bin/
+obj/

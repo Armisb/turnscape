@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1</TargetFrameworks>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RunPostBuildEvent>Always</RunPostBuildEvent>
+    </PropertyGroup>
+
+    
+    <Target Name="CopyBuild" AfterTargets="Build">
+        <ItemGroup>
+            <MySourceFiles Include="$(TargetDir)/*.dll"/>
+            <MyOutputDir Include="$(TargetDir)/../../../../turnscape/Assets/Shared_DLL"/>
+            <MyOutputDir2 Include="$(TargetDir)/../../../../server/GameAPI/Shared_DLL"/>
+        </ItemGroup>
+        <Message Text="DLLs copied to: @(MyOutputDir)" Importance="high"/>
+        <Copy
+            SourceFiles="@(MySourceFiles)"
+            DestinationFolder="@(MyOutputDir)"
+            OverwriteReadOnlyFiles="true"
+        />
+        <Message Text="DLLs copied to: @(MyOutputDir)" Importance="high"/>
+        <Copy
+            SourceFiles="@(MySourceFiles)"
+            DestinationFolder="@(MyOutputDir2)"
+            OverwriteReadOnlyFiles="true"
+        />
+        <Message Text="DLLs copied to: @(MyOutputDir2)" Importance="high"/>
+    </Target>
+</Project>
