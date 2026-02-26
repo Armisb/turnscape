@@ -34,6 +34,12 @@ public class ChangeInput : MonoBehaviour
         
     }
 
+    public void SetErrorMessage(string errorMessage)
+    {
+        this.errorMessage.text = errorMessage;
+        this.errorMessage.gameObject.SetActive(true);
+    }
+
     public void SwitchToSignUpScreen()
     {
         isSignUpScreen = true;
@@ -75,7 +81,7 @@ public class ChangeInput : MonoBehaviour
             nt.SendPostRequest(mailField.text, passwordField.text);
             // handle login logic here, for example, send a request to the server to authenticate the user
             // for now the placeholder logic is to hide the login panel
-            ResetTextFields();
+            //ResetTextFields();
 
             
         }

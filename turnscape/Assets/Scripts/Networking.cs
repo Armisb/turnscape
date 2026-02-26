@@ -2,13 +2,16 @@ using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 
 public class Networking : MonoBehaviour
 {
+
+    [SerializeField] private ChangeInput loginScreen;
     void Start()
     {
-
+    
     }
 
     public void SendPostRequest(string Username, string Password)
@@ -65,11 +68,15 @@ public class Networking : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
+            GameManagerSc.LoadScene("BaseScene");
+
             Debug.Log("Response: " + request.downloadHandler.text);
 
         }
         else
         {
+            loginScreen.SetErrorMessage(request.error);
+
             Debug.LogError("Error: " + request.error);
         }
     }

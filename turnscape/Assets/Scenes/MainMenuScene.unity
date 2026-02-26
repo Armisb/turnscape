@@ -3441,6 +3441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa5badda2ccaf34a97d19c3839ed80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Networking
+  loginScreen: {fileID: 1776078656}
 --- !u!4 &1674519184
 Transform:
   m_ObjectHideFlags: 0
@@ -3776,6 +3777,7 @@ MonoBehaviour:
   loginHeader: {fileID: 721201443}
   loginText: {fileID: 1381030476}
   loginPanel: {fileID: 1693656225}
+  networkmgr: {fileID: 1674519182}
 --- !u!1 &2041711345
 GameObject:
   m_ObjectHideFlags: 0
