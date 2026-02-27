@@ -2,14 +2,26 @@ using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
-    public string Username {  get;  set; }
-    public string Password { get;  set; }
+    private string Username {  get;  set; }
+    private string Password { get;  set; }
 
-    public PlayerData(string username, string password)
+    public static PlayerData newPlayerObject(string username, string password)
     {
-        this.Username = username;
-        this.Password = password;
+        GameObject go = new GameObject();
+        go.AddComponent<PlayerData>();
+        go.GetComponent<PlayerData>().Username = username;
+        go.GetComponent<PlayerData>().Password = password;
+        return go.GetComponent<PlayerData>();
     }
 
+    public string getUsername()
+    {
+        return Username;
+    }
+
+    public string getPassword()
+    {
+        return Password;
+    }
 
 }

@@ -2,22 +2,16 @@ using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
+
 
 public class Networking : MonoBehaviour
 {
 
-    [SerializeField] private ChangeInput loginScreen;
-    void Start()
-    {
+    [SerializeField] private LoginScreen loginScreen;
     
-    }
 
-    public void SendPostRequest(string Username, string Password)
+    public void SendPostRequest(PlayerData data)
     {
-        PlayerData data = new PlayerData(Username, Password);
-
         StartCoroutine(SendPost(data));
     }
 
@@ -25,8 +19,8 @@ public class Networking : MonoBehaviour
     {
         string url = "https://localhost:7232/user/login";
 
-        PlayerData data = new PlayerData("arminas", "Juodckis");
-
+        //PlayerData data = new PlayerData("arminas", "Juodckis");
+        PlayerData data = PlayerData.newPlayerObject("a", "a");
         string json = JsonUtility.ToJson(data);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
@@ -47,14 +41,14 @@ public class Networking : MonoBehaviour
         }
     }
 
-    [ContextMenu("Send Post")]
-    IEnumerator SendPost(PlayerData player)
+    
+    IEnumerator SendPost(PlayerData playerData)
     {
         string url = "https://localhost:7232/user/login";
 
         // Create JSON data
         //string jsonData = "{\"UserName\":\"arminas\",\"Password\":\"Juodckis\"}";
-        string jsonData = $"{{\"UserName\":\"{player.Username}\",\"Password\":\"{player.Password}\"}}";
+        string jsonData = $"{{\"UserName\":\"{playerData.getUsername()}\",\"Password\":\"{playerData.getPassword()}\"}}";
 
         // Convert to byte array
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
@@ -66,17 +60,18 @@ public class Networking : MonoBehaviour
         request.certificateHandler = new AcceptAllCertificates();
         yield return request.SendWebRequest();
 
+        
+        
         if (request.result == UnityWebRequest.Result.Success)
         {
-            GameManagerSc.LoadScene("BaseScene");
-
+            loginScreen.sucessfullRequest = true;
             Debug.Log("Response: " + request.downloadHandler.text);
-
+        
         }
         else
         {
+            loginScreen.sucessfullRequest = false;
             loginScreen.SetErrorMessage(request.error);
-
             Debug.LogError("Error: " + request.error);
         }
     }

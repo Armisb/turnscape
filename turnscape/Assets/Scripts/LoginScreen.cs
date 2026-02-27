@@ -1,24 +1,24 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
-public class ChangeInput : MonoBehaviour
+public class LoginScreen : MonoBehaviour
 {
     private EventSystem system;
     [SerializeField] private TMP_InputField mailField, passwordField;
     [SerializeField] private TMP_Text errorMessage;
     [SerializeField] private TMP_Text loginHeader;
     [SerializeField] private TMP_Text loginText;
+    [SerializeField] private TMP_Text isLoggedIn;
+    [SerializeField] private Button playButton;
 
     [SerializeField] private GameObject loginPanel;
     private bool isSignUpScreen = false;
+    public bool sucessfullRequest = false;
     Networking nt;
-    PlayerData playerData;
     [SerializeField] GameObject networkmgr;
 
 
@@ -47,7 +47,7 @@ public class ChangeInput : MonoBehaviour
         loginText.text = "Sign up";
 
         // continue handling logic over here for the sign up 
-
+        
     }
 
     public void ResetTextFields()
@@ -73,20 +73,38 @@ public class ChangeInput : MonoBehaviour
         }
         else
         {
-            // should read the input fields and check if the credentials are correct
-            // for the now the placeholder is to hide the inputs
-
-
-
-            nt.SendPostRequest(mailField.text, passwordField.text);
-            // handle login logic here, for example, send a request to the server to authenticate the user
-            // for now the placeholder logic is to hide the login panel
-            //ResetTextFields();
-
-            
+            PlayerData playerData = PlayerData.newPlayerObject(mailField.text, passwordField.text);
+            nt.SendPostRequest(playerData);
+            if (sucessfullRequest)
+            {
+                errorMessage.gameObject.SetActive(false);
+                // reads the input fields and sends them to handle login in networking
+                if (!isSignUpScreen)
+                {
+                   HandleLoggingIn(playerData);
+                }
+                else 
+                {
+                    HandleSigningIn(playerData);
+                }
+            }
         }
     }
+
     
+    
+    private void HandleLoggingIn(PlayerData data)
+    {
+        isLoggedIn.text = $"Logged in: {data.getUsername()}";
+        loginPanel.SetActive(false);
+        playButton.gameObject.SetActive(true);
+    }
+    private void HandleSigningIn(PlayerData data)
+    {
+        loginPanel.SetActive(false);
+        ResetTextFields();
+        
+    }
 
     /// <summary>
     /// allows switching typing fields with the press of tab button 
@@ -95,9 +113,10 @@ public class ChangeInput : MonoBehaviour
     {
         if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
-            var next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
-            if (next != null)
-                next.Select();
+            // disabled temporarily
+            // var next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
+            // if (next != null)
+            //     next.Select();
         }
     }
 }
