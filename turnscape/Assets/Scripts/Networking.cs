@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Text;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SocialPlatforms.Impl;
 
 
 public class Networking : MonoBehaviour
@@ -20,7 +22,7 @@ public class Networking : MonoBehaviour
         string url = "https://localhost:7232/user/login";
 
         //PlayerData data = new PlayerData("arminas", "Juodckis");
-        PlayerData data = PlayerData.newPlayerObject("a", "a");
+        PlayerData data = new PlayerData("a", "a");
         string json = JsonUtility.ToJson(data);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
@@ -42,40 +44,44 @@ public class Networking : MonoBehaviour
     }
 
     
-    IEnumerator SendPost(PlayerData playerData)
+    
+
+    public IEnumerator SendPost(PlayerData player)
     {
         string url = "https://localhost:7232/user/login";
 
         // Create JSON data
-        //string jsonData = "{\"UserName\":\"arminas\",\"Password\":\"Juodckis\"}";
-        string jsonData = $"{{\"UserName\":\"{playerData.getUsername()}\",\"Password\":\"{playerData.getPassword()}\"}}";
+        string jsonData = $"{{\"UserName\":\"{player.getUsername()}\",\"Password\":\"{player.getPassword()}\"}}";
 
         // Convert to byte array
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
-
+        
+        // handle request
         UnityWebRequest request = new UnityWebRequest(url, "POST");
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
         request.certificateHandler = new AcceptAllCertificates();
+        request.SetRequestHeader("Content-Type", "application/json");
         yield return request.SendWebRequest();
 
-        
-        
+        // if request was successful
         if (request.result == UnityWebRequest.Result.Success)
         {
-            loginScreen.sucessfullRequest = true;
+            loginScreen.SucessfullLogin(player);
             Debug.Log("Response: " + request.downloadHandler.text);
-        
         }
+        // request failed
         else
         {
-            loginScreen.sucessfullRequest = false;
             loginScreen.SetErrorMessage(request.error);
             Debug.LogError("Error: " + request.error);
         }
     }
+
+
 }
+
+
 
 
 

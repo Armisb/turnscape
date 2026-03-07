@@ -17,7 +17,6 @@ public class LoginScreen : MonoBehaviour
 
     [SerializeField] private GameObject loginPanel;
     private bool isSignUpScreen = false;
-    public bool sucessfullRequest = false;
     Networking nt;
     [SerializeField] GameObject networkmgr;
 
@@ -73,24 +72,23 @@ public class LoginScreen : MonoBehaviour
         }
         else
         {
-            PlayerData playerData = PlayerData.newPlayerObject(mailField.text, passwordField.text);
+            PlayerData playerData =  new PlayerData(mailField.text, passwordField.text);
             nt.SendPostRequest(playerData);
-            if (sucessfullRequest)
-            {
-                errorMessage.gameObject.SetActive(false);
-                // reads the input fields and sends them to handle login in networking
-                if (!isSignUpScreen)
-                {
-                   HandleLoggingIn(playerData);
-                }
-                else 
-                {
-                    HandleSigningIn(playerData);
-                }
-            }
+            
         }
     }
-
+    public void SucessfullLogin(PlayerData playerData)
+    {
+        errorMessage.gameObject.SetActive(false);
+        if (!isSignUpScreen)
+        {
+            HandleLoggingIn(playerData);
+        }
+        else
+        {
+            HandleSigningIn(playerData);
+        }
+    }
     
     
     private void HandleLoggingIn(PlayerData data)
@@ -103,7 +101,6 @@ public class LoginScreen : MonoBehaviour
     {
         loginPanel.SetActive(false);
         ResetTextFields();
-        
     }
 
     /// <summary>

@@ -5,13 +5,10 @@ public class PlayerData : MonoBehaviour
     private string Username {  get;  set; }
     private string Password { get;  set; }
 
-    public static PlayerData newPlayerObject(string username, string password)
+    public PlayerData(string username, string password)
     {
-        GameObject go = new GameObject();
-        go.AddComponent<PlayerData>();
-        go.GetComponent<PlayerData>().Username = username;
-        go.GetComponent<PlayerData>().Password = password;
-        return go.GetComponent<PlayerData>();
+        Username = username;
+        Password = password;
     }
 
     public string getUsername()
