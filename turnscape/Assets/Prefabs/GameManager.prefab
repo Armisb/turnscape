@@ -439,3 +439,4 @@ MonoBehaviour:
   loadingPanel: {fileID: 1597075940714246133}
   fillImage: {fileID: 6233524082004491869}
   percentageText: {fileID: 8703233044033916499}
+  Player: {fileID: 0}
