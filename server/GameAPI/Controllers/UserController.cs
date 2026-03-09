@@ -58,7 +58,7 @@ namespace GameAPI.Controllers
             }
             catch(Exception e)
             {
-                return BadRequest(e.Message);
+                return Unauthorized(e.Message);
             }
         }
 

@@ -15,7 +15,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using GameAPI.NewFolder;
 
-namespace GameAPI.Services.Authentication
+namespace GameAPI.Services.Authentication 
 {
     public class JwtAuthenticationService(AppDbContext context, IConfiguration configuration) : IJwtAuthenticationService
     {
