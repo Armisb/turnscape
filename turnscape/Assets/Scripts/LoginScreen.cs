@@ -13,12 +13,13 @@ public class LoginScreen : MonoBehaviour
     [SerializeField] private TMP_Text loginHeader;
     [SerializeField] private TMP_Text loginText;
     [SerializeField] private TMP_Text isLoggedIn;
-    [SerializeField] private Button playButton;
-
+    [SerializeField] private GameObject masterPanel;
     [SerializeField] private GameObject loginPanel;
+    [SerializeField] private GameObject playPanel;
     private bool isSignUpScreen = false;
-    Networking nt;
-    [SerializeField] GameObject networkmgr;
+    private Networking nt;
+    [SerializeField] private GameObject networkmgr;
+    private string playerName;
 
 
     private void Start()
@@ -44,9 +45,6 @@ public class LoginScreen : MonoBehaviour
         isSignUpScreen = true;
         loginHeader.text = "Signup to the game";
         loginText.text = "Sign up";
-
-        // continue handling logic over here for the sign up 
-        
     }
 
     public void ResetTextFields()
@@ -72,32 +70,46 @@ public class LoginScreen : MonoBehaviour
         }
         else
         {
-            PlayerData playerData =  new PlayerData(mailField.text, passwordField.text);
-            nt.SendPostRequest(playerData);
+            playerName = mailField.text;
+            if (!isSignUpScreen)
+            {
+                nt.SendLoginRequest($"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}");
+            }
+            else
+            {
+                nt.SendSignupRequest($"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}");
+            }
             
         }
     }
-    public void SucessfullLogin(PlayerData playerData)
+    
+    
+    public void SucessfullLogin()
     {
         errorMessage.gameObject.SetActive(false);
         if (!isSignUpScreen)
         {
-            HandleLoggingIn(playerData);
+            HandleLoggingIn();
         }
         else
         {
-            HandleSigningIn(playerData);
+            HandleSigningIn();
         }
     }
-    
-    
-    private void HandleLoggingIn(PlayerData data)
+
+    public void LogOut()
     {
-        isLoggedIn.text = $"Logged in: {data.getUsername()}";
-        loginPanel.SetActive(false);
-        playButton.gameObject.SetActive(true);
+        isLoggedIn.text = "Not logged in";
     }
-    private void HandleSigningIn(PlayerData data)
+    
+    private void HandleLoggingIn()
+    {
+        isLoggedIn.text = $"Logged in: {playerName}";
+        loginPanel.SetActive(false);
+        playPanel.gameObject.SetActive(true);
+        
+    }
+    private void HandleSigningIn()
     {
         loginPanel.SetActive(false);
         ResetTextFields();
@@ -110,10 +122,10 @@ public class LoginScreen : MonoBehaviour
     {
         if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
-            // disabled temporarily
-            // var next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
-            // if (next != null)
-            //     next.Select();
+            //zdisabled temporarily
+            var next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
+            if (next != null)
+                next.Select();
         }
     }
 }
