@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class InventoryManSc : MonoBehaviour
 {
@@ -27,7 +30,10 @@ public class InventoryManSc : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
 
+    void Start()
+    {
         RebuildSceneInventories();
     }
 
@@ -108,7 +114,7 @@ public class InventoryManSc : MonoBehaviour
         inv0 ??= "";
         inv1 ??= "";
 
-        if (!InventoryData.TryGetValue(inv0, out var slots0)) return false;
+        /*if (!InventoryData.TryGetValue(inv0, out var slots0)) return false;
         if (!InventoryData.TryGetValue(inv1, out var slots1)) return false;
 
         if (!slots0.ContainsKey(slot0)) return false;
@@ -118,7 +124,7 @@ public class InventoryManSc : MonoBehaviour
         ItemData item1 = slots1[slot1];
 
         slots0[slot0] = item1;
-        slots1[slot1] = item0;
+        slots1[slot1] = item0;*/
 
         InventorySc inventory0 = InventoryObjects[inv0];
         InventorySc inventory1 = InventoryObjects[inv1];
@@ -198,8 +204,58 @@ public class InventoryManSc : MonoBehaviour
 
     public void GetInventoriesFromServer()
     {
-        Debug.Log("GetInventoriesFromServer");
+        StartCoroutine(DownloadAndLoadInventory());
+    }
+
+    private IEnumerator DownloadAndLoadInventory()
+    {
         GameManagerSc.Instance.downloader.GetInventoriesFromServer();
+
+        string path = Path.Combine(Application.dataPath, "InventoryData.json");
+        float timeout = 5f;
+        float elapsed = 0f;
+
+        while (!File.Exists(path) && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (!File.Exists(path))
+        {
+            Debug.LogError("InventoryData.json not created by downloader.");
+            yield break;
+        }
+
+        string json = File.ReadAllText(path);
+
+        string wrappedJson = "{\"items\":" + json + "}";
+
+        ItemDataList list = JsonUtility.FromJson<ItemDataList>(wrappedJson);
+
+        if (list == null || list.items == null)
+        {
+            Debug.LogError("Failed to parse InventoryData.json");
+            yield break;
+        }
+
+        InventoryData["PlayerInventory"].Clear();
+        var invSlots = InventoryObjects["PlayerInventory"].Slots;
+
+        foreach (var item in list.items)
+        {
+            string slotKey = item.position.ToString();
+
+            if (!invSlots.ContainsKey(slotKey))
+            {
+                Debug.LogWarning($"Slot {slotKey} not found in scene, skipping item {item.id}");
+                continue;
+            }
+
+            InventoryData["PlayerInventory"][slotKey] = item;
+
+            invSlots[slotKey].UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
+        }
     }
 
     public ItemData GetItemData(string inventoryName, string slotName)
@@ -215,7 +271,7 @@ public class InventoryManSc : MonoBehaviour
         return item;
     }
 
-    void ApplyInventoryData()
+    /*void ApplyInventoryData()
     {
         foreach (var invPair in InventoryObjects)
         {
@@ -235,5 +291,5 @@ public class InventoryManSc : MonoBehaviour
                 slot.UpdateUI((item != null) ? FileReader.GetTextureSprite(item.name) : null);
             }
         }
-    }
+    }*/
 }

@@ -15,7 +15,6 @@ public class Downloader : MonoBehaviour
 
     private IEnumerator DownloadInventoryJson()
     {
-        // Replace with your actual endpoint
         string url = "https://localhost:7232/Item/9c98d905-6526-4c8d-b4db-73715d8d0206";
 
         UnityWebRequest request = UnityWebRequest.Get(url);
@@ -27,13 +26,11 @@ public class Downloader : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             string json = request.downloadHandler.text;
-            Debug.Log("Inventory JSON received:\n" + json);
 
-            // Save to Assets folder so you can inspect it
             string path = Path.Combine(Application.dataPath, "InventoryData.json");
             File.WriteAllText(path, json);
 
-            Debug.Log("Inventory JSON saved to: " + path);
+            Debug.Log("Inventory JSON saved");
         }
         else
         {
