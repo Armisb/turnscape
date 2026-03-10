@@ -3,6 +3,7 @@ using System;
 using GameAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260309204438_AddItems")]
+    partial class AddItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.2");
@@ -57,6 +60,7 @@ namespace GameAPI.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("InventoryType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ItemTypeId")
@@ -105,21 +109,11 @@ namespace GameAPI.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("GameAPI.Models.ArmorType", b =>
-                {
-                    b.HasBaseType("GameAPI.Models.ItemType");
-
-                    b.Property<int>("Protection")
-                        .HasColumnType("INTEGER");
-
-                    b.HasDiscriminator().HasValue("Armor");
-                });
-
             modelBuilder.Entity("GameAPI.Models.WeaponType", b =>
                 {
                     b.HasBaseType("GameAPI.Models.ItemType");
 
-                    b.Property<int?>("Damage")
+                    b.Property<int>("Damage")
                         .HasColumnType("INTEGER");
 
                     b.HasDiscriminator().HasValue("Weapon");
@@ -128,7 +122,7 @@ namespace GameAPI.Migrations
             modelBuilder.Entity("GameAPI.Models.Item", b =>
                 {
                     b.HasOne("GameAPI.Models.GameUser", "GameUser")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("GameUserId");
 
                     b.HasOne("GameAPI.Models.ItemType", "ItemType")
@@ -140,6 +134,11 @@ namespace GameAPI.Migrations
                     b.Navigation("GameUser");
 
                     b.Navigation("ItemType");
+                });
+
+            modelBuilder.Entity("GameAPI.Models.GameUser", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

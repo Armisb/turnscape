@@ -23,6 +23,9 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="NewFolder\ItemDtos\" />
+    <Folder Include="Services\ItemType\" />
+    <Folder Include="Services\Item\" />
   </ItemGroup>
 
 </Project>
