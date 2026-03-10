@@ -5,18 +5,20 @@ using TMPro;
 
 public class GameManagerSc : MonoBehaviour
 {
-    public static GameManagerSc instance;
+    public static GameManagerSc Instance;
 
     [Header("UI Elements")]
     public GameObject loadingPanel;
     public Image fillImage;
     public TMP_Text percentageText;
 
+    public PlayerSc mainPlayer;
+
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -36,8 +38,8 @@ public class GameManagerSc : MonoBehaviour
 
     public static void LoadScene(string sceneName)
     {
-        instance.loadingPanel.SetActive(true);
-        instance.StartCoroutine(instance.LoadAsync(sceneName));
+        Instance.loadingPanel.SetActive(true);
+        Instance.StartCoroutine(Instance.LoadAsync(sceneName));
     }
 
     private System.Collections.IEnumerator LoadAsync(string sceneName)
@@ -50,6 +52,8 @@ public class GameManagerSc : MonoBehaviour
             float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
             fillImage.fillAmount = progress;
             percentageText.text = (progress * 100f).ToString("F0") + "%";
+
+            InventoryManSc.Instance.RebuildSceneInventories();
 
             if (asyncLoad.progress >= 0.9f)
             {

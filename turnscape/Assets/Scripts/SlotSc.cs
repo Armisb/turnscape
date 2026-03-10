@@ -1,0 +1,97 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+{
+    //public Image image;
+
+    public string uniqueName;
+    public InventorySc inventory;
+
+    public Transform itemHolder;
+    private Image itemImage;
+
+    public static SlotSc dragSlot;
+    public static SlotSc returnSlot;
+
+    public InventoryManSc invMan => InventoryManSc.Instance;
+    public string inventoryName => (inventory != null) ? inventory.uniqueName : "";
+    public bool hasItem => itemHolder.gameObject.activeSelf;
+
+    private void Awake()
+    {
+        itemImage = itemHolder.GetComponent<Image>();
+
+        /*InventorySc parentInv = GetComponentInParent<InventorySc>();
+
+        if (parentInv != null)
+        {
+            inventory = parentInv;
+            invMan = parentInv.invMan;
+        }
+        else
+        {
+            if (invMan == null)
+            {
+                invMan = GameManagerSc.instance.mainPlayer.inventoryMan;
+            }
+
+            invMan.RegisterSlot(this);
+        }*/
+
+        if (uniqueName == "DragSlot") dragSlot = this;
+
+        UpdateUI(itemImage.sprite);
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        returnSlot = this;
+
+        invMan.SwitchSlots(this, dragSlot);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (dragSlot == null) return;
+
+        Vector3 mousePos = Input.mousePosition; 
+        mousePos.z = Camera.main.WorldToScreenPoint(transform.position).z;
+
+        RectTransform dragRect = dragSlot.GetComponent<RectTransform>();
+        dragRect.position = Camera.main.ScreenToWorldPoint(mousePos);
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        invMan.SwitchSlots(dragSlot, this);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (invMan.SwitchSlots(dragSlot, returnSlot))
+        {
+            returnSlot = null;
+        }
+    }
+
+    public void UpdateUI(Sprite icon = null)
+    {
+        if (icon != null)
+        {
+            itemImage.sprite = icon;
+            itemHolder.gameObject.SetActive(true);
+        }
+        else
+        {
+            itemHolder.gameObject.SetActive(false);
+            itemImage.sprite = null;
+        }
+    }
+
+    public Sprite GetItemSprite()
+    {
+        return itemImage.sprite;
+    }
+}
