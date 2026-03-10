@@ -2,6 +2,8 @@ using GameAPI.Data;
 using GameAPI.Models;
 using GameAPI.NewFolder.ItemDtos;
 using GameAPI.NewFolder.ItemTypeDtos;
+using GameAPI.Services.Item;
+using GameAPI.Services.ItemType;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +12,7 @@ namespace GameAPI.Controllers
 {
     [Route("/Item")]
     [ApiController]
-    public class ItemController(AppDbContext context) : ControllerBase
+    public class ItemController(AppDbContext context, IItemTypeService itemTypeService, IItemService itemService) : ControllerBase
     {
 
         [HttpGet]
@@ -53,39 +55,75 @@ namespace GameAPI.Controllers
             return Ok(items);
         }
         
+        
+        // With Service 
         [HttpPost("WeaponType")]
-        public async Task<ActionResult<WeaponType>> CreateWeaponType(CreateWeaponTypeDto weaponType)
+        public async Task<ActionResult<WeaponType>> CreateWeaponType(CreateWeaponTypeDto weaponTypeDto)
         {
-            WeaponType created = new WeaponType(){Name = weaponType.Name, Category = weaponType.Category, Damage = weaponType.Damage};
-            await context.ItemTypes.AddAsync(created);
-            await context.SaveChangesAsync();
-            return Ok(created);
-        }
-
-        [HttpPost("ArmorType")]
-        public async Task<ActionResult<ArmorType>> CreateArmorType(CreateArmorTypeDto armorDto)
-        {
-            ArmorType created = new ArmorType(){Name = armorDto.Name, Category = armorDto.Category, Protection = armorDto.Protection};
-            await context.ItemTypes.AddAsync(created);
-            await context.SaveChangesAsync();
-            return Ok(created);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Item>> CreateItem(CreateItemDto item)
-        {
-            Item created = new Item()
+            try
             {
-                InventoryType = item.InventoryType,
-                Position = item.Position,
-                Level = item.Level,
-                Health = item.Health,
-                ItemTypeId = item.ItemTypeId,
-                GameUserId = item.GameUserId
-            };
-            await context.Items.AddAsync(created);
-            await context.SaveChangesAsync();
+            var response = await itemTypeService.CreateWeaponType(weaponTypeDto);
+            return Ok(response);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // With Service
+        [HttpPost("ArmorType")]
+        public async Task<ActionResult<ArmorType>> CreateArmorType(CreateArmorTypeDto armorTypeDto)
+        {
+            try
+            {
+            var response = await itemTypeService.CreateArmorType(armorTypeDto);
+            return Ok(response);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // With Service
+        [HttpGet("ItemType")]
+        public async Task<ActionResult<List<GetItemTypeDto>>> GetItemTypeAll()
+        {
+            List<GetItemTypeDto> itemTypes = await itemTypeService.GetItemTypeAll();
+            return Ok(itemTypes);
+        }
+
+        // With Service
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult<ItemType>> DeleteItemType(Guid Id)
+        {
+            try
+            {
+            ItemType response = await itemTypeService.DeleteItemType(Id);
+            
+            return Ok(response);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // with service
+        [HttpPost]
+        public async Task<ActionResult<Item>> CreateItem(CreateItemDto itemDto)
+        {
+            Item created = await itemService.CreateItem(itemDto);
             return Ok(created);
         }
+
+        //Create-Update-delete WeaponType : Create Delete
+        //Create-Update-delete Armortype : Create Delete
+        //Create-Update-delete Item
+        //Get all items 
+        //Get item for specific user
+        //Update item position
+        
     }
 }

@@ -28,7 +28,7 @@ namespace GameAPI.Controllers
         public async Task<ActionResult<GameUser>> GetUserById( int Id)
         {
 
-            GameUser user = await service.GetUserByIdAsync(Id);
+            GameUser? user = await service.GetUserByIdAsync(Id);
             return user is null ? NotFound("User with specified id is not found") : Ok(user);
         }
 
