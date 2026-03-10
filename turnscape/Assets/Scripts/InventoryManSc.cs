@@ -198,7 +198,8 @@ public class InventoryManSc : MonoBehaviour
 
     public void GetInventoriesFromServer()
     {
-        //GameManagerSc.Instance.downloader.GetInventoriesFromServer();
+        Debug.Log("GetInventoriesFromServer");
+        GameManagerSc.Instance.downloader.GetInventoriesFromServer();
     }
 
     public ItemData GetItemData(string inventoryName, string slotName)
