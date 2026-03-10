@@ -53,6 +53,8 @@ public class InventoryManSc : MonoBehaviour
             RegisterSlotInternal(slot);
         }
 
+        GetInventoriesFromServer();
+
         //ApplyInventoryData();
     }
 
@@ -196,7 +198,7 @@ public class InventoryManSc : MonoBehaviour
 
     public void GetInventoriesFromServer()
     {
-        // TODO: request inventory data from server and fill InventoryData
+        //GameManagerSc.Instance.downloader.GetInventoriesFromServer();
     }
 
     public ItemData GetItemData(string inventoryName, string slotName)

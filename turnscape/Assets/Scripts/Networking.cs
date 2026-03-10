@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using System.Text;
 using System.Xml.Linq;
 using UnityEngine;
@@ -120,8 +121,6 @@ public class Networking : MonoBehaviour
             Debug.LogError("Error: " + request.error);
         }
     }
-
-
 }
 
 

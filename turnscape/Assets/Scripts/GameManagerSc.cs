@@ -12,7 +12,7 @@ public class GameManagerSc : MonoBehaviour
     public Image fillImage;
     public TMP_Text percentageText;
 
-    public PlayerSc mainPlayer;
+    public Downloader downloader;
 
     private void Awake()
     {
