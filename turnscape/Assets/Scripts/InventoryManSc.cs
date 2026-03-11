@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class InventoryManSc : MonoBehaviour
 {
@@ -35,6 +34,7 @@ public class InventoryManSc : MonoBehaviour
     void Start()
     {
         RebuildSceneInventories();
+        StatisticsSc.Instance.LocateStatisticsUI();
     }
 
     public void RebuildSceneInventories()
@@ -47,66 +47,109 @@ public class InventoryManSc : MonoBehaviour
             miscInv.uniqueName = "";
             miscInv.Slots.Clear();
         }
+
         InventoryObjects.Add("", miscInv);
 
         if (!InventoryData.ContainsKey(""))
             InventoryData[""] = new Dictionary<string, ItemData>();
 
-        SlotSc[] slots = FindObjectsByType<SlotSc>(FindObjectsSortMode.None);
+        InventorySc[] inventories = FindObjectsByType<InventorySc>(FindObjectsSortMode.None);
 
-        foreach (var slot in slots)
+        foreach (var inv in inventories)
         {
-            RegisterSlotInternal(slot);
+            string invName = inv.uniqueName ?? "";
+
+            InventoryObjects[invName] = inv;
+            inv.Slots.Clear();
+
+            if (!InventoryData.ContainsKey(invName))
+                InventoryData[invName] = new Dictionary<string, ItemData>();
+
+            SlotSc[] slots = inv.GetComponentsInChildren<SlotSc>();
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                SlotSc slot = slots[i];
+
+                slot.uniqueName = i.ToString();
+                slot.inventory = inv;
+
+                inv.Slots[slot.uniqueName] = slot;
+
+                if (!InventoryData[invName].ContainsKey(slot.uniqueName))
+                    InventoryData[invName][slot.uniqueName] = null;
+            }
+        }
+
+        SlotSc[] allSlots = FindObjectsByType<SlotSc>(FindObjectsSortMode.None);
+
+        foreach (var slot in allSlots)
+        {
+            if (slot.inventory == null)
+            {
+                slot.inventory = miscInv;
+
+                if (!miscInv.Slots.ContainsKey(slot.uniqueName))
+                    miscInv.Slots.Add(slot.uniqueName, slot);
+
+                if (!InventoryData[""].ContainsKey(slot.uniqueName))
+                    InventoryData[""][slot.uniqueName] = null;
+            }
         }
 
         GetInventoriesFromServer();
-
-        //ApplyInventoryData();
+        StatisticsSc.Instance.RecalculateStats();
+        PrintInventoryData();
     }
 
-    void RegisterSlotInternal(SlotSc slot)
+    void PutItemInternal(ItemData item)
     {
-        InventorySc parentInv = null;
+        if (item == null)
+            return;
 
-        if (slot.transform.parent != null)
-            parentInv = slot.transform.parent.GetComponent<InventorySc>();
+        string invName = item.inventoryType;
 
-        // scene inventory
-        if (parentInv != null)
+        if (string.IsNullOrEmpty(invName) || !InventoryObjects.ContainsKey(invName))
+            invName = "PlayerInventory";
+
+        InventorySc inv = InventoryObjects[invName];
+
+        int startIndex = item.position;
+        int index = startIndex;
+
+        int invSize = inv.Slots.Count;
+
+        if (invSize == 0)
         {
-            string invName = parentInv.uniqueName ?? "";
+            Debug.LogWarning($"Inventory {invName} has no slots.");
+            return;
+        }
 
-            if (!InventoryObjects.ContainsKey(invName))
+        for (int i = 0; i < invSize; i++)
+        {
+            string slotKey = index.ToString();
+
+            if (!inv.Slots.ContainsKey(slotKey))
             {
-                InventoryObjects[invName] = parentInv;
-                parentInv.Slots.Clear();
-
-                if (!InventoryData.ContainsKey(invName))
-                    InventoryData[invName] = new Dictionary<string, ItemData>();
+                index = (index + 1) % invSize;
+                continue;
             }
 
-            slot.uniqueName = parentInv.Slots.Count.ToString();
+            SlotSc slot = inv.Slots[slotKey];
 
-            slot.inventory = parentInv;
+            if (!slot.hasItem)
+            {
+                InventoryData[invName][slotKey] = item;
 
-            if (!parentInv.Slots.ContainsKey(slot.uniqueName))
-                parentInv.Slots.Add(slot.uniqueName, slot);
+                slot.UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
 
-            if (!InventoryData[invName].ContainsKey(slot.uniqueName))
-                InventoryData[invName][slot.uniqueName] = null;
+                return;
+            }
+
+            index = (index + 1) % invSize;
         }
 
-        // misc inventory
-        else
-        {
-            slot.inventory = miscInv;
-
-            if (!miscInv.Slots.ContainsKey(slot.uniqueName))
-                miscInv.Slots.Add(slot.uniqueName, slot);
-
-            if (!InventoryData[""].ContainsKey(slot.uniqueName))
-                InventoryData[""][slot.uniqueName] = null;
-        }
+        Debug.LogWarning($"Inventory {invName} is full. Could not place item {item.id}");
     }
 
     public bool SwitchSlots(string inv0, string slot0, string inv1, string slot1)
@@ -114,17 +157,35 @@ public class InventoryManSc : MonoBehaviour
         inv0 ??= "";
         inv1 ??= "";
 
-        /*if (!InventoryData.TryGetValue(inv0, out var slots0)) return false;
-        if (!InventoryData.TryGetValue(inv1, out var slots1)) return false;
+        if (!InventoryData.TryGetValue(inv0, out var slots0))
+        {
+            Debug.LogWarning($"SwitchSlots failed: Inventory '{inv0}' not found.");
+            return false;
+        }
 
-        if (!slots0.ContainsKey(slot0)) return false;
-        if (!slots1.ContainsKey(slot1)) return false;
+        if (!InventoryData.TryGetValue(inv1, out var slots1))
+        {
+            Debug.LogWarning($"SwitchSlots failed: Inventory '{inv1}' not found.");
+            return false;
+        }
+
+        if (!slots0.ContainsKey(slot0))
+        {
+            Debug.LogWarning($"SwitchSlots failed: Slot '{slot0}' not found in inventory '{inv0}'.");
+            return false;
+        }
+
+        if (!slots1.ContainsKey(slot1))
+        {
+            Debug.LogWarning($"SwitchSlots failed: Slot '{slot1}' not found in inventory '{inv1}'.");
+            return false;
+        }
 
         ItemData item0 = slots0[slot0];
         ItemData item1 = slots1[slot1];
 
         slots0[slot0] = item1;
-        slots1[slot1] = item0;*/
+        slots1[slot1] = item0;
 
         InventorySc inventory0 = InventoryObjects[inv0];
         InventorySc inventory1 = InventoryObjects[inv1];
@@ -137,6 +198,11 @@ public class InventoryManSc : MonoBehaviour
 
         slotSc0.UpdateUI(sprite1);
         slotSc1.UpdateUI(sprite0);
+
+        /*if (inv0 == "PlayerEquipped" || inv1 == "PlayerEquipped")
+        {
+            PrintInventoryData();
+        }*/
 
         return true;
     }
@@ -223,7 +289,7 @@ public class InventoryManSc : MonoBehaviour
 
         if (!File.Exists(path))
         {
-            Debug.LogError("InventoryData.json not created by downloader.");
+            Debug.Log("InventoryData.json not created by downloader.");
             yield break;
         }
 
@@ -235,26 +301,13 @@ public class InventoryManSc : MonoBehaviour
 
         if (list == null || list.items == null)
         {
-            Debug.LogError("Failed to parse InventoryData.json");
+            Debug.Log("Failed to parse InventoryData.json");
             yield break;
         }
 
-        InventoryData["PlayerInventory"].Clear();
-        var invSlots = InventoryObjects["PlayerInventory"].Slots;
-
         foreach (var item in list.items)
         {
-            string slotKey = item.position.ToString();
-
-            if (!invSlots.ContainsKey(slotKey))
-            {
-                Debug.LogWarning($"Slot {slotKey} not found in scene, skipping item {item.id}");
-                continue;
-            }
-
-            InventoryData["PlayerInventory"][slotKey] = item;
-
-            invSlots[slotKey].UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
+            PutItemInternal(item);
         }
     }
 
@@ -271,25 +324,30 @@ public class InventoryManSc : MonoBehaviour
         return item;
     }
 
-    /*void ApplyInventoryData()
+
+    public void PrintInventoryData()
     {
-        foreach (var invPair in InventoryObjects)
+        foreach (var invPair in InventoryData)
         {
             string invName = invPair.Key;
-            InventorySc inv = invPair.Value;
+            var slots = invPair.Value;
 
-            if (!InventoryData.TryGetValue(invName, out var slots))
-                continue;
+            Debug.Log($"Inventory: {invName}");
 
             foreach (var slotPair in slots)
             {
-                if (!inv.Slots.TryGetValue(slotPair.Key, out var slot))
-                    continue;
-
+                string slotKey = slotPair.Key;
                 ItemData item = slotPair.Value;
 
-                slot.UpdateUI((item != null) ? FileReader.GetTextureSprite(item.name) : null);
+                if (item != null)
+                {
+                    Debug.Log($"  Slot {slotKey}: Cate = {item.category}, Pos = {item.position}");
+                }
+                else
+                {
+                    //Debug.Log($"  Slot {slotKey}: null");
+                }
             }
         }
-    }*/
+    }
 }

@@ -66,6 +66,7 @@ public class GameManagerSc : MonoBehaviour
         if (sceneName == "BaseScene")
         {
             InventoryManSc.Instance.RebuildSceneInventories();
+            StatisticsSc.Instance.LocateStatisticsUI();
         }
 
         loadingPanel.SetActive(false);

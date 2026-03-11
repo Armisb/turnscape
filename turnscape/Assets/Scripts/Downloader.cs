@@ -34,7 +34,7 @@ public class Downloader : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Error downloading inventory JSON: " + request.error);
+            Debug.Log("Failed to download inventory JSON: " + request.error);
         }
     }
 }
