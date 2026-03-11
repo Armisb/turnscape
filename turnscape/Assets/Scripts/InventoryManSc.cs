@@ -97,9 +97,12 @@ public class InventoryManSc : MonoBehaviour
             }
         }
 
-        GetInventoriesFromServer();
-        StatisticsSc.Instance.RecalculateStats();
-        PrintInventoryData();
+        if (InventoryData.ContainsKey("PlayerInventory"))
+        {
+            GetInventoriesFromServer();
+            StatisticsSc.Instance.RecalculateStats();
+            //PrintInventoryData();
+        }
     }
 
     void PutItemInternal(ItemData item)

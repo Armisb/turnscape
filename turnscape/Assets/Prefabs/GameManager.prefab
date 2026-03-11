@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 2589631379634420339}
   - component: {fileID: -8908602343444171370}
   - component: {fileID: 5970976004033124587}
+  - component: {fileID: 2096784753737954561}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -466,3 +467,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40a1cd8b60945c247a3fcb3e9619b033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Downloader
+--- !u!114 &2096784753737954561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4977410872680699822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74367b9b13cdcf6478d6145f4f781441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatisticsSc
+  damage: 1
+  protection: 0
