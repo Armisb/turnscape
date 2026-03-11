@@ -112,6 +112,7 @@ public class LoginScreen : MonoBehaviour
     private void HandleSigningIn()
     {
         loginPanel.SetActive(false);
+        masterPanel.SetActive(true);
         ResetTextFields();
     }
 
