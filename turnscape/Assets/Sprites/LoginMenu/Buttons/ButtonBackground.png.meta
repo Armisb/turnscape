@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -103,13 +103,13 @@ TextureImporter:
       name: ButtonBackground_0
       rect:
         serializedVersion: 2
-        x: 47
-        y: 65
-        width: 209
-        height: 154
+        x: 2
+        y: 7
+        width: 59
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 1, y: 1, z: 0, w: 1}
       customData: 
       outline: []
       physicsShape: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 20f4666e74ffd5e238d4994c5435c3ff
     internalID: 0
     vertices: []
     indices: 
