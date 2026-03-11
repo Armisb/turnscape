@@ -53,8 +53,6 @@ public class GameManagerSc : MonoBehaviour
             fillImage.fillAmount = progress;
             percentageText.text = (progress * 100f).ToString("F0") + "%";
 
-            InventoryManSc.Instance.RebuildSceneInventories();
-
             if (asyncLoad.progress >= 0.9f)
             {
                 fillImage.fillAmount = 1f;
@@ -63,6 +61,12 @@ public class GameManagerSc : MonoBehaviour
             }
 
             yield return null;
+        }
+
+        if (sceneName == "BaseScene")
+        {
+            InventoryManSc.Instance.RebuildSceneInventories();
+            StatisticsSc.Instance.LocateStatisticsUI();
         }
 
         loadingPanel.SetActive(false);

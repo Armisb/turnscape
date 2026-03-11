@@ -401,6 +401,8 @@ GameObject:
   m_Component:
   - component: {fileID: 512263270476442250}
   - component: {fileID: 2589631379634420339}
+  - component: {fileID: -8908602343444171370}
+  - component: {fileID: 5970976004033124587}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -439,4 +441,28 @@ MonoBehaviour:
   loadingPanel: {fileID: 1597075940714246133}
   fillImage: {fileID: 6233524082004491869}
   percentageText: {fileID: 8703233044033916499}
-  Player: {fileID: 0}
+  downloader: {fileID: 5970976004033124587}
+--- !u!114 &-8908602343444171370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4977410872680699822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12e715f4f0863c4c964f223e936e3c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryManSc
+--- !u!114 &5970976004033124587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4977410872680699822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40a1cd8b60945c247a3fcb3e9619b033, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Downloader

@@ -23,23 +23,6 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
     {
         itemImage = itemHolder.GetComponent<Image>();
 
-        /*InventorySc parentInv = GetComponentInParent<InventorySc>();
-
-        if (parentInv != null)
-        {
-            inventory = parentInv;
-            invMan = parentInv.invMan;
-        }
-        else
-        {
-            if (invMan == null)
-            {
-                invMan = GameManagerSc.instance.mainPlayer.inventoryMan;
-            }
-
-            invMan.RegisterSlot(this);
-        }*/
-
         if (uniqueName == "DragSlot") dragSlot = this;
 
         UpdateUI(itemImage.sprite);
@@ -74,6 +57,13 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
         {
             returnSlot = null;
         }
+
+        if (dragSlot != null)
+        {
+            invMan.SwitchSlots(dragSlot, invMan.InventoryObjects["PlayerInventory"]);
+        }
+
+        StatisticsSc.Instance.RecalculateStats();
     }
 
     public void UpdateUI(Sprite icon = null)

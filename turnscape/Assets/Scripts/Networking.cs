@@ -118,13 +118,10 @@ public class Networking : MonoBehaviour
         else
         {
             loginScreen.SetErrorMessage(request.error);
-            Debug.LogError("Error: " + request.error);
+            Debug.Log("Error: " + request.error);
         }
     }
 }
-
-
-
 
 
 public class AcceptAllCertificates : CertificateHandler
