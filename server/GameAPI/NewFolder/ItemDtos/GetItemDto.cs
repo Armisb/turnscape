@@ -11,6 +11,8 @@ public class GetItemDto
     public int Health { get; set; }
 
     public required string ItemType { get; set; }
+    //Add Name
+    public required string Name { get; set; }
     public required string Category { get; set; }
     public int? Damage { get; set; }
     public int? Protection {get;set;}

@@ -28,8 +28,9 @@ namespace GameAPI.Controllers
                 Health = i.Health,
                 ItemType = EF.Property<string>(i.ItemType, "Type"),
                 Category = i.ItemType.Category,
-                Damage = EF.Property<string>(i.ItemType, "Type") == "Weapon"? ((WeaponType)i.ItemType).Damage : null,
-                Protection = EF.Property<string>(i.ItemType, "Type") == "Armor"? ((ArmorType)i.ItemType).Protection:null
+                Name = i.ItemType.Name,
+                Damage = EF.Property<string>(i.ItemType, "Type") == "Weapon"? ((WeaponType)i.ItemType).Damage : 0,
+                Protection = EF.Property<string>(i.ItemType, "Type") == "Armor"? ((ArmorType)i.ItemType).Protection:0
 
             }).ToListAsync<GetItemDto>();
             return Ok(items);
@@ -48,8 +49,9 @@ namespace GameAPI.Controllers
                 Health = i.Health,
                 ItemType = EF.Property<string>(i.ItemType, "Type"),
                 Category = i.ItemType.Category,
-                Damage = EF.Property<string>(i.ItemType, "Type") == "Weapon"? ((WeaponType)i.ItemType).Damage : null,
-                Protection = EF.Property<string>(i.ItemType, "Type") == "Armor"? ((ArmorType)i.ItemType).Protection:null
+                Name = i.ItemType.Name,
+                Damage = EF.Property<string>(i.ItemType, "Type") == "Weapon"? ((WeaponType)i.ItemType).Damage : 0,
+                Protection = EF.Property<string>(i.ItemType, "Type") == "Armor"? ((ArmorType)i.ItemType).Protection:0
 
             }).ToListAsync<GetItemDto>();
             return Ok(items);
