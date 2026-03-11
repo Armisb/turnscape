@@ -120,12 +120,24 @@ public class LoginScreen : MonoBehaviour
     /// </summary>
     private void HandleTabbingThroughFields()
     {
+        // if tab is pressed
         if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
-            //zdisabled temporarily
-            var next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
+            
+            GameObject current = EventSystem.current.currentSelectedGameObject;
+            if (current == null) return;
+
+            Selectable currentSelectable = current.GetComponent<Selectable>();
+            if (currentSelectable == null) return;
+
+            // Tab = down, Shift+Tab = up
+            Selectable next = Keyboard.current.shiftKey.isPressed
+                ? currentSelectable.FindSelectableOnUp()
+                : currentSelectable.FindSelectableOnDown();
+            
             if (next != null)
                 next.Select();
+            
         }
     }
 }

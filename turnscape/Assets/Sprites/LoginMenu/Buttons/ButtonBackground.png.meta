@@ -103,10 +103,10 @@ TextureImporter:
       name: ButtonBackground_0
       rect:
         serializedVersion: 2
-        x: 47
-        y: 65
-        width: 209
-        height: 154
+        x: 2
+        y: 7
+        width: 60
+        height: 46
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
