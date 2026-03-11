@@ -1,2 +1,4 @@
 .vscode/
 .fake
+.db-shm
+.db-wal
