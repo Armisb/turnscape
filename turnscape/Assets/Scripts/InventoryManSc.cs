@@ -31,11 +31,12 @@ public class InventoryManSc : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
+    /*void Start()
     {
+        Debug.Log("Start");
         RebuildSceneInventories();
         StatisticsSc.Instance.LocateStatisticsUI();
-    }
+    }*/
 
     public void RebuildSceneInventories()
     {
@@ -97,11 +98,11 @@ public class InventoryManSc : MonoBehaviour
             }
         }
 
-        if (InventoryData.ContainsKey("PlayerInventory"))
+        if (InventoryObjects.ContainsKey("PlayerInventory"))
         {
             GetInventoriesFromServer();
             StatisticsSc.Instance.RecalculateStats();
-            //PrintInventoryData();
+            PrintInventoryData();
         }
     }
 
@@ -111,6 +112,8 @@ public class InventoryManSc : MonoBehaviour
             return;
 
         string invName = item.inventoryType;
+
+        Debug.Log("Inv: " + invName);
 
         if (string.IsNullOrEmpty(invName) || !InventoryObjects.ContainsKey(invName))
             invName = "PlayerInventory";
@@ -348,7 +351,7 @@ public class InventoryManSc : MonoBehaviour
                 }
                 else
                 {
-                    //Debug.Log($"  Slot {slotKey}: null");
+                    Debug.Log($"  Slot {slotKey}: null");
                 }
             }
         }

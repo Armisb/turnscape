@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class GameManagerSc : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GameManagerSc : MonoBehaviour
 
     [Header("UI Elements")]
     public GameObject loadingPanel;
+    public GameObject miscCanvas;
     public Image fillImage;
     public TMP_Text percentageText;
 
@@ -24,6 +26,25 @@ public class GameManagerSc : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    public void SetCanvasCamera()
+    {
+        Camera cam = Camera.main;
+
+        if (cam == null)
+        {
+            Debug.LogWarning("Main Camera not found in scene.");
+            return;
+        }
+
+        Canvas canvas = miscCanvas.GetComponent<Canvas>();
+
+        if (canvas != null)
+        {
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.worldCamera = cam;
         }
     }
 
@@ -65,9 +86,12 @@ public class GameManagerSc : MonoBehaviour
 
         if (sceneName == "BaseScene")
         {
+            Debug.Log("loaders");
             InventoryManSc.Instance.RebuildSceneInventories();
             StatisticsSc.Instance.LocateStatisticsUI();
         }
+
+        SetCanvasCamera();
 
         loadingPanel.SetActive(false);
     }

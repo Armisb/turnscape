@@ -825,6 +825,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2589631379634420339, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: miscCanvas
+      value: 
+      objectReference: {fileID: 1781823917}
     - target: {fileID: 4977410872680699822, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -4158,6 +4162,11 @@ MonoBehaviour:
   loginPanel: {fileID: 1693656225}
   playPanel: {fileID: 718665109}
   networkmgr: {fileID: 1674519182}
+--- !u!1 &1781823917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1513316117247594227, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+  m_PrefabInstance: {fileID: 533781339}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1957365781
 GameObject:
   m_ObjectHideFlags: 0

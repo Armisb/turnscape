@@ -32,6 +32,8 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
     {
         returnSlot = this;
 
+        if (dragSlot == null) dragSlot = GameManagerSc.Instance.miscCanvas.transform.GetChild(0).GetComponent<SlotSc>();
+
         invMan.SwitchSlots(this, dragSlot);
     }
 
