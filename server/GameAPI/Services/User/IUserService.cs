@@ -1,5 +1,5 @@
 using GameAPI.Models;
-using GameAPI.NewFolder;
+using shared_lib;
 
 namespace GameAPI.Services;
 

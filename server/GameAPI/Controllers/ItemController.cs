@@ -1,7 +1,7 @@
 using GameAPI.Data;
 using GameAPI.Models;
-using GameAPI.NewFolder.ItemDtos;
-using GameAPI.NewFolder.ItemTypeDtos;
+using shared_lib.ItemDtos;
+using shared_lib.ItemTypeDtos;
 using GameAPI.Services.Item;
 using GameAPI.Services.ItemType;
 using Microsoft.AspNetCore.Http;
