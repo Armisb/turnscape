@@ -1,128 +1,69 @@
+using System;
 using System.Collections;
-using System.IO;
 using System.Text;
-using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms.Impl;
 
 
 public class Networking : MonoBehaviour
 {
+    private void Awake()
+    {
+        if (AuthManager.AccessToken != null)
+        {
+            var data = new LoginResponse
+            {
+                accessToken = AuthManager.AccessToken,
+                refreshToken = AuthManager.RefreshToken
+            };
+            loginScreen.SucessfullLogin(JsonUtility.ToJson(data));
+        }
+    }
 
     [SerializeField] private LoginScreen loginScreen;
-    private string token = "";
-    
 
-    public void SendSignupRequest(string jsonData)
+    public void SendPostGeneric(string url, string jsonData, Action<String> onSuccess, Action<String> onError)
     {
-        StartCoroutine(SendPostSignup(jsonData));
+        StartCoroutine(SendPostGen(url, jsonData, onSuccess, onError));
     }
     
-    public void SendLoginRequest(string jsonData)
-    {
-        StartCoroutine(SendPostLogin(jsonData));
-    }
-
-    // IEnumerator SendObject()
-    // {
-    //     string url = "https://localhost:7232/user/login";
-    //
-    //     //PlayerData data = new PlayerData("arminas", "Juodckis");
-    //     PlayerData data = new PlayerData("a", "a");
-    //     string json = JsonUtility.ToJson(data);
-    //     byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
-    //
-    //     UnityWebRequest request = new UnityWebRequest(url, "POST");
-    //     request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-    //     request.downloadHandler = new DownloadHandlerBuffer();
-    //     request.SetRequestHeader("Content-Type", "application/json");
-    //
-    //     yield return request.SendWebRequest();
-    //
-    //     if (request.result == UnityWebRequest.Result.Success)
-    //     {
-    //         Debug.Log(request.downloadHandler.text);
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError(request.error);
-    //     }
-    // }
-
     public void Logout()
     {
-        token = "";
         loginScreen.LogOut();
     }
-    
-    private IEnumerator SendPostSignup(string jsonData)
-    {
-        string url = "https://localhost:7232/user/signup";
 
-        // Create JSON data
-        //string jsonData = $"{{\"UserName\":\"{player.getUsername()}\",\"Password\":\"{player.getPassword()}\"}}";
-        
-        // Convert to byte array
+    private IEnumerator SendPostGen(string url, string jsonData, Action<string> onSuccess, Action<string> onError)
+    {
+        // convert to byte array
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
-        
+
         // handle request
         UnityWebRequest request = new UnityWebRequest(url, "POST");
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.certificateHandler = new AcceptAllCertificates();
         request.SetRequestHeader("Content-Type", "application/json");
-        yield return request.SendWebRequest();
 
-        // if request was successful
+        yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {
-            loginScreen.SucessfullLogin();
-            Debug.Log("Response: " + request.downloadHandler.text);
+            onSuccess?.Invoke(request.downloadHandler.text);
+            Debug.Log(request.downloadHandler.text);
         }
-        // request failed
         else
         {
-            loginScreen.SetErrorMessage(request.error);
-            Debug.Log("Error: " + request.error);
-        }
-    }
-    
-
-    private IEnumerator SendPostLogin(string jsonData)
-    {
-        string url = "https://localhost:7232/user/login";
-
-        // Create JSON data
-        //string jsonData = $"{{\"UserName\":\"{player.getUsername()}\",\"Password\":\"{player.getPassword()}\"}}";
-        
-        // Convert to byte array
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
-        
-        // handle request
-        UnityWebRequest request = new UnityWebRequest(url, "POST");
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.certificateHandler = new AcceptAllCertificates();
-        request.SetRequestHeader("Content-Type", "application/json");
-        yield return request.SendWebRequest();
-
-        // if request was successful
-        if (request.result == UnityWebRequest.Result.Success)
-        {
-            token = request.downloadHandler.text;
-            loginScreen.SucessfullLogin();
-            Debug.Log("Response: " + request.downloadHandler.text);
-        }
-        // request failed
-        else
-        {
-            loginScreen.SetErrorMessage(request.error);
-            Debug.Log("Error: " + request.error);
+            onError?.Invoke(request.error);
+            Debug.LogError("Error: " + request.error);
         }
     }
 }
 
+[System.Serializable]
+public class LoginResponse
+{
+    public string accessToken;
+    public string refreshToken;
+}
 
 public class AcceptAllCertificates : CertificateHandler
 {

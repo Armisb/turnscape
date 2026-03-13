@@ -3,11 +3,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Button = UnityEngine.UI.Button;
 
 public class LoginScreen : MonoBehaviour
 {
-    private EventSystem system;
     [SerializeField] private TMP_InputField mailField, passwordField;
     [SerializeField] private TMP_Text errorMessage;
     [SerializeField] private TMP_Text loginHeader;
@@ -18,20 +16,16 @@ public class LoginScreen : MonoBehaviour
     [SerializeField] private GameObject playPanel;
     private bool isSignUpScreen = false;
     private Networking nt;
-    [SerializeField] private GameObject networkmgr;
-    private string playerName;
 
 
     private void Start()
     {
-        system = EventSystem.current;
-        nt = networkmgr.GetComponent<Networking>();
+        nt = GetComponentInChildren(typeof(Networking)) as Networking;
     }
 
     private void Update()
     {
         HandleTabbingThroughFields();
-        
     }
 
     public void SetErrorMessage(string errorMessage)
@@ -70,26 +64,36 @@ public class LoginScreen : MonoBehaviour
         }
         else
         {
-            playerName = mailField.text;
+            AuthManager.SetPlayerName(mailField.text);
             if (!isSignUpScreen)
             {
-                nt.SendLoginRequest($"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}");
+                nt.SendPostGeneric(
+                    "https://localhost:7232/user/login",
+                    $"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}",
+                    response => this.SucessfullLogin(response),
+                    error => this.SetErrorMessage(error)
+                    );
             }
             else
             {
-                nt.SendSignupRequest($"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}");
+                nt.SendPostGeneric(
+                    "https://localhost:7232/user/signup",
+                    $"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}",
+                    response => this.SucessfullLogin(response),
+                    error => this.SucessfullLogin(error)
+                    );
             }
             
         }
     }
     
     
-    public void SucessfullLogin()
+    public void SucessfullLogin(string response)
     {
         errorMessage.gameObject.SetActive(false);
         if (!isSignUpScreen)
         {
-            HandleLoggingIn();
+            HandleLoggingIn(response);
         }
         else
         {
@@ -99,15 +103,19 @@ public class LoginScreen : MonoBehaviour
 
     public void LogOut()
     {
+        AuthManager.ClearTokens();
         isLoggedIn.text = "Not logged in";
     }
     
-    private void HandleLoggingIn()
+    private void HandleLoggingIn(string response)
     {
-        isLoggedIn.text = $"Logged in: {playerName}";
+        LoginResponse data = JsonUtility.FromJson<LoginResponse>(response);
+        AuthManager.SetAccessToken(data.accessToken);
+        AuthManager.SetRefreshToken(data.refreshToken);
+        isLoggedIn.text = $"Logged in: {AuthManager.PlayerName}";
         loginPanel.SetActive(false);
+        masterPanel.SetActive(false);
         playPanel.gameObject.SetActive(true);
-        
     }
     private void HandleSigningIn()
     {
@@ -124,7 +132,6 @@ public class LoginScreen : MonoBehaviour
         // if tab is pressed
         if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
-            
             GameObject current = EventSystem.current.currentSelectedGameObject;
             if (current == null) return;
 
