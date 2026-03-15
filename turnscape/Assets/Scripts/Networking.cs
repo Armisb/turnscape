@@ -7,6 +7,8 @@ using UnityEngine.Networking;
 
 public class Networking : MonoBehaviour
 {
+    [SerializeField] private LoginScreen loginScreen;
+    
     private void Awake()
     {
         if (AuthManager.AccessToken != null)
@@ -20,11 +22,14 @@ public class Networking : MonoBehaviour
         }
     }
 
-    [SerializeField] private LoginScreen loginScreen;
-
     public void SendPostGeneric(string url, string jsonData, Action<String> onSuccess, Action<String> onError)
     {
-        StartCoroutine(SendPostGen(url, jsonData, onSuccess, onError));
+        StartCoroutine(SendRequestGen("POST", url, jsonData, onSuccess, onError));
+    }
+    
+    public void SendGetGeneric(string url, string jsonData, Action<String> onSuccess, Action<String> onError)
+    {
+        StartCoroutine(SendRequestGen("GET", url, jsonData, onSuccess, onError));
     }
     
     public void Logout()
@@ -32,17 +37,22 @@ public class Networking : MonoBehaviour
         loginScreen.LogOut();
     }
 
-    private IEnumerator SendPostGen(string url, string jsonData, Action<string> onSuccess, Action<string> onError)
+    private IEnumerator SendRequestGen(string type, string url, string jsonData, Action<string> onSuccess, Action<string> onError)
     {
         // convert to byte array
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
         // handle request
-        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        UnityWebRequest request = new UnityWebRequest(url, type);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.certificateHandler = new AcceptAllCertificates();
         request.SetRequestHeader("Content-Type", "application/json");
+
+        if (AuthManager.AccessToken != null)
+        {
+            request.SetRequestHeader("Authorization", $"Bearer {AuthManager.AccessToken}");
+        }
 
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
