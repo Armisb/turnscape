@@ -1,3 +1,4 @@
+using System.Net;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -30,7 +31,28 @@ public class LoginScreen : MonoBehaviour
 
     public void SetErrorMessage(string errorMessage)
     {
-        this.errorMessage.text = errorMessage;
+        string formattedError = errorMessage;
+        if (!errorMessage.Contains("4"))
+            formattedError = "Cannot reach the server.";
+        else
+        {
+            switch (errorMessage.Substring(errorMessage.IndexOf("4"), 3))
+            {
+                case "400":
+                    formattedError = "Username already in use.";
+                    break;
+                case "401":
+                    formattedError = "Invalid Username or Password";
+                    break;
+                case "404":
+                    formattedError = "Cannot connect to the server";
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        this.errorMessage.text = formattedError;
         this.errorMessage.gameObject.SetActive(true);
     }
 
@@ -58,8 +80,8 @@ public class LoginScreen : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(mailField.text) || string.IsNullOrWhiteSpace(passwordField.text))
         {
-            Debug.Log("email or password is empty");
-            errorMessage.text = "email or password is empty!";
+            Debug.Log("Username or password is empty");
+            errorMessage.text = "Username or Password field is empty!";
             errorMessage.gameObject.SetActive(true);
         }
         else
@@ -68,7 +90,7 @@ public class LoginScreen : MonoBehaviour
             if (!isSignUpScreen)
             {
                 nt.SendPostGeneric(
-                    "https://localhost:7232/user/login",
+                    "user/login",
                     $"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}",
                     response => this.SucessfullLogin(response),
                     error => this.SetErrorMessage(error)
@@ -77,10 +99,10 @@ public class LoginScreen : MonoBehaviour
             else
             {
                 nt.SendPostGeneric(
-                    "https://localhost:7232/user/signup",
+                    "user/signup",
                     $"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}",
                     response => this.SucessfullLogin(response),
-                    error => this.SucessfullLogin(error)
+                    error => this.SetErrorMessage(error)
                     );
             }
             

@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 public class Networking : MonoBehaviour
 {
     [SerializeField] private LoginScreen loginScreen;
-    
+    private static string defaultBaseUrl = "https://localhost:7232/"; 
     private void Awake()
     {
         if (AuthManager.AccessToken != null)
@@ -43,7 +43,7 @@ public class Networking : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
         // handle request
-        UnityWebRequest request = new UnityWebRequest(url, type);
+        UnityWebRequest request = new UnityWebRequest(defaultBaseUrl+url, type);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.certificateHandler = new AcceptAllCertificates();
