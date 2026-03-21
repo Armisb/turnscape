@@ -1,26 +1,28 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
-public class StatisticsSc : MonoBehaviour
+public class StatisticsSc : LoaderBehaviour<StatisticsSc>
 {
-    public static StatisticsSc Instance { get; private set; }
-
     public int damage;
     public int protection;
 
     private List<StatisticsUI> statisticsUIs = new List<StatisticsUI>();
 
-    void Awake()
+    public override List<Type> Dependencies => new()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        typeof(InventoryManSc)
+    };
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+    protected override void Load()
+    {
+        LocateStatisticsUI();
+    }
+
+    protected override void Apply()
+    {
+
     }
 
     public void LocateStatisticsUI()

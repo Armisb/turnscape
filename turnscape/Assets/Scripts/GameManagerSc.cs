@@ -1,8 +1,9 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections;
+using static UnityEditor.LightingExplorerTableColumn;
 
 public class GameManagerSc : MonoBehaviour
 {
@@ -16,6 +17,12 @@ public class GameManagerSc : MonoBehaviour
 
     public Downloader downloader;
 
+    public static event System.Action OnStage_AfterSceneLoad;
+    public static event System.Action OnStage_Locate;
+    public static event System.Func<IEnumerator> OnStage_Load;
+    public static event System.Action OnStage_Bind;
+    public static event System.Action OnStage_Finalize;
+
     private void Awake()
     {
         if (Instance == null)
@@ -27,6 +34,13 @@ public class GameManagerSc : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private IEnumerator Start()
+    {
+        yield return null;
+
+        LoaderBehaviour.LoadAllUnloaded();
     }
 
     public void SetCanvasCamera()
@@ -84,12 +98,14 @@ public class GameManagerSc : MonoBehaviour
             yield return null;
         }
 
-        if (sceneName == "BaseScene")
+        /*if (sceneName == "BaseScene")
         {
             Debug.Log("loaders");
             InventoryManSc.Instance.RebuildSceneInventories();
             StatisticsSc.Instance.LocateStatisticsUI();
-        }
+        }*/
+
+        LoaderBehaviour.LoadAllUnloaded();
 
         SetCanvasCamera();
 
