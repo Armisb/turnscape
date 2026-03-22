@@ -17,13 +17,6 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
     private InventorySc miscInv;
 
-    /*void Start()
-    {
-        Debug.Log("Start");
-        RebuildSceneInventories();
-        StatisticsSc.Instance.LocateStatisticsUI();
-    }*/
-
     public override List<Type> Dependencies => new();
 
     protected override void Load()

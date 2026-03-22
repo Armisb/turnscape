@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEditor.LightingExplorerTableColumn;
 
 public class GameManagerSc : MonoBehaviour
 {
@@ -17,11 +16,7 @@ public class GameManagerSc : MonoBehaviour
 
     public Downloader downloader;
 
-    public static event System.Action OnStage_AfterSceneLoad;
-    public static event System.Action OnStage_Locate;
-    public static event System.Func<IEnumerator> OnStage_Load;
-    public static event System.Action OnStage_Bind;
-    public static event System.Action OnStage_Finalize;
+    public Camera MainCamera;
 
     private void Awake()
     {
@@ -41,6 +36,8 @@ public class GameManagerSc : MonoBehaviour
         yield return null;
 
         LoaderBehaviour.LoadAllUnloaded();
+
+        SetCanvasCamera();
     }
 
     public void SetCanvasCamera()
@@ -49,16 +46,24 @@ public class GameManagerSc : MonoBehaviour
 
         if (cam == null)
         {
-            Debug.LogWarning("Main Camera not found in scene.");
-            return;
+            cam = MainCamera;
+
+            if (cam == null)
+            {
+                Debug.LogWarning("No camera found (Main or fallback).");
+                return;
+            }
         }
 
-        Canvas canvas = miscCanvas.GetComponent<Canvas>();
+        Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
 
-        if (canvas != null)
+        foreach (Canvas canvas in canvases)
         {
-            canvas.renderMode = RenderMode.ScreenSpaceCamera;
-            canvas.worldCamera = cam;
+            if (canvas.renderMode != RenderMode.ScreenSpaceCamera || canvas.worldCamera == null)
+            {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = cam;
+            }
         }
     }
 
@@ -97,13 +102,6 @@ public class GameManagerSc : MonoBehaviour
 
             yield return null;
         }
-
-        /*if (sceneName == "BaseScene")
-        {
-            Debug.Log("loaders");
-            InventoryManSc.Instance.RebuildSceneInventories();
-            StatisticsSc.Instance.LocateStatisticsUI();
-        }*/
 
         LoaderBehaviour.LoadAllUnloaded();
 
