@@ -1,4 +1,6 @@
 using System.Net;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,12 +18,19 @@ public class LoginScreen : MonoBehaviour
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private GameObject playPanel;
     private bool isSignUpScreen = false;
-    private Networking nt;
 
 
-    private void Start()
+    private void Awake()
     {
-        nt = GetComponentInChildren(typeof(Networking)) as Networking;
+        if (AuthManager.AccessToken != null)
+        {
+            var data = new LoginResponse
+            {
+                accessToken = AuthManager.AccessToken,
+                refreshToken = AuthManager.RefreshToken
+            };
+            SucessfullLogin(JsonUtility.ToJson(data));
+        }
     }
 
     private void Update()
@@ -58,7 +67,7 @@ public class LoginScreen : MonoBehaviour
 
     public void SwitchToSignUpScreen()
     {
-        isSignUpScreen = true;
+        SetSignUpScreen(true);
         loginHeader.text = "Signup to the game";
         loginText.text = "Sign up";
     }
@@ -76,7 +85,7 @@ public class LoginScreen : MonoBehaviour
         loginPanel.SetActive(false);
     }
 
-    public void TextFieldFilled()
+    private async Task TextFieldFilled()
     {
         if (string.IsNullOrWhiteSpace(mailField.text) || string.IsNullOrWhiteSpace(passwordField.text))
         {
@@ -86,19 +95,22 @@ public class LoginScreen : MonoBehaviour
         }
         else
         {
-            AuthManager.SetPlayerName(mailField.text);
             if (!isSignUpScreen)
             {
-                nt.SendPostGeneric(
+
+
+                await Networking.SendPostGeneric(
                     "user/login",
                     $"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}",
                     response => this.SucessfullLogin(response),
                     error => this.SetErrorMessage(error)
-                    );
+                );
             }
             else
             {
-                nt.SendPostGeneric(
+                
+            
+                await Networking.SendPostGeneric(
                     "user/signup",
                     $"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}",
                     response => this.SucessfullLogin(response),
@@ -108,7 +120,18 @@ public class LoginScreen : MonoBehaviour
             
         }
     }
-    
+
+    public void SetSignUpScreen(bool sign)
+    {
+        if  (sign)
+        {
+            isSignUpScreen =  true;
+        }
+        else
+        {
+            isSignUpScreen = false;
+        }
+    }
     
     public void SucessfullLogin(string response)
     {
@@ -129,11 +152,25 @@ public class LoginScreen : MonoBehaviour
         isLoggedIn.text = "Not logged in";
     }
     
+    public void OnTextFieldFilled()
+    {
+        _ = TextFieldFilled();
+    }
+    
     private void HandleLoggingIn(string response)
     {
         LoginResponse data = JsonUtility.FromJson<LoginResponse>(response);
         AuthManager.SetAccessToken(data.accessToken);
         AuthManager.SetRefreshToken(data.refreshToken);
+        // Extract User ID from JWT
+        AuthManager.SetPlayerID((JwtHelper.GetClaim(
+            data.accessToken,
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        )));
+        AuthManager.SetPlayerName(JwtHelper.GetClaim(
+            data.accessToken,
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+        ));
         isLoggedIn.text = $"Logged in: {AuthManager.PlayerName}";
         loginPanel.SetActive(false);
         masterPanel.SetActive(false);
