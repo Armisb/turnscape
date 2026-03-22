@@ -1,8 +1,8 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections;
 
 public class GameManagerSc : MonoBehaviour
 {
@@ -15,6 +15,8 @@ public class GameManagerSc : MonoBehaviour
     public TMP_Text percentageText;
 
     public Downloader downloader;
+
+    public Camera MainCamera;
 
     private void Awake()
     {
@@ -29,22 +31,39 @@ public class GameManagerSc : MonoBehaviour
         }
     }
 
+    private IEnumerator Start()
+    {
+        yield return null;
+
+        LoaderBehaviour.LoadAllUnloaded();
+
+        SetCanvasCamera();
+    }
+
     public void SetCanvasCamera()
     {
         Camera cam = Camera.main;
 
         if (cam == null)
         {
-            Debug.LogWarning("Main Camera not found in scene.");
-            return;
+            cam = MainCamera;
+
+            if (cam == null)
+            {
+                Debug.LogWarning("No camera found (Main or fallback).");
+                return;
+            }
         }
 
-        Canvas canvas = miscCanvas.GetComponent<Canvas>();
+        Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
 
-        if (canvas != null)
+        foreach (Canvas canvas in canvases)
         {
-            canvas.renderMode = RenderMode.ScreenSpaceCamera;
-            canvas.worldCamera = cam;
+            if (canvas.renderMode != RenderMode.ScreenSpaceCamera || canvas.worldCamera == null)
+            {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = cam;
+            }
         }
     }
 
@@ -84,12 +103,7 @@ public class GameManagerSc : MonoBehaviour
             yield return null;
         }
 
-        if (sceneName == "BaseScene")
-        {
-            Debug.Log("loaders");
-            InventoryManSc.Instance.RebuildSceneInventories();
-            StatisticsSc.Instance.LocateStatisticsUI();
-        }
+        LoaderBehaviour.LoadAllUnloaded();
 
         SetCanvasCamera();
 

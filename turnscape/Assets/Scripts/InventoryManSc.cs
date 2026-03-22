@@ -1,14 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using UnityEngine;
 
-public class InventoryManSc : MonoBehaviour
+public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 {
-    // Singleton instance
-    public static InventoryManSc Instance { get; private set; }
-
     // InventoryName -> SlotName -> ItemData (null if empty)
     public Dictionary<string, Dictionary<string, ItemData>> InventoryData =
         new Dictionary<string, Dictionary<string, ItemData>>();
@@ -19,24 +17,17 @@ public class InventoryManSc : MonoBehaviour
 
     private InventorySc miscInv;
 
-    void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+    public override List<Type> Dependencies => new();
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+    protected override void Load()
+    {
+        RebuildSceneInventories();
     }
 
-    /*void Start()
+    protected override void Apply()
     {
-        Debug.Log("Start");
-        RebuildSceneInventories();
-        StatisticsSc.Instance.LocateStatisticsUI();
-    }*/
+
+    }
 
     public void RebuildSceneInventories()
     {
@@ -101,8 +92,6 @@ public class InventoryManSc : MonoBehaviour
         if (InventoryObjects.ContainsKey("PlayerInventory"))
         {
             GetInventoriesFromServer();
-            StatisticsSc.Instance.RecalculateStats();
-            PrintInventoryData();
         }
     }
 
