@@ -15,6 +15,8 @@ public abstract class LoaderBehaviour : MonoBehaviour
 
     protected abstract void Load();
 
+    protected abstract void SceneReload();
+
     protected abstract void Apply();
 
     protected virtual void Awake()
@@ -32,6 +34,14 @@ public abstract class LoaderBehaviour : MonoBehaviour
         foreach (var loader in LoaderBehaviour.Loaders)
         {
             loader.Apply();
+        }
+    }
+
+    public static void SceneReloadAll()
+    {
+        foreach (var loader in LoaderBehaviour.Loaders)
+        {
+            loader.SceneReload();
         }
     }
 }
@@ -75,6 +85,6 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
     }
 
     protected abstract override void Load();
-
+    protected abstract override void SceneReload();
     protected abstract override void Apply();
 }

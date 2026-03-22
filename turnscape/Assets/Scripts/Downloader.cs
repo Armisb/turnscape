@@ -1,40 +1,35 @@
 using System.Collections;
-using System.IO;
-using System.Text;
-using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class Downloader : MonoBehaviour
 {
-    public void GetInventoriesFromServer()
+    public void GetInventoriesFromServer(System.Action<string> onComplete)
     {
-        StartCoroutine(DownloadInventoryJson());
+        StartCoroutine(DownloadInventoryJson(onComplete));
     }
 
-    private IEnumerator DownloadInventoryJson()
+    private IEnumerator DownloadInventoryJson(System.Action<string> onComplete)
     {
         string url = "https://turnscape-api.azurewebsites.net/Item";
 
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.certificateHandler = new AcceptAllCertificates();
-
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.Success)
+        using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
-            string json = request.downloadHandler.text;
+            yield return request.SendWebRequest();
 
-            string path = Path.Combine(Application.dataPath, "InventoryData.json");
-            File.WriteAllText(path, json);
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string json = request.downloadHandler.text;
 
-            Debug.Log("Inventory JSON saved");
-        }
-        else
-        {
-            Debug.Log("Failed to download inventory JSON: " + request.error);
+                Debug.Log("Downloaded JSON: " + json);
+
+                onComplete?.Invoke(json);
+            }
+            else
+            {
+                Debug.LogError("Failed: " + request.error);
+                onComplete?.Invoke(null);
+            }
         }
     }
 }

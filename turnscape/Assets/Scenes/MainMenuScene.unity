@@ -826,6 +826,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2589631379634420339, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: MainCamera
+      value: 
+      objectReference: {fileID: 2115083225}
+    - target: {fileID: 2589631379634420339, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
       propertyPath: miscCanvas
       value: 
       objectReference: {fileID: 1781823917}

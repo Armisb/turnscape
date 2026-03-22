@@ -103,9 +103,10 @@ public class GameManagerSc : MonoBehaviour
             yield return null;
         }
 
-        LoaderBehaviour.LoadAllUnloaded();
-
         SetCanvasCamera();
+
+        LoaderBehaviour.SceneReloadAll();
+        LoaderBehaviour.LoadAllUnloaded();
 
         loadingPanel.SetActive(false);
     }
