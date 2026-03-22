@@ -130,7 +130,7 @@ public void FormatError_EmptyString_ReturnsServerUnreachable()
 {
     Assert.AreEqual("Cannot reach the server.", _service.FormatErrorMessage(""));
 }
-AdAA
+
 
 [Test]
 public void ParseLoginResponse_InvalidToken_ReturnsNull()
