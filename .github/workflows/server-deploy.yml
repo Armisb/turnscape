@@ -12,6 +12,7 @@ env:
   DOTNET_VERSION: "10.x"
   SOLUTION_PATH: ./server/GameAPI/GameAPI.csproj
   API_PROJECT_PATH: ./server/GameAPI/GameAPI.csproj
+  SHARED_LIB_PATH: ./shared_lib/shared_lib.csproj
   PUBLISH_DIR: ./publish
 
 jobs:
@@ -26,6 +27,12 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Shared_Restore
+        run: dotnet restore ${{ env.SHARED_LIB_PATH }}
+
+      - name: Shared_Build
+        run: dotnet build ${{ env.SHARED_LIB_PATH }} --configuration Release --no-restore
 
       - name: Restore
         run: dotnet restore ${{ env.SOLUTION_PATH }}
