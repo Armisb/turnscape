@@ -92,8 +92,6 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         if (InventoryObjects.ContainsKey("PlayerInventory"))
         {
             GetInventoriesFromServer();
-            //StatisticsSc.Instance.RecalculateStats();
-            //PrintInventoryData();
         }
     }
 
