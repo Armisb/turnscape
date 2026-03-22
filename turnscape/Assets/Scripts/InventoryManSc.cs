@@ -24,6 +24,11 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         RebuildSceneInventories();
     }
 
+    protected override void SceneReload()
+    {
+        RebuildSceneInventories();
+    }
+
     protected override void Apply()
     {
 
@@ -91,7 +96,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
         if (InventoryObjects.ContainsKey("PlayerInventory"))
         {
-            GetInventoriesFromServer();
+            GameManagerSc.Instance.downloader.GetInventoriesFromServer(OnDataReceived);
         }
     }
 
@@ -263,32 +268,15 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         return k == slots.Length;
     }
 
-    public void GetInventoriesFromServer()
+    private void OnDataReceived(string json)
     {
-        StartCoroutine(DownloadAndLoadInventory());
-    }
-
-    private IEnumerator DownloadAndLoadInventory()
-    {
-        GameManagerSc.Instance.downloader.GetInventoriesFromServer();
-
-        string path = Path.Combine(Application.dataPath, "InventoryData.json");
-        float timeout = 5f;
-        float elapsed = 0f;
-
-        while (!File.Exists(path) && elapsed < timeout)
+        if (string.IsNullOrEmpty(json))
         {
-            elapsed += Time.deltaTime;
-            yield return null;
+            Debug.LogError("Inventory JSON is null");
+            return;
         }
 
-        if (!File.Exists(path))
-        {
-            Debug.Log("InventoryData.json not created by downloader.");
-            yield break;
-        }
-
-        string json = File.ReadAllText(path);
+        Debug.Log("Received JSON from server:\n" + json);
 
         string wrappedJson = "{\"items\":" + json + "}";
 
@@ -296,8 +284,8 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
         if (list == null || list.items == null)
         {
-            Debug.Log("Failed to parse InventoryData.json");
-            yield break;
+            Debug.LogError("Failed to parse inventory JSON");
+            return;
         }
 
         foreach (var item in list.items)

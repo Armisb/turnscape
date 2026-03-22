@@ -20,6 +20,11 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         LocateStatisticsUI();
     }
 
+    protected override void SceneReload()
+    {
+        LocateStatisticsUI();
+    }
+
     protected override void Apply()
     {
 

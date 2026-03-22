@@ -548,7 +548,7 @@ MonoBehaviour:
   fillImage: {fileID: 6233524082004491869}
   percentageText: {fileID: 8703233044033916499}
   downloader: {fileID: 5970976004033124587}
-  MainCamera: {fileID: 0}
+  MainCamera: {fileID: 8963765380267355354}
 --- !u!114 &-8908602343444171370
 MonoBehaviour:
   m_ObjectHideFlags: 0
