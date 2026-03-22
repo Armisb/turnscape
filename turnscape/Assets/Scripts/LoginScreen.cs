@@ -1,11 +1,14 @@
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using shared_lib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Button = UnityEngine.UI.Button;
+using shared_lib;
 
 public class LoginScreen : MonoBehaviour
 {
@@ -97,22 +100,26 @@ public class LoginScreen : MonoBehaviour
         {
             if (!isSignUpScreen)
             {
-
-
                 await Networking.SendPostGeneric(
+                var loginUserDto = new LoginUserDto();
+                loginUserDto.UserName = mailField.text;
+                loginUserDto.Password = passwordField.text;
+                nt.SendPostGeneric(
                     "user/login",
-                    $"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}",
+                    loginUserDto,
                     response => this.SucessfullLogin(response),
                     error => this.SetErrorMessage(error)
                 );
             }
             else
             {
-                
-            
                 await Networking.SendPostGeneric(
+                var createUserDto = new CreateUserDto();
+                createUserDto.UserName = mailField.text;
+                createUserDto.Password = passwordField.text;
+                nt.SendPostGeneric(
                     "user/signup",
-                    $"{{\"UserName\":\"{mailField.text}\",\"Password\":\"{passwordField.text}\"}}",
+                    createUserDto,
                     response => this.SucessfullLogin(response),
                     error => this.SetErrorMessage(error)
                     );

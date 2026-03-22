@@ -1,6 +1,6 @@
 using System;
 using GameAPI.Models;
-using GameAPI.NewFolder.ItemTypeDtos;
+using shared_lib.ItemTypeDtos;
 
 namespace GameAPI.Services.ItemType;
 

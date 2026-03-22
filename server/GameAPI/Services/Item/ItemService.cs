@@ -1,6 +1,6 @@
 using System;
 using GameAPI.Data;
-using GameAPI.NewFolder.ItemDtos;
+using shared_lib.ItemDtos;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace GameAPI.Services.Item;

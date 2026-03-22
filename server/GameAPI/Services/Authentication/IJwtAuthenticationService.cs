@@ -17,7 +17,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using GameAPI.NewFolder;
+using shared_lib;
 
 namespace GameAPI.Services.Authentication
 {

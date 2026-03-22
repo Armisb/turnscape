@@ -1,9 +1,10 @@
-﻿namespace GameAPI.NewFolder
+﻿using System;
+namespace shared_lib
 {
     public class RefreshTokenRequestDto
     {
         public Guid Id { get; set; }
-        public required string RefreshToken { get; set; }
+        public string RefreshToken { get; set; }
 
     }
 }

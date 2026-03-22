@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1</TargetFrameworks>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RunPostBuildEvent>Always</RunPostBuildEvent>
+    </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.9" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.16.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.16.0" />
+  </ItemGroup>
+
+    
+    <Target Name="CopyBuild" AfterTargets="Build">
+        <ItemGroup>
+            <MySourceFiles Include="$(TargetDir)/*.dll"/>
+            <MyOutputDir Include="$(TargetDir)/../../../../turnscape/Assets/Shared_DLL"/>
+            <MyOutputDir2 Include="$(TargetDir)/../../../../server/GameAPI/Shared_DLL"/>
+        </ItemGroup>
+        <Copy
+            SourceFiles="@(MySourceFiles)"
+            DestinationFolder="@(MyOutputDir)"
+            OverwriteReadOnlyFiles="true"
+        />
+        <Message Text="DLLs copied to: @(MyOutputDir)" Importance="high"/>
+        <Copy
+            SourceFiles="@(MySourceFiles)"
+            DestinationFolder="@(MyOutputDir2)"
+            OverwriteReadOnlyFiles="true"
+        />
+        <Message Text="DLLs copied to: @(MyOutputDir2)" Importance="high"/>
+    </Target>
+</Project>

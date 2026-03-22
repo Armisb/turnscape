@@ -1,7 +1,7 @@
 using System;
 using GameAPI.Data;
 using GameAPI.Models;
-using GameAPI.NewFolder.ItemTypeDtos;
+using shared_lib.ItemTypeDtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameAPI.Services.ItemType;

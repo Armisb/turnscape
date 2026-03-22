@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GameAPI.NewFolder
+namespace shared_lib
 {
     public class LoginUserDto
     {

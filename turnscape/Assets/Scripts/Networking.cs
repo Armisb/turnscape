@@ -4,25 +4,28 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SocialPlatforms.Impl;
+using shared_lib;
+using Newtonsoft.Json;
 
 
 public static class Networking
 {
     private static string defaultBaseUrl = "https://turnscape-api.azurewebsites.net/"; 
 
-        public static async Task SendPostGeneric(string url, string jsonData, Action<string> onSuccess, Action<string> onError)
+        public static async Task SendPostGeneric(string url, object jsonData, Action<string> onSuccess, Action<string> onError)
         {
             await SendRequestGen("POST", url, jsonData, onSuccess, onError);
         }
 
-        public static async Task SendGetGeneric(string url, string jsonData, Action<string> onSuccess, Action<string> onError)
+        public static async Task SendGetGeneric(string url, object jsonData, Action<string> onSuccess, Action<string> onError)
         {
             await SendRequestGen("GET", url, jsonData, onSuccess, onError);
         }
 
-        private static async Task SendRequestGen(string type, string url, string jsonData, Action<string> onSuccess, Action<string> onError)
+        private static async Task SendRequestGen(string type, string url, object jsonData, Action<string> onSuccess, Action<string> onError)
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData ?? "");
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jsonData) ?? "");
 
             using UnityWebRequest request = new UnityWebRequest(defaultBaseUrl + url, type);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -50,8 +53,7 @@ public static class Networking
             }
         }
     }
-
-
+}
 
 public class AcceptAllCertificates : CertificateHandler
 {

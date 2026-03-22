@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using GameAPI.NewFolder;
+using shared_lib;
 
 namespace GameAPI.Controllers
 {
