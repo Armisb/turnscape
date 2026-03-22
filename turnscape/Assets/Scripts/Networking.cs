@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 public class Networking : MonoBehaviour
 {
     [SerializeField] private LoginScreen loginScreen;
-    private static string defaultBaseUrl = "https://localhost:7232/"; 
+    private static string defaultBaseUrl = "https://turnscape-api.azurewebsites.net/"; 
     private void Awake()
     {
         if (AuthManager.AccessToken != null)
