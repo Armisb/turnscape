@@ -11,7 +11,7 @@ public class Downloader : MonoBehaviour
 
     private IEnumerator DownloadInventoryJson(System.Action<string> onComplete)
     {
-        string url = "https://turnscape-api.azurewebsites.net/Item";
+        string url = "https://turnscape-api.azurewebsites.net/Item/" + AuthManager.PlayerId;
 
         using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
