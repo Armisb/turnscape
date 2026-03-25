@@ -1,28 +1,18 @@
-using System.IO;
 using UnityEngine;
 
 public static class FileReader
 {
-    public static string BaseAssetsPath = Application.dataPath;
-    public static string BaseTexturesPath = Path.Combine(Application.dataPath, "Textures");
-
-    public static Sprite GetTextureSprite(string fileName, string folderPath = null)
+    public static Sprite GetTextureSprite(string fileName)
     {
-        string path = folderPath ?? BaseTexturesPath;
-        string fullPath = Path.Combine(path, fileName);
+        string fileNameNoExt = System.IO.Path.GetFileNameWithoutExtension(fileName);
 
-        if (!File.Exists(fullPath))
+        Sprite sprite = Resources.Load<Sprite>($"Textures/{fileNameNoExt}");
+
+        if (sprite == null)
         {
-            Debug.LogError($"File not found at '{fullPath}'");
-            return null;
+            Debug.LogError($"Sprite not found in Resources/Textures: {fileNameNoExt}");
         }
 
-        byte[] fileData = File.ReadAllBytes(fullPath);
-        Texture2D tex = new Texture2D(2, 2);
-
-        if (!tex.LoadImage(fileData))
-            return null;
-
-        return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        return sprite;
     }
 }
