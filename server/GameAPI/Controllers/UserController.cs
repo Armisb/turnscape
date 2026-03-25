@@ -15,7 +15,7 @@ namespace GameAPI.Controllers
     public class UserController(IUserService service, IJwtAuthenticationService authenticationService) : ControllerBase
     {
         
-        [Authorize(Roles = "GameUser")]
+        
         [HttpGet]
         public async Task<ActionResult<List<GameUser>>> GetUser()
         {

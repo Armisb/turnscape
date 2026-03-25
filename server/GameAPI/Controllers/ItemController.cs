@@ -112,6 +112,20 @@ namespace GameAPI.Controllers
             }
         }
 
+
+        [HttpPut("update-positions/{userId}")]
+        public async Task<ActionResult<List<UpdatePosDto>>> UpdatePositions(
+        Guid userId,
+        List<UpdatePosDto> updated)
+        {
+            if (updated == null)
+                return BadRequest("No items provided.");
+
+            var result = await itemService.UpdateItemsPositions(updated, userId);
+
+            return Ok(result);
+        }
+        
         // with service
         [HttpPost]
         public async Task<ActionResult<Item>> CreateItem(CreateItemDto itemDto)
