@@ -1,4 +1,5 @@
 using System;
+using GameAPI.NewFolder.ItemDtos;
 using shared_lib.ItemDtos;
 
 namespace GameAPI.Services.Item;
