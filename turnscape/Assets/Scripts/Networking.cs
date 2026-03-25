@@ -53,7 +53,7 @@ public static class Networking
             }
         }
     }
-}
+
 
 public class AcceptAllCertificates : CertificateHandler
 {

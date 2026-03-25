@@ -8,7 +8,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
-using shared_lib;
 
 public class LoginScreen : MonoBehaviour
 {
@@ -100,11 +99,20 @@ public class LoginScreen : MonoBehaviour
         {
             if (!isSignUpScreen)
             {
-                await Networking.SendPostGeneric(
-                var loginUserDto = new LoginUserDto();
+                // await Networking.SendPostGeneric(
+                // var loginUserDto = new LoginUserDto();
+                // loginUserDto.UserName = mailField.text;
+                // loginUserDto.Password = passwordField.text;
+                // nt.SendPostGeneric(
+                //     "user/login",
+                //     loginUserDto,
+                //     response => this.SucessfullLogin(response),
+                //     error => this.SetErrorMessage(error)
+                // );
+                LoginUserDto loginUserDto = new LoginUserDto();
                 loginUserDto.UserName = mailField.text;
                 loginUserDto.Password = passwordField.text;
-                nt.SendPostGeneric(
+                await Networking.SendPostGeneric(
                     "user/login",
                     loginUserDto,
                     response => this.SucessfullLogin(response),
@@ -113,11 +121,10 @@ public class LoginScreen : MonoBehaviour
             }
             else
             {
-                await Networking.SendPostGeneric(
                 var createUserDto = new CreateUserDto();
                 createUserDto.UserName = mailField.text;
                 createUserDto.Password = passwordField.text;
-                nt.SendPostGeneric(
+                await Networking.SendPostGeneric(
                     "user/signup",
                     createUserDto,
                     response => this.SucessfullLogin(response),
