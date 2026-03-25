@@ -7,6 +7,7 @@ using GameAPI.Services.ItemType;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GameAPI.NewFolder.ItemDtos;
 
 namespace GameAPI.Controllers
 {
