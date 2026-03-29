@@ -17,19 +17,11 @@
         <ItemGroup>
             <MySourceFiles Include="$(TargetDir)/*.dll"/>
             <MyOutputDir Include="$(TargetDir)/../../../../turnscape/Assets/Shared_DLL"/>
-            <MyOutputDir2 Include="$(TargetDir)/../../../../server/GameAPI/Shared_DLL"/>
         </ItemGroup>
         <Copy
             SourceFiles="@(MySourceFiles)"
             DestinationFolder="@(MyOutputDir)"
             OverwriteReadOnlyFiles="true"
         />
-        <Message Text="DLLs copied to: @(MyOutputDir)" Importance="high"/>
-        <Copy
-            SourceFiles="@(MySourceFiles)"
-            DestinationFolder="@(MyOutputDir2)"
-            OverwriteReadOnlyFiles="true"
-        />
-        <Message Text="DLLs copied to: @(MyOutputDir2)" Importance="high"/>
     </Target>
 </Project>

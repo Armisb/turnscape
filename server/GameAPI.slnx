@@ -1,2 +1,4 @@
 <Solution>
+  <Project Path="GameAPI.Tests/GameAPI.Tests.csproj" />
+  <Project Path="GameAPI/GameAPI.csproj" />
 </Solution>
