@@ -20,12 +20,4 @@ public class UserService(AppDbContext context, IConfiguration configuration) : I
         List<GameUser> users = await context.GameUsers.ToListAsync<GameUser>();
         return users;
     }
-
-    public async Task<GameUser?> GetUserByIdAsync(int Id)
-    {
-        GameUser? user = await context.GameUsers.FindAsync(Id);
-        return user;
-    }
-
-   
 }
