@@ -29,9 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="shared_lib">
-      <HintPath>Shared_DLL\shared_lib.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\shared_lib\shared_lib.csproj" />
   </ItemGroup>
 
 </Project>
