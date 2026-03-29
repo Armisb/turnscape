@@ -15,7 +15,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
     public Dictionary<string, InventorySc> InventoryObjects =
         new Dictionary<string, InventorySc>();
 
-    private InventorySc miscInv;
+    public InventorySc miscInv;
 
     public override List<Type> Dependencies => new();
 
@@ -68,7 +68,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
             {
                 SlotSc slot = slots[i];
 
-                slot.uniqueName = i.ToString();
+                if (slot.uniqueName == "") slot.uniqueName = i.ToString();
                 slot.inventory = inv;
 
                 inv.Slots[slot.uniqueName] = slot;
@@ -106,8 +106,6 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
             return;
 
         string invName = item.inventoryType;
-
-        Debug.Log("Inv: " + invName);
 
         if (string.IsNullOrEmpty(invName) || !InventoryObjects.ContainsKey(invName))
             invName = "PlayerInventory";
@@ -272,11 +270,9 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
     {
         if (string.IsNullOrEmpty(json))
         {
-            Debug.LogError("Inventory JSON is null");
+            Debug.LogWarning("Inventory JSON is null");
             return;
         }
-
-        Debug.Log("Received JSON from server:\n" + json);
 
         string wrappedJson = "{\"items\":" + json + "}";
 
@@ -284,7 +280,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
         if (list == null || list.items == null)
         {
-            Debug.LogError("Failed to parse inventory JSON");
+            Debug.LogWarning("Failed to parse inventory JSON");
             return;
         }
 
