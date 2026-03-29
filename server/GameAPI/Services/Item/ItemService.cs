@@ -54,7 +54,11 @@ public class ItemService(AppDbContext context) : IItemService
             }
             else
             {
-                var item_in_place = items.FirstOrDefault(x => x.ItemType.Category == item_to_switch.ItemType.Category && x.Id != updatePos.Id );
+                var item_in_place = items.FirstOrDefault(x => x.InventoryType != null 
+                                                        && item_to_switch.InventoryType != null 
+                                                        && x.InventoryType.ToLower().Equals(updatePos.InventoryType.ToLower()) 
+                                                        && x.ItemType.Category == item_to_switch.ItemType.Category 
+                                                        && x.Id != updatePos.Id );
                 if(item_in_place != null)
                 {
                     item_in_place.InventoryType = item_to_switch.InventoryType;
