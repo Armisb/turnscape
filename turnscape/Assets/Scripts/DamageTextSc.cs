@@ -1,13 +1,13 @@
 using System;
 using TMPro;
+using UnityEditor.Advertisements;
 using UnityEngine;
-using Random = UnityEngine.Random;
+
 
 public class DamageTextSc : MonoBehaviour
 {
-    private float floatSpeed = 1f;
+    private float floatSpeed = 100f;
     private float lifetime = 2f;
-    
     private TextMeshProUGUI textMesh;
     private RectTransform rectTransform;
     private Color textColor;
@@ -20,12 +20,15 @@ public class DamageTextSc : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         
         startScale = transform.localScale;
-        transform.localScale = startScale * 1.2f;
+        transform.localScale = startScale * 1.25f;
         textColor = textMesh.color;
+        
+
     }
 
     private void Update()
     {
+
         timer += Time.deltaTime;
         float t = timer / lifetime;
         t = 1f - MathF.Pow(1f - t, 2f);
@@ -38,7 +41,7 @@ public class DamageTextSc : MonoBehaviour
         textMesh.color = textColor;
         
         // scale down
-        transform.localScale = Vector3.Lerp(startScale, startScale * 0.5f, t);
+        transform.localScale = Vector3.Lerp(startScale, startScale * 0.25f, t);
 
         if (timer >= lifetime)
         {
@@ -49,6 +52,7 @@ public class DamageTextSc : MonoBehaviour
     public void SetText(string text)
     {
         textMesh.text = text;
+  
     }
     
 }
