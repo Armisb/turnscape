@@ -39,26 +39,22 @@ public class FightSc : MonoBehaviour
     {
         Enemy.TakeDamage(Player.damage * damageMultiplier);
         turn = false;
-        bool ended = CheckEnd();
-        if (ended) return;
+        CheckEnd();
         DoDelayEnemyAttack(Enemy.damage);
     }
 
-    public bool CheckEnd()
+    public void CheckEnd()
     {
         if (!Player.alive)
         {
             endText.text = "You Died!";
             panel.SetActive(true);
-            
         }
         if (!Enemy.alive)
         {
             endText.text = "You Won!";
             panel.SetActive(true);
-            
         }
-        
     }
 
     private void CheckTurn()
