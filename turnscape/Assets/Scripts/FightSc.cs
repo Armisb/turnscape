@@ -1,47 +1,85 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Timers;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class FightSc : MonoBehaviour
 {
-    public Image healthBarFill;
-    public float MaxHealth = 100f;
-    public float CurrentHealth;
 
-    public GameObject damageTextPrefab;
-    public Transform damageTextSpawnPoint;
+    public Entity Player;
+    public Entity Enemy;
+    public Canvas canvas;
+    public bool turn;
+    public GameObject panel;
+    [SerializeField] private TextMeshProUGUI endText;
+    [SerializeField] private float enemyAttackDelay = 1f;
     
-    void Start()
+    
+    void Awake()
     {
-        CurrentHealth = MaxHealth;
-        UpdateHealthBar();
+        canvas.enabled = true;
+        turn = true;
+        Player.protection = StatisticsSc.Instance.protection;
+        Player.damage = StatisticsSc.Instance.damage;
+        Enemy.protection = 2;
+        Enemy.damage = 10;
     }
 
-    public void TakeDamage(float damage)
+    public void Update()
     {
-        CurrentHealth -= damage;
-        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth);
-        UpdateHealthBar();
-        Debug.Log("Took some damage! Current health: " + CurrentHealth);
-        
-        ShowDamageText(damage);
+        CheckTurn();
     }
 
-    private void ShowDamageText(float damage)
+    public void DamageEnemy(float damageMultiplier)
     {
-    Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
+        Enemy.TakeDamage(Player.damage * damageMultiplier);
+        turn = false;
+        bool ended = CheckEnd();
+        if (ended) return;
+        DoDelayEnemyAttack(Enemy.damage);
+    }
+
+    public bool CheckEnd()
+    {
+        if (!Player.alive)
+        {
+            endText.text = "You Died!";
+            panel.SetActive(true);
+            
+        }
+        if (!Enemy.alive)
+        {
+            endText.text = "You Won!";
+            panel.SetActive(true);
+            
+        }
         
-        GameObject damageText = Instantiate(
-            damageTextPrefab,
-            damageTextSpawnPoint.position + randomOffset,
-            Quaternion.identity,
-            damageTextSpawnPoint.parent
-            );
-        damageText.GetComponent<DamageTextSc>().SetText(damage.ToString("0"));
+    }
+
+    private void CheckTurn()
+    {
+        canvas.enabled = turn;
     }
     
-    private void UpdateHealthBar()
+    
+    private void DoDelayEnemyAttack(float damage)
     {
-        healthBarFill.fillAmount = CurrentHealth / MaxHealth;
+        StartCoroutine(DelayEnemyAttack(enemyAttackDelay, damage));
+    }
+    IEnumerator DelayEnemyAttack(float delayTime, float damage)
+    {
+        yield return new WaitForSeconds(delayTime);
+        
+        Player.TakeDamage(damage);
+        turn = true;
+        CheckEnd();
+        //Wait for the specified delay time before continuing.
+        //Do the action after the delay time has finished.
     }
 
  
