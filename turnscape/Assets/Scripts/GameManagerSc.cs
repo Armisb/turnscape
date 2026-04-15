@@ -82,7 +82,7 @@ public class GameManagerSc : MonoBehaviour
         Instance.StartCoroutine(Instance.LoadAsync(sceneName));
     }
 
-    private System.Collections.IEnumerator LoadAsync(string sceneName)
+    private IEnumerator LoadAsync(string sceneName)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
@@ -105,9 +105,17 @@ public class GameManagerSc : MonoBehaviour
 
         SetCanvasCamera();
 
-        LoaderBehaviour.SceneReloadAll();
-        LoaderBehaviour.LoadAllUnloaded();
+        var enumerator = LoaderBehaviour.SceneReloadAll();
+        while (enumerator.MoveNext())
+        {
+            fillImage.fillAmount += 1f / LoaderBehaviour.Loaders.Count;
+            percentageText.text = (fillImage.fillAmount * 100f).ToString("F0") + "%";
 
-        loadingPanel.SetActive(false);
+            yield return enumerator.Current;
+        }
+
+        yield return null;
+
+        Instance.loadingPanel.SetActive(false);
     }
 }

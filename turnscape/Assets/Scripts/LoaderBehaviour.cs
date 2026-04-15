@@ -11,7 +11,8 @@ public abstract class LoaderBehaviour : MonoBehaviour
     public static List<LoaderBehaviour> Loaders = new();
 
     public abstract bool isLoaded { get; set; }
-    public abstract void LoadWithDependencies();
+
+    public abstract IEnumerator LoadWithDependencies();
 
     protected abstract void Load();
 
@@ -24,24 +25,26 @@ public abstract class LoaderBehaviour : MonoBehaviour
 
     }
 
-    public static void LoadAllUnloaded()
+    public static IEnumerator LoadAllUnloaded()
     {
-        foreach (var loader in LoaderBehaviour.Loaders)
+        foreach (var loader in Loaders)
         {
-            loader.LoadWithDependencies();
+            yield return loader.LoadWithDependencies();
         }
 
-        foreach (var loader in LoaderBehaviour.Loaders)
+        foreach (var loader in Loaders)
         {
             loader.Apply();
+            yield return null;
         }
     }
 
-    public static void SceneReloadAll()
+    public static IEnumerator SceneReloadAll()
     {
-        foreach (var loader in LoaderBehaviour.Loaders)
+        foreach (var loader in Loaders)
         {
             loader.SceneReload();
+            yield return null;
         }
     }
 }
@@ -69,7 +72,7 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
         }
     }
 
-    public sealed override void LoadWithDependencies()
+    public sealed override IEnumerator LoadWithDependencies()
     {
         if (!isLoaded)
         {
@@ -77,9 +80,13 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
             {
                 var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
                 if (dep != null && !dep.isLoaded)
-                    dep.LoadWithDependencies();
+                {
+                    yield return dep.LoadWithDependencies();
+                }
             }
+
             Load();
+
             isLoaded = true;
         }
     }
