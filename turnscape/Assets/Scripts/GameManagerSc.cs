@@ -105,7 +105,7 @@ public class GameManagerSc : MonoBehaviour
 
         SetCanvasCamera();
 
-        var enumerator = LoaderBehaviour.SceneReloadAll();
+        var enumerator = LoaderBehaviour.SceneReloadAll(sceneName);
         while (enumerator.MoveNext())
         {
             fillImage.fillAmount += 1f / LoaderBehaviour.Loaders.Count;

@@ -15,17 +15,17 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         typeof(InventoryManSc)
     };
 
-    protected override void Load()
+    protected override void Load(string sceneName = "")
     {
         LocateStatisticsUI();
     }
 
-    protected override void SceneReload()
+    protected override void SceneReload(string sceneName = "")
     {
         LocateStatisticsUI();
     }
 
-    protected override void Apply()
+    protected override void Apply(string sceneName = "")
     {
 
     }

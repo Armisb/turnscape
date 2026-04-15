@@ -19,22 +19,35 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
     public override List<Type> Dependencies => new();
 
-    protected override void Load()
+    public bool doNotRebuild = false;
+
+    protected override void Load(string sceneName = "")
     {
-        RebuildSceneInventories();
+        //RebuildSceneInventories();
     }
 
-    protected override void SceneReload()
+    protected override void SceneReload(string sceneName = "")
     {
-        RebuildSceneInventories();
+        Debug.Log("Reload " + sceneName);
+
+        if (!doNotRebuild)
+        {
+            BuildSceneInventories();
+        }
+        else
+        {
+            RebuildSceneInventories();
+        }
+
+        if (sceneName == "BaseScene") doNotRebuild = true;
     }
 
-    protected override void Apply()
+    protected override void Apply(string sceneName = "")
     {
 
     }
 
-    public void RebuildSceneInventories()
+    public void BuildSceneInventories()
     {
         InventoryObjects.Clear();
 
@@ -74,7 +87,9 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
                 inv.Slots[slot.uniqueName] = slot;
 
                 if (!InventoryData[invName].ContainsKey(slot.uniqueName))
+                {
                     InventoryData[invName][slot.uniqueName] = null;
+                }
             }
         }
 
@@ -100,6 +115,71 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         }
     }
 
+    public void RebuildSceneInventories()
+    {
+        InventoryObjects.Clear();
+
+        if (miscInv == null)
+        {
+            miscInv = new InventorySc();
+            miscInv.uniqueName = "";
+            miscInv.Slots.Clear();
+        }
+
+        InventoryObjects.Add("", miscInv);
+
+
+        InventorySc[] inventories = FindObjectsByType<InventorySc>(FindObjectsSortMode.None);
+
+        foreach (var inv in inventories)
+        {
+            string invName = inv.uniqueName ?? "";
+
+            InventoryObjects[invName] = inv;
+            inv.Slots.Clear();
+
+            /*if (!InventoryData.ContainsKey(invName))
+                InventoryData[invName] = new Dictionary<string, ItemData>();*/
+
+            SlotSc[] slots = inv.GetComponentsInChildren<SlotSc>();
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                SlotSc slot = slots[i];
+
+                if (slot.uniqueName == "") slot.uniqueName = i.ToString();
+                slot.inventory = inv;
+
+                inv.Slots[slot.uniqueName] = slot;
+
+                if (InventoryData.ContainsKey(invName) && InventoryData[invName].ContainsKey(slot.uniqueName))
+                {
+                    PutItemInternal(InventoryData[invName][slot.uniqueName]);
+                }
+            }
+        }
+
+        SlotSc[] allSlots = FindObjectsByType<SlotSc>(FindObjectsSortMode.None);
+
+        foreach (var slot in allSlots)
+        {
+            if (slot.inventory == null)
+            {
+                slot.inventory = miscInv;
+
+                if (!miscInv.Slots.ContainsKey(slot.uniqueName))
+                    miscInv.Slots.Add(slot.uniqueName, slot);
+
+                if (InventoryData[""].ContainsKey(slot.uniqueName))
+                {
+                    PutItemInternal(InventoryData[""][slot.uniqueName]);
+                }
+            }
+        }
+
+
+    }
+
     void PutItemInternal(ItemData item)
     {
         if (item == null)
@@ -112,8 +192,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
         InventorySc inv = InventoryObjects[invName];
 
-        int startIndex = item.position;
-        int index = startIndex;
+        int index = item.position;
 
         int invSize = inv.Slots.Count;
 
@@ -188,19 +267,20 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         InventorySc inventory0 = InventoryObjects[inv0];
         InventorySc inventory1 = InventoryObjects[inv1];
 
+        if (item1 != null) item1.inventoryType = (inventory0 != null) ? inventory0.uniqueName : "";
+        if (item0 != null) item0.inventoryType = (inventory1 != null) ? inventory1.uniqueName : "";
+
         SlotSc slotSc0 = inventory0.Slots[slot0];
         SlotSc slotSc1 = inventory1.Slots[slot1];
+
+        if (item1 != null) item1.position = int.TryParse(slotSc0.uniqueName, out int pos1) ? pos1 : 0;
+        if (item0 != null) item0.position = int.TryParse(slotSc1.uniqueName, out int pos0) ? pos0 : 0;
 
         Sprite sprite0 = slotSc0.GetItemSprite();
         Sprite sprite1 = slotSc1.GetItemSprite();
 
         slotSc0.UpdateUI(sprite1);
         slotSc1.UpdateUI(sprite0);
-
-        /*if (inv0 == "PlayerEquipped" || inv1 == "PlayerEquipped")
-        {
-            PrintInventoryData();
-        }*/
 
         return true;
     }

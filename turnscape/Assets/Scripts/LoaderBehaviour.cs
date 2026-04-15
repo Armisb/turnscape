@@ -12,24 +12,24 @@ public abstract class LoaderBehaviour : MonoBehaviour
 
     public abstract bool isLoaded { get; set; }
 
-    public abstract IEnumerator LoadWithDependencies();
+    public abstract IEnumerator LoadWithDependencies(string sceneName = "");
 
-    protected abstract void Load();
+    protected abstract void Load(string sceneName = "");
 
-    protected abstract void SceneReload();
+    protected abstract void SceneReload(string sceneName = "");
 
-    protected abstract void Apply();
+    protected abstract void Apply(string sceneName = "");
 
     protected virtual void Awake()
     {
-
+        
     }
 
-    public static IEnumerator LoadAllUnloaded()
+    public static IEnumerator LoadAllUnloaded(string sceneName = "")
     {
         foreach (var loader in Loaders)
         {
-            yield return loader.LoadWithDependencies();
+            yield return loader.LoadWithDependencies(sceneName);
         }
 
         foreach (var loader in Loaders)
@@ -39,11 +39,11 @@ public abstract class LoaderBehaviour : MonoBehaviour
         }
     }
 
-    public static IEnumerator SceneReloadAll()
+    public static IEnumerator SceneReloadAll(string sceneName = "")
     {
         foreach (var loader in Loaders)
         {
-            loader.SceneReload();
+            loader.SceneReload(sceneName);
             yield return null;
         }
     }
@@ -72,7 +72,7 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
         }
     }
 
-    public sealed override IEnumerator LoadWithDependencies()
+    public sealed override IEnumerator LoadWithDependencies(string sceneName = "")
     {
         if (!isLoaded)
         {
@@ -81,17 +81,17 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
                 var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
                 if (dep != null && !dep.isLoaded)
                 {
-                    yield return dep.LoadWithDependencies();
+                    yield return dep.LoadWithDependencies(sceneName);
                 }
             }
 
-            Load();
+            Load(sceneName);
 
             isLoaded = true;
         }
     }
 
-    protected abstract override void Load();
-    protected abstract override void SceneReload();
-    protected abstract override void Apply();
+    protected abstract override void Load(string sceneName = "");
+    protected abstract override void SceneReload(string sceneName = "");
+    protected abstract override void Apply(string sceneName = "");
 }
