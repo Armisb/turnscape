@@ -540,11 +540,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -205.1
+      value: -227.7
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -133.1
+      value: -157.5
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -623,7 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -3023,11 +3023,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -206.22
+      value: -228.81999
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -174.50002
+      value: -198.90001
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5285,7 +5285,7 @@ MonoBehaviour:
   turn: 1
   panel: {fileID: 1427017437}
   endText: {fileID: 2126310585}
-  enemyAttackDelay: 0.5
+  enemyAttackDelay: 1
 --- !u!1 &1190556218
 GameObject:
   m_ObjectHideFlags: 0
