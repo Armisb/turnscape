@@ -8,17 +8,16 @@ using UnityEngine.SceneManagement;
 
 public abstract class LoaderBehaviour : MonoBehaviour
 {
-    //public static List<LoaderBehaviour> NewLoaders = new();
     public static List<LoaderBehaviour> Loaders = new();
 
     public abstract bool isLoaded { get; set; }
 
-    public abstract void LoadWithDependencies();
-    public abstract void BeforeReloadWithDependencies();
+    public abstract IEnumerator LoadWithDependencies();
+    public abstract IEnumerator BeforeReloadWithDependencies();
 
-    protected virtual void Load()
+    protected virtual IEnumerator Load()
     {
-
+        yield break;
     }
 
     protected virtual void Apply()
@@ -36,16 +35,16 @@ public abstract class LoaderBehaviour : MonoBehaviour
 
     }
 
-    public static void LoadAll()
+    public static IEnumerator LoadAll()
     {
         foreach (var loader in Loaders)
         {
-            loader.BeforeReloadWithDependencies();
+            yield return loader.BeforeReloadWithDependencies();
         }
 
         foreach (var loader in Loaders)
         {
-            loader.LoadWithDependencies();
+            yield return loader.LoadWithDependencies();
         }
 
         foreach (var loader in Loaders)
@@ -72,61 +71,65 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
         }
 
         Instance = this as T;
+
         if (!Loaders.Contains(this))
         {
             Loaders.Add(this);
         }
     }
 
-    public sealed override void LoadWithDependencies()
-    {
-        if (!isLoaded)
-        {
-            foreach (var depType in Dependencies)
-            {
-                var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
-                if (dep != null && !dep.isLoaded)
-                {
-                    dep.LoadWithDependencies();
-                }
-            }
-
-            Load();
-
-            isLoaded = true;
-        }
-    }
-
-    public sealed override void BeforeReloadWithDependencies()
+    public sealed override IEnumerator LoadWithDependencies()
     {
         if (isLoaded)
+            yield break;
+
+        foreach (var depType in Dependencies)
         {
-            foreach (var depType in Dependencies)
+            var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
+
+            if (dep != null && !dep.isLoaded)
             {
-                var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
-                if (dep != null && !dep.isLoaded)
-                {
-                    dep.BeforeReloadWithDependencies();
-                }
+                yield return dep.LoadWithDependencies();
             }
-
-            BeforeReload();
-
-            isLoaded = false;
         }
+
+        yield return Load();
+
+        isLoaded = true;
     }
 
-    protected override void Load()
+    public sealed override IEnumerator BeforeReloadWithDependencies()
     {
+        if (!isLoaded)
+            yield break;
 
+        foreach (var depType in Dependencies)
+        {
+            var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
+
+            if (dep != null && dep.isLoaded)
+            {
+                yield return dep.BeforeReloadWithDependencies();
+            }
+        }
+
+        BeforeReload();
+
+        isLoaded = false;
     }
+
+    protected override IEnumerator Load()
+    {
+        yield break;
+    }
+
     protected override void Apply()
     {
 
     }
+
     protected override void BeforeReload()
     {
 
     }
-
 }

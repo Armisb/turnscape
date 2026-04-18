@@ -35,7 +35,7 @@ public class GameManagerSc : MonoBehaviour
     {
         yield return null;
 
-        LoaderBehaviour.LoadAll();
+        yield return StartCoroutine(LoaderBehaviour.LoadAll());
 
         SetCanvasCamera();
     }
@@ -105,7 +105,7 @@ public class GameManagerSc : MonoBehaviour
 
         SetCanvasCamera();
 
-        LoaderBehaviour.LoadAll();
+        yield return StartCoroutine(LoaderBehaviour.LoadAll());
 
         yield return null;
 

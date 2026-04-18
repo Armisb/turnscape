@@ -1,7 +1,8 @@
-using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using UnityEngine;
 
 public class StatisticsSc : LoaderBehaviour<StatisticsSc>
 {
@@ -15,9 +16,11 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         typeof(InventoryManSc)
     };
 
-    protected override void Load()
+    protected override IEnumerator Load()
     {
         LocateStatisticsUI();
+
+        yield return null;
     }
 
     public void LocateStatisticsUI()

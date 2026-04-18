@@ -14,25 +14,38 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
     public override List<Type> Dependencies => new();
 
-    protected override void Load()
+    private bool spinLock = true;
+
+    protected override IEnumerator Load()
     {
         Debug.Log("[Inventory] Load START");
 
         CollectInvetoryUI();
 
         Debug.Log("[Inventory] Requesting server data...");
-        GameManagerSc.Instance.downloader.GetInventoriesFromServer(OnDataReceived);
-    }
 
-    private void OnDataReceived(string json)
-    {
-        Debug.Log("[Inventory] Data received from server");
+        string json = null;
+        bool done = false;
+
+        GameManagerSc.Instance.downloader.GetInventoriesFromServer((result) =>
+        {
+            json = result;
+            done = true;
+        });
+
+        yield return new WaitUntil(() => done);
+
+        if (string.IsNullOrEmpty(json))
+        {
+            Debug.LogWarning("[Inventory] Server returned null");
+            yield break;
+        }
 
         LoadInventoryDataFromJson(json);
         ApplyInventoryDataToScene();
         SyncInventoryStructureFromScene();
 
-        Debug.Log("[Inventory] Data applied to scene");
+        Debug.Log("[Inventory] Load COMPLETE");
     }
 
     private void CollectInvetoryUI()
