@@ -35,7 +35,7 @@ public class GameManagerSc : MonoBehaviour
     {
         yield return null;
 
-        LoaderBehaviour.LoadAllUnloaded();
+        LoaderBehaviour.LoadAll();
 
         SetCanvasCamera();
     }
@@ -105,14 +105,7 @@ public class GameManagerSc : MonoBehaviour
 
         SetCanvasCamera();
 
-        var enumerator = LoaderBehaviour.SceneReloadAll();
-        while (enumerator.MoveNext())
-        {
-            fillImage.fillAmount += 1f / LoaderBehaviour.Loaders.Count;
-            percentageText.text = (fillImage.fillAmount * 100f).ToString("F0") + "%";
-
-            yield return enumerator.Current;
-        }
+        LoaderBehaviour.LoadAll();
 
         yield return null;
 

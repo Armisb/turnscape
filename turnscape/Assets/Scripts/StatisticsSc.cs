@@ -20,16 +20,6 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         LocateStatisticsUI();
     }
 
-    protected override void SceneReload()
-    {
-        LocateStatisticsUI();
-    }
-
-    protected override void Apply()
-    {
-
-    }
-
     public void LocateStatisticsUI()
     {
         statisticsUIs = FindObjectsByType<StatisticsUI>(FindObjectsSortMode.None).ToList();
@@ -41,10 +31,10 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         damage = 1;
         protection = 0;
 
-        if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquipped"))
+        if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquiped"))
             return;
 
-        ItemData[] equippedItems = InventoryManSc.Instance.InventoryData["PlayerEquipped"].Values.ToArray();
+        ItemData[] equippedItems = InventoryManSc.Instance.InventoryData["PlayerEquiped"].Values.ToArray();
 
         foreach (var item in equippedItems)
         {

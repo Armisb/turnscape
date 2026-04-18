@@ -8,43 +8,49 @@ using UnityEngine.SceneManagement;
 
 public abstract class LoaderBehaviour : MonoBehaviour
 {
+    //public static List<LoaderBehaviour> NewLoaders = new();
     public static List<LoaderBehaviour> Loaders = new();
 
     public abstract bool isLoaded { get; set; }
 
-    public abstract IEnumerator LoadWithDependencies();
+    public abstract void LoadWithDependencies();
+    public abstract void BeforeReloadWithDependencies();
 
-    protected abstract void Load();
+    protected virtual void Load()
+    {
 
-    protected abstract void SceneReload();
+    }
 
-    protected abstract void Apply();
+    protected virtual void Apply()
+    {
+
+    }
+
+    protected virtual void BeforeReload()
+    {
+
+    }
 
     protected virtual void Awake()
     {
 
     }
 
-    public static IEnumerator LoadAllUnloaded()
+    public static void LoadAll()
     {
         foreach (var loader in Loaders)
         {
-            yield return loader.LoadWithDependencies();
+            loader.BeforeReloadWithDependencies();
+        }
+
+        foreach (var loader in Loaders)
+        {
+            loader.LoadWithDependencies();
         }
 
         foreach (var loader in Loaders)
         {
             loader.Apply();
-            yield return null;
-        }
-    }
-
-    public static IEnumerator SceneReloadAll()
-    {
-        foreach (var loader in Loaders)
-        {
-            loader.SceneReload();
-            yield return null;
         }
     }
 }
@@ -72,7 +78,7 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
         }
     }
 
-    public sealed override IEnumerator LoadWithDependencies()
+    public sealed override void LoadWithDependencies()
     {
         if (!isLoaded)
         {
@@ -81,7 +87,7 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
                 var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
                 if (dep != null && !dep.isLoaded)
                 {
-                    yield return dep.LoadWithDependencies();
+                    dep.LoadWithDependencies();
                 }
             }
 
@@ -91,7 +97,36 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
         }
     }
 
-    protected abstract override void Load();
-    protected abstract override void SceneReload();
-    protected abstract override void Apply();
+    public sealed override void BeforeReloadWithDependencies()
+    {
+        if (isLoaded)
+        {
+            foreach (var depType in Dependencies)
+            {
+                var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
+                if (dep != null && !dep.isLoaded)
+                {
+                    dep.BeforeReloadWithDependencies();
+                }
+            }
+
+            BeforeReload();
+
+            isLoaded = false;
+        }
+    }
+
+    protected override void Load()
+    {
+
+    }
+    protected override void Apply()
+    {
+
+    }
+    protected override void BeforeReload()
+    {
+
+    }
+
 }

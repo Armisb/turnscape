@@ -6022,7 +6022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4657a140d9cd6b459bd970e3630a570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySc
-  uniqueName: PlayerEquipped
+  uniqueName: PlayerEquiped
 --- !u!224 &1897404052 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4733416719199439823, guid: d1715476dafc77447b814a0e3380544f, type: 3}
@@ -6910,6 +6910,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8908602343444171370, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 512263270476442250, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
