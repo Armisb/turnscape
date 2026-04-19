@@ -1,56 +1,107 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public abstract class LoaderBehaviour : MonoBehaviour
 {
     public static List<LoaderBehaviour> Loaders = new();
 
+    public static bool IsLoading { get; private set; }
+    public static int TotalTasks { get; private set; }
+    public static int CompletedTasks { get; private set; }
+
+    public static float Progress =>
+        TotalTasks == 0 ? 1f : (float)CompletedTasks / TotalTasks;
+
     public abstract bool isLoaded { get; set; }
 
-    public abstract IEnumerator LoadWithDependencies();
-    public abstract IEnumerator BeforeReloadWithDependencies();
+    public abstract void LoadWithDependencies();
+    public abstract void PrepareWithDependencies();
 
-    protected virtual IEnumerator Load()
-    {
-        yield break;
-    }
+    protected abstract IEnumerator Download(CoroutineScope scope);
+    protected abstract void Load();
+    protected abstract void Apply();
+    protected abstract void Prepare();
+    protected abstract IEnumerator Upload(CoroutineScope scope);
 
-    protected virtual void Apply()
-    {
+    protected static int isUploading = 0;
 
-    }
-
-    protected virtual void BeforeReload()
-    {
-
-    }
-
-    protected virtual void Awake()
-    {
-
-    }
+    protected virtual void Awake() { }
 
     public static IEnumerator LoadAll()
     {
-        foreach (var loader in Loaders)
-        {
-            yield return loader.BeforeReloadWithDependencies();
-        }
+        IsLoading = true;
+        CompletedTasks = 0;
+        TotalTasks = 0;
+
+        yield return new WaitUntil(() => isUploading == 0);
 
         foreach (var loader in Loaders)
-        {
-            yield return loader.LoadWithDependencies();
-        }
+            loader.PrepareWithDependencies();
 
-        foreach (var loader in Loaders)
-        {
+        yield return new WaitUntil(() => isUploading == 0);
+
+        var snapshot = Loaders.ToArray();
+        TotalTasks += snapshot.Length;
+
+        yield return DownloadAll();
+
+        foreach (var loader in snapshot)
+            loader.LoadWithDependencies();
+
+        foreach (var loader in snapshot)
             loader.Apply();
+
+        IsLoading = false;
+    }
+
+    private static IEnumerator DownloadAll()
+    {
+        var snapshot = Loaders.ToArray();
+
+        foreach (var loader in snapshot)
+            loader.downloadScope = new CoroutineScope(loader);
+
+        foreach (var loader in snapshot)
+        {
+            yield return loader.Download(loader.downloadScope);
+            yield return loader.downloadScope.Wait();
+
+            CompletedTasks++;
         }
+    }
+
+    protected CoroutineScope downloadScope;
+    protected CoroutineScope uploadScope;
+}
+
+public class CoroutineScope
+{
+    private readonly MonoBehaviour owner;
+    private int running;
+
+    public CoroutineScope(MonoBehaviour owner)
+    {
+        this.owner = owner;
+    }
+
+    public void Run(IEnumerator routine)
+    {
+        running++;
+        owner.StartCoroutine(Wrap(routine));
+    }
+
+    private IEnumerator Wrap(IEnumerator routine)
+    {
+        yield return routine;
+        running--;
+    }
+
+    public IEnumerator Wait()
+    {
+        yield return new WaitUntil(() => running == 0);
     }
 }
 
@@ -73,63 +124,59 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
         Instance = this as T;
 
         if (!Loaders.Contains(this))
-        {
             Loaders.Add(this);
-        }
     }
 
-    public sealed override IEnumerator LoadWithDependencies()
+    public sealed override void LoadWithDependencies()
     {
         if (isLoaded)
-            yield break;
+            return;
 
         foreach (var depType in Dependencies)
         {
             var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
 
             if (dep != null && !dep.isLoaded)
-            {
-                yield return dep.LoadWithDependencies();
-            }
+                dep.LoadWithDependencies();
         }
 
-        yield return Load();
-
+        Load();
         isLoaded = true;
     }
 
-    public sealed override IEnumerator BeforeReloadWithDependencies()
+    public sealed override void PrepareWithDependencies()
     {
         if (!isLoaded)
-            yield break;
+            return;
 
         foreach (var depType in Dependencies)
         {
             var dep = Loaders.FirstOrDefault(l => l.GetType() == depType);
 
             if (dep != null && dep.isLoaded)
-            {
-                yield return dep.BeforeReloadWithDependencies();
-            }
+                dep.PrepareWithDependencies();
         }
 
-        BeforeReload();
+        Prepare();
 
         isLoaded = false;
+        isUploading++;
+
+        uploadScope = new CoroutineScope(this);
+        StartCoroutine(UploadFlow());
     }
 
-    protected override IEnumerator Load()
+    private IEnumerator UploadFlow()
     {
-        yield break;
+        yield return Upload(uploadScope);
+        yield return uploadScope.Wait();
+
+        isUploading--;
     }
 
-    protected override void Apply()
-    {
-
-    }
-
-    protected override void BeforeReload()
-    {
-
-    }
+    protected override IEnumerator Download(CoroutineScope scope) { yield break; }
+    protected override void Load() { }
+    protected override void Apply() { }
+    protected override void Prepare() { }
+    protected override IEnumerator Upload(CoroutineScope scope) { yield break; }
 }

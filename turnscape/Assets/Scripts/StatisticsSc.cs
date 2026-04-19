@@ -16,17 +16,15 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         typeof(InventoryManSc)
     };
 
-    protected override IEnumerator Load()
+    protected override void Load()
     {
         LocateStatisticsUI();
-
-        yield return null;
+        RecalculateStats();
     }
 
     public void LocateStatisticsUI()
     {
         statisticsUIs = FindObjectsByType<StatisticsUI>(FindObjectsSortMode.None).ToList();
-        RecalculateStats();
     }
 
     public void RecalculateStats()
