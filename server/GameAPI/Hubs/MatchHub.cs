@@ -31,12 +31,12 @@ namespace GameAPI.Hubs
 
             if(activeId == match.PlayerOneId.ToString())
             {
-                int damage = match.PlayerOneStats[0] > (int)(match.PlayerTwoStats[1]*0.1) ? (int)(match.PlayerOneStats[0]+match.PlayerTwoStats[1]*0.1) : 0;
+                int damage = Helpers.AttackHelpers.CalcDamageLiteAttack(match.PlayerOneStats,match.PlayerTwoStats);
                 match.PlayerTwoStats[2] -= damage;
             }
             else
             {
-                int damage = match.PlayerTwoStats[0] > (int)(match.PlayerOneStats[1]*0.1) ? (int)(match.PlayerTwoStats[0]+match.PlayerOneStats[1]*0.1) : 0;
+                int damage = Helpers.AttackHelpers.CalcDamageLiteAttack(match.PlayerTwoStats,match.PlayerOneStats);
                 match.PlayerOneStats[2] -= damage;
             }
             
