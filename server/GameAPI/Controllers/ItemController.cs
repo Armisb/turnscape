@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameAPI.NewFolder.ItemDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GameAPI.Controllers
 {
@@ -17,7 +18,8 @@ namespace GameAPI.Controllers
     {
 
         [HttpGet]
-        public async Task<ActionResult<List<GetItemDto>>> GetUser()
+        [Authorize(Roles = "Admin,GameUser")]
+        public async Task<ActionResult<List<GetItemDto>>> GetUsersItems()
         {
 
             List<GetItemDto> items = await context.Items.Include(x=>x.ItemType).Select(i=>new GetItemDto
@@ -38,7 +40,8 @@ namespace GameAPI.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<ActionResult<List<Item>>> GetUser(Guid userId)
+        [Authorize(Roles = "Admin,GameUser")]
+        public async Task<ActionResult<List<Item>>> GetUserIdItems(Guid userId)
         {
 
             List<GetItemDto> items = await context.Items.Where(i=>i.GameUserId == userId).Include(x=>x.ItemType).Select(i=>new GetItemDto
@@ -61,6 +64,7 @@ namespace GameAPI.Controllers
         
         // With Service 
         [HttpPost("WeaponType")]
+        [Authorize(Roles = "Admin,GameUser")]
         public async Task<ActionResult<WeaponType>> CreateWeaponType(CreateWeaponTypeDto weaponTypeDto)
         {
             try
@@ -76,6 +80,7 @@ namespace GameAPI.Controllers
 
         // With Service
         [HttpPost("ArmorType")]
+        [Authorize(Roles = "Admin,GameUser")]
         public async Task<ActionResult<ArmorType>> CreateArmorType(CreateArmorTypeDto armorTypeDto)
         {
             try
@@ -91,6 +96,7 @@ namespace GameAPI.Controllers
 
         // With Service
         [HttpGet("ItemType")]
+        [Authorize(Roles = "Admin,GameUser")]
         public async Task<ActionResult<List<GetItemTypeDto>>> GetItemTypeAll()
         {
             List<GetItemTypeDto> itemTypes = await itemTypeService.GetItemTypeAll();
@@ -99,6 +105,7 @@ namespace GameAPI.Controllers
 
         // With Service
         [HttpDelete("{Id}")]
+        [Authorize(Roles = "Admin,GameUser")]
         public async Task<ActionResult<ItemType>> DeleteItemType(Guid Id)
         {
             try
@@ -115,6 +122,7 @@ namespace GameAPI.Controllers
 
 
         [HttpPut("update-positions/{userId}")]
+        [Authorize(Roles = "Admin,GameUser")]
         public async Task<ActionResult<List<UpdatePosDto>>> UpdatePositions(
         Guid userId,
         List<UpdatePosDto> updated)
@@ -129,6 +137,7 @@ namespace GameAPI.Controllers
         
         // with service
         [HttpPost]
+        [Authorize(Roles = "Admin,GameUser")]
         public async Task<ActionResult<Item>> CreateItem(CreateItemDto itemDto)
         {
             Item created = await itemService.CreateItem(itemDto);
