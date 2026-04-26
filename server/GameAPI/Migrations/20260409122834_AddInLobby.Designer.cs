@@ -4,6 +4,7 @@ using GameAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260409122834_AddInLobby")]
+    partial class AddInLobby
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,19 +139,17 @@ namespace GameAPI.Migrations
                     b.Property<bool>("IsFinished")
                         .HasColumnType("bit");
 
+                    b.Property<int>("PlayerOneHealth")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("PlayerOneId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.PrimitiveCollection<string>("PlayerOneStats")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PlayerTwoHealth")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("PlayerTwoId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.PrimitiveCollection<string>("PlayerTwoStats")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
                         .IsRequired()
