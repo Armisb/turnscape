@@ -13,10 +13,14 @@ public class GameManagerSc : MonoBehaviour
     public GameObject miscCanvas;
     public Image fillImage;
     public TMP_Text percentageText;
+    public TMP_Text loadBatchText;
 
     public Downloader downloader;
-
     public Camera MainCamera;
+
+    private int batchIndex;
+    private int batchTotal;
+    private string batchLabel;
 
     private void Awake()
     {
@@ -29,15 +33,110 @@ public class GameManagerSc : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        loadingPanel.SetActive(true);
     }
 
     private IEnumerator Start()
     {
-        yield return null;
+        SetCanvasCamera();
 
-        LoaderBehaviour.LoadAllUnloaded();
+        yield return RunBatch(1, 1, "Loading game data", () =>
+        {
+            return RunLoadingBar(LoaderBehaviour.LoadAll());
+        });
+
+        yield return new WaitForEndOfFrame();
+        loadingPanel.SetActive(false);
+    }
+
+    public static void LoadScene(string sceneName)
+    {
+        Instance.loadingPanel.SetActive(true);
+        Instance.StartCoroutine(Instance.LoadSceneRoutine(sceneName));
+    }
+
+    private IEnumerator LoadSceneRoutine(string sceneName)
+    {
+        yield return RunBatch(1, 2, "Loading scene assets", () =>
+        {
+            return RunLoadingBar(LoadSceneAsync(sceneName));
+        });
 
         SetCanvasCamera();
+
+        yield return RunBatch(2, 2, "Loading game data", () =>
+        {
+            return RunLoadingBar(LoaderBehaviour.LoadAll());
+        });
+
+        yield return new WaitForEndOfFrame();
+        loadingPanel.SetActive(false);
+    }
+
+    private IEnumerator LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+        op.allowSceneActivation = false;
+
+        while (!op.isDone)
+        {
+            float p = Mathf.Clamp01(op.progress / 0.9f);
+            UpdateProgress(p);
+
+            if (op.progress >= 0.9f)
+            {
+                UpdateProgress(1f);
+                op.allowSceneActivation = true;
+            }
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator RunBatch(int index, int total, string label, System.Func<IEnumerator> routine)
+    {
+        batchIndex = index;
+        batchTotal = total;
+        batchLabel = label;
+
+        UpdateBatchUI();
+
+        yield return routine();
+
+        UpdateBatchUI(1f);
+    }
+
+    private IEnumerator RunLoadingBar(IEnumerator routine)
+    {
+        while (routine.MoveNext())
+        {
+            if (routine.Current is IEnumerator nested)
+                yield return nested;
+
+            yield return null;
+
+            UpdateProgress(LoaderBehaviour.Progress);
+        }
+
+        UpdateProgress(1f);
+    }
+
+    private void UpdateProgress(float progress)
+    {
+        fillImage.fillAmount = progress;
+        percentageText.text = $"{(progress * 100f):F0}%";
+    }
+
+    private void UpdateBatchUI(float? forcedProgress = null)
+    {
+        if (forcedProgress.HasValue)
+        {
+            fillImage.fillAmount = forcedProgress.Value;
+            percentageText.text = "100%";
+        }
+
+        loadBatchText.text = $"{batchLabel} {batchIndex}/{batchTotal}";
     }
 
     public void SetCanvasCamera()
@@ -47,19 +146,14 @@ public class GameManagerSc : MonoBehaviour
         if (cam == null)
         {
             cam = MainCamera;
-
-            if (cam == null)
-            {
-                Debug.LogWarning("No camera found (Main or fallback).");
-                return;
-            }
+            if (cam == null) return;
         }
 
         Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
 
         foreach (Canvas canvas in canvases)
         {
-            if (canvas.renderMode != RenderMode.ScreenSpaceCamera || canvas.worldCamera == null)
+            if (canvas.worldCamera == null && canvas != miscCanvas.GetComponent<Canvas>())
             {
                 canvas.renderMode = RenderMode.ScreenSpaceCamera;
                 canvas.worldCamera = cam;
@@ -74,48 +168,5 @@ public class GameManagerSc : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
-    }
-
-    public static void LoadScene(string sceneName)
-    {
-        Instance.loadingPanel.SetActive(true);
-        Instance.StartCoroutine(Instance.LoadAsync(sceneName));
-    }
-
-    private IEnumerator LoadAsync(string sceneName)
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-        asyncLoad.allowSceneActivation = false;
-
-        while (!asyncLoad.isDone)
-        {
-            float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
-            fillImage.fillAmount = progress;
-            percentageText.text = (progress * 100f).ToString("F0") + "%";
-
-            if (asyncLoad.progress >= 0.9f)
-            {
-                fillImage.fillAmount = 1f;
-                percentageText.text = "100%";
-                asyncLoad.allowSceneActivation = true;
-            }
-
-            yield return null;
-        }
-
-        SetCanvasCamera();
-
-        var enumerator = LoaderBehaviour.SceneReloadAll(sceneName);
-        while (enumerator.MoveNext())
-        {
-            fillImage.fillAmount += 1f / LoaderBehaviour.Loaders.Count;
-            percentageText.text = (fillImage.fillAmount * 100f).ToString("F0") + "%";
-
-            yield return enumerator.Current;
-        }
-
-        yield return null;
-
-        Instance.loadingPanel.SetActive(false);
     }
 }

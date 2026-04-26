@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,50 +6,56 @@ using UnityEngine;
 
 public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 {
-    // InventoryName -> SlotName -> ItemData (null if empty)
-    public Dictionary<string, Dictionary<string, ItemData>> InventoryData =
-        new Dictionary<string, Dictionary<string, ItemData>>();
-
-    // InventoryName -> InventorySc object in scene
-    public Dictionary<string, InventorySc> InventoryObjects =
-        new Dictionary<string, InventorySc>();
+    public Dictionary<string, Dictionary<string, ItemData>> InventoryData = new();
+    public Dictionary<string, InventorySc> InventoryObjects = new();
 
     public InventorySc miscInv;
 
-    public override List<Type> Dependencies => new();
+    public override List<System.Type> Dependencies => new();
 
-    public bool doNotRebuild = false;
+    private string json = "";
 
-    protected override void Load(string sceneName = "")
+    protected override IEnumerator Download(CoroutineScope scope)
     {
-        //RebuildSceneInventories();
+        scope.Run(GameManagerSc.Instance.downloader.DownloadInventoryJson(r => json = r));
+        yield break;
     }
 
-    protected override void SceneReload(string sceneName = "")
+    protected override void Load()
     {
-        Debug.Log("Reload " + sceneName);
-
-        if (!doNotRebuild)
-        {
-            BuildSceneInventories();
-        }
-        else
-        {
-            RebuildSceneInventories();
-        }
-
-        if (sceneName == "BaseScene") doNotRebuild = true;
+        CollectInvetoryUI();
+        LoadInventoryDataFromJson(json);
+        ApplyInventoryDataToScene();
+        SyncInventoryStructureFromScene();
+        Debug.Log(json);
     }
 
-    protected override void Apply(string sceneName = "")
+    protected override void Prepare()
     {
-
+        Debug.Log(json);
+        json = BuildInventoryJson();
+        Debug.Log("Build: " + json);
     }
 
-    public void BuildSceneInventories()
+    protected override IEnumerator Upload(CoroutineScope scope)
+    {
+        Debug.Log("Saving: " + json);
+        var UpdatePosList = BuildUpdatePosDtos();
+        scope.Run(GameManagerSc.Instance.downloader.UpdateInventoryPositions(UpdatePosList));
+        yield break;
+    }
+
+    private void CollectInvetoryUI()
     {
         InventoryObjects.Clear();
 
+        InitMiscInventory();
+        CollectSceneInventories();
+        AssignLooseSlots();
+    }
+
+    private void InitMiscInventory()
+    {
         if (miscInv == null)
         {
             miscInv = new InventorySc();
@@ -58,78 +63,15 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
             miscInv.Slots.Clear();
         }
 
-        InventoryObjects.Add("", miscInv);
+        InventoryObjects[""] = miscInv;
 
         if (!InventoryData.ContainsKey(""))
             InventoryData[""] = new Dictionary<string, ItemData>();
-
-        InventorySc[] inventories = FindObjectsByType<InventorySc>(FindObjectsSortMode.None);
-
-        foreach (var inv in inventories)
-        {
-            string invName = inv.uniqueName ?? "";
-
-            InventoryObjects[invName] = inv;
-            inv.Slots.Clear();
-
-            if (!InventoryData.ContainsKey(invName))
-                InventoryData[invName] = new Dictionary<string, ItemData>();
-
-            SlotSc[] slots = inv.GetComponentsInChildren<SlotSc>();
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                SlotSc slot = slots[i];
-
-                if (slot.uniqueName == "") slot.uniqueName = i.ToString();
-                slot.inventory = inv;
-
-                inv.Slots[slot.uniqueName] = slot;
-
-                if (!InventoryData[invName].ContainsKey(slot.uniqueName))
-                {
-                    InventoryData[invName][slot.uniqueName] = null;
-                }
-            }
-        }
-
-        SlotSc[] allSlots = FindObjectsByType<SlotSc>(FindObjectsSortMode.None);
-
-        foreach (var slot in allSlots)
-        {
-            if (slot.inventory == null)
-            {
-                slot.inventory = miscInv;
-
-                if (!miscInv.Slots.ContainsKey(slot.uniqueName))
-                    miscInv.Slots.Add(slot.uniqueName, slot);
-
-                if (!InventoryData[""].ContainsKey(slot.uniqueName))
-                    InventoryData[""][slot.uniqueName] = null;
-            }
-        }
-
-        if (InventoryObjects.ContainsKey("PlayerInventory"))
-        {
-            GameManagerSc.Instance.downloader.GetInventoriesFromServer(OnDataReceived);
-        }
     }
 
-    public void RebuildSceneInventories()
+    private void CollectSceneInventories()
     {
-        InventoryObjects.Clear();
-
-        if (miscInv == null)
-        {
-            miscInv = new InventorySc();
-            miscInv.uniqueName = "";
-            miscInv.Slots.Clear();
-        }
-
-        InventoryObjects.Add("", miscInv);
-
-
-        InventorySc[] inventories = FindObjectsByType<InventorySc>(FindObjectsSortMode.None);
+        var inventories = FindObjectsByType<InventorySc>(FindObjectsSortMode.None);
 
         foreach (var inv in inventories)
         {
@@ -138,149 +80,119 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
             InventoryObjects[invName] = inv;
             inv.Slots.Clear();
 
-            /*if (!InventoryData.ContainsKey(invName))
-                InventoryData[invName] = new Dictionary<string, ItemData>();*/
-
-            SlotSc[] slots = inv.GetComponentsInChildren<SlotSc>();
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                SlotSc slot = slots[i];
-
-                if (slot.uniqueName == "") slot.uniqueName = i.ToString();
-                slot.inventory = inv;
-
-                inv.Slots[slot.uniqueName] = slot;
-
-                if (InventoryData.ContainsKey(invName) && InventoryData[invName].ContainsKey(slot.uniqueName))
-                {
-                    PutItemInternal(InventoryData[invName][slot.uniqueName]);
-                }
-            }
+            RegisterSlots(inv, invName);
         }
+    }
 
-        SlotSc[] allSlots = FindObjectsByType<SlotSc>(FindObjectsSortMode.None);
+    private void RegisterSlots(InventorySc inv, string invName)
+    {
+        var slots = inv.GetComponentsInChildren<SlotSc>();
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            var slot = slots[i];
+
+            if (string.IsNullOrEmpty(slot.uniqueName))
+                slot.uniqueName = i.ToString();
+
+            slot.inventory = inv;
+            inv.Slots[slot.uniqueName] = slot;
+        }
+    }
+
+    private void AssignLooseSlots()
+    {
+        var allSlots = FindObjectsByType<SlotSc>(FindObjectsSortMode.None);
 
         foreach (var slot in allSlots)
         {
-            if (slot.inventory == null)
-            {
-                slot.inventory = miscInv;
+            if (slot.inventory != null)
+                continue;
 
-                if (!miscInv.Slots.ContainsKey(slot.uniqueName))
-                    miscInv.Slots.Add(slot.uniqueName, slot);
+            slot.inventory = miscInv;
 
-                if (InventoryData[""].ContainsKey(slot.uniqueName))
-                {
-                    PutItemInternal(InventoryData[""][slot.uniqueName]);
-                }
-            }
+            if (!miscInv.Slots.ContainsKey(slot.uniqueName))
+                miscInv.Slots[slot.uniqueName] = slot;
         }
-
-
     }
 
-    void PutItemInternal(ItemData item)
+    private void PutItemInternal(ItemData item)
     {
         if (item == null)
             return;
 
-        string invName = item.inventoryType;
+        string invName = ResolveInventory(item.inventoryType);
 
-        if (string.IsNullOrEmpty(invName) || !InventoryObjects.ContainsKey(invName))
-            invName = "PlayerInventory";
+        if (!InventoryObjects.ContainsKey(invName))
+            return;
 
-        InventorySc inv = InventoryObjects[invName];
+        var inv = InventoryObjects[invName];
 
         int index = item.position;
-
         int invSize = inv.Slots.Count;
 
         if (invSize == 0)
-        {
-            Debug.LogWarning($"Inventory {invName} has no slots.");
             return;
-        }
 
         for (int i = 0; i < invSize; i++)
         {
             string slotKey = index.ToString();
 
-            if (!inv.Slots.ContainsKey(slotKey))
-            {
-                index = (index + 1) % invSize;
-                continue;
-            }
-
-            SlotSc slot = inv.Slots[slotKey];
-
-            if (!slot.hasItem)
+            if (inv.Slots.TryGetValue(slotKey, out var slot) && !slot.hasItem)
             {
                 InventoryData[invName][slotKey] = item;
-
                 slot.UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
-
                 return;
             }
 
             index = (index + 1) % invSize;
         }
-
-        Debug.LogWarning($"Inventory {invName} is full. Could not place item {item.id}");
     }
 
-    public bool SwitchSlots(string inv0, string slot0, string inv1, string slot1)
+    private string ResolveInventory(string invName)
+    {
+        if (string.IsNullOrEmpty(invName))
+            return "";
+
+        if (!InventoryObjects.ContainsKey(invName))
+            return "";
+
+        return invName;
+    }
+
+    public bool SwitchSlots(string inv0, string slot0, string inv1, string slot1, string cat0 = "", string cat1 = "")
     {
         inv0 ??= "";
         inv1 ??= "";
 
         if (!InventoryData.TryGetValue(inv0, out var slots0))
-        {
-            Debug.LogWarning($"SwitchSlots failed: Inventory '{inv0}' not found.");
             return false;
-        }
 
         if (!InventoryData.TryGetValue(inv1, out var slots1))
-        {
-            Debug.LogWarning($"SwitchSlots failed: Inventory '{inv1}' not found.");
             return false;
-        }
 
-        if (!slots0.ContainsKey(slot0))
-        {
-            Debug.LogWarning($"SwitchSlots failed: Slot '{slot0}' not found in inventory '{inv0}'.");
+        if (!slots0.ContainsKey(slot0) || !slots1.ContainsKey(slot1))
             return false;
-        }
 
-        if (!slots1.ContainsKey(slot1))
-        {
-            Debug.LogWarning($"SwitchSlots failed: Slot '{slot1}' not found in inventory '{inv1}'.");
+        Debug.Log(slot0  + " | " + (!string.IsNullOrEmpty(slots0[slot0].category) ? slots0[slot0].category : "null") + " | " + (cat0 != "" ? cat0 : "null."));
+        Debug.Log(slot1  + " | " + (!string.IsNullOrEmpty(slots1[slot1].category) ? slots1[slot1].category : "null") + " | " + (cat1 != "" ? cat1 : "null."));
+        Debug.Log(!string.IsNullOrEmpty(cat0));
+        Debug.Log(!string.IsNullOrEmpty(cat0) && !string.IsNullOrEmpty(slots0[slot0].category) && !slots0[slot0].category.Equals(cat0));
+        Debug.Log(!string.IsNullOrEmpty(cat1));
+        Debug.Log(!string.IsNullOrEmpty(cat1) && !string.IsNullOrEmpty(slots1[slot1].category) && !slots1[slot1].category.Equals(cat1));
+        if ((!string.IsNullOrEmpty(cat0) && !string.IsNullOrEmpty(slots0[slot0].category) && !slots0[slot0].category.Equals(cat0)) ||
+            (!string.IsNullOrEmpty(cat1) && !string.IsNullOrEmpty(slots1[slot1].category) && !slots1[slot1].category.Equals(cat1)))
             return false;
-        }
 
-        ItemData item0 = slots0[slot0];
-        ItemData item1 = slots1[slot1];
+        (slots0[slot0], slots1[slot1]) = (slots1[slot1], slots0[slot0]);
 
-        slots0[slot0] = item1;
-        slots1[slot1] = item0;
+        var inventory0 = InventoryObjects[inv0];
+        var inventory1 = InventoryObjects[inv1];
 
-        InventorySc inventory0 = InventoryObjects[inv0];
-        InventorySc inventory1 = InventoryObjects[inv1];
+        UpdateItemMeta(slots0[slot0], inventory0, slot0);
+        UpdateItemMeta(slots1[slot1], inventory1, slot1);
 
-        if (item1 != null) item1.inventoryType = (inventory0 != null) ? inventory0.uniqueName : "";
-        if (item0 != null) item0.inventoryType = (inventory1 != null) ? inventory1.uniqueName : "";
-
-        SlotSc slotSc0 = inventory0.Slots[slot0];
-        SlotSc slotSc1 = inventory1.Slots[slot1];
-
-        if (item1 != null) item1.position = int.TryParse(slotSc0.uniqueName, out int pos1) ? pos1 : 0;
-        if (item0 != null) item0.position = int.TryParse(slotSc1.uniqueName, out int pos0) ? pos0 : 0;
-
-        Sprite sprite0 = slotSc0.GetItemSprite();
-        Sprite sprite1 = slotSc1.GetItemSprite();
-
-        slotSc0.UpdateUI(sprite1);
-        slotSc1.UpdateUI(sprite0);
+        UpdateSlotUI(inventory0.Slots[slot0], inventory1.Slots[slot1]);
 
         return true;
     }
@@ -288,34 +200,27 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
     public bool SwitchSlots(SlotSc slot0, SlotSc slot1)
     {
         if (slot0 == null || slot1 == null)
-        {
-            Debug.LogWarning($"Null slot switch: {slot0} or {slot1}");
             return false;
-        }
 
         return SwitchSlots(
             slot0.inventoryName,
             slot0.uniqueName,
             slot1.inventoryName,
-            slot1.uniqueName
+            slot1.uniqueName,
+            slot0.category,
+            slot1.category
         );
     }
 
     public bool SwitchSlots(SlotSc slot, InventorySc inv)
     {
         if (slot == null || inv == null)
-        {
-            Debug.LogWarning($"Null slot or inventory switch: {slot} or {inv}");
             return false;
-        }
 
         foreach (var slot1 in inv.Slots.Values)
         {
             if (!slot1.hasItem)
-            {
-                SwitchSlots(slot, slot1);
-                return true;
-            }
+                return SwitchSlots(slot, slot1);
         }
 
         return false;
@@ -324,10 +229,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
     public bool SwitchSlots(SlotSc[] slots, InventorySc inv)
     {
         if (slots == null || inv == null)
-        {
-            Debug.LogWarning($"Null slot array or inventory switch");
             return false;
-        }
 
         int k = 0;
 
@@ -346,67 +248,170 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         return k == slots.Length;
     }
 
-    private void OnDataReceived(string json)
+    private void LoadInventoryDataFromJson(string json)
     {
         if (string.IsNullOrEmpty(json))
-        {
-            Debug.LogWarning("Inventory JSON is null");
             return;
-        }
 
-        string wrappedJson = "{\"items\":" + json + "}";
+        string wrapped = "{\"items\":" + json + "}";
 
-        ItemDataList list = JsonUtility.FromJson<ItemDataList>(wrappedJson);
+        ItemDataList list = JsonUtility.FromJson<ItemDataList>(wrapped);
 
-        if (list == null || list.items == null)
-        {
-            Debug.LogWarning("Failed to parse inventory JSON");
+        if (list?.items == null)
             return;
-        }
+
+        InventoryData.Clear();
 
         foreach (var item in list.items)
         {
-            PutItemInternal(item);
+            string invName = ResolveInventory(item.inventoryType);
+            string slotKey = item.position.ToString();
+
+            if (!InventoryData.ContainsKey(invName))
+                InventoryData[invName] = new Dictionary<string, ItemData>();
+
+            InventoryData[invName][slotKey] = item;
         }
     }
 
-    public ItemData GetItemData(string inventoryName, string slotName)
-    {
-        inventoryName ??= "";
-
-        if (!InventoryData.TryGetValue(inventoryName, out var slots))
-            return null;
-
-        if (!slots.TryGetValue(slotName, out var item))
-            return null;
-
-        return item;
-    }
-
-
-    public void PrintInventoryData()
+    private void ApplyInventoryDataToScene()
     {
         foreach (var invPair in InventoryData)
         {
             string invName = invPair.Key;
-            var slots = invPair.Value;
 
-            Debug.Log($"Inventory: {invName}");
+            if (!InventoryObjects.TryGetValue(invName, out InventorySc inv))
+                continue;
 
-            foreach (var slotPair in slots)
+            foreach (var slotPair in invPair.Value)
             {
                 string slotKey = slotPair.Key;
                 ItemData item = slotPair.Value;
 
-                if (item != null)
-                {
-                    Debug.Log($"  Slot {slotKey}: Cate = {item.category}, Pos = {item.position}");
-                }
-                else
-                {
-                    Debug.Log($"  Slot {slotKey}: null");
-                }
+                if (item == null) continue;
+                if (!inv.Slots.TryGetValue(slotKey, out SlotSc slot)) continue;
+                if (slot.hasItem) continue;
+
+                slot.UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
             }
         }
+    }
+
+    private void UpdateItemMeta(ItemData item, InventorySc inv, string slotKey)
+    {
+        if (item == null) return;
+
+        item.inventoryType = inv?.uniqueName ?? "";
+        item.position = int.TryParse(slotKey, out int pos) ? pos : 0;
+    }
+
+    private void UpdateSlotUI(SlotSc a, SlotSc b)
+    {
+        Sprite spriteA = a.GetItemSprite();
+        Sprite spriteB = b.GetItemSprite();
+
+        a.UpdateUI(spriteB);
+        b.UpdateUI(spriteA);
+    }
+
+    private void SyncInventoryStructureFromScene()
+    {
+        if (!InventoryObjects.ContainsKey(""))
+            InventoryObjects[""] = miscInv;
+
+        foreach (var invPair in InventoryObjects)
+        {
+            string invName = invPair.Key;
+            InventorySc inv = invPair.Value;
+
+            if (!InventoryData.ContainsKey(invName))
+                InventoryData[invName] = new Dictionary<string, ItemData>();
+
+            SyncInventorySlots(inv, invName);
+        }
+    }
+
+    private void SyncInventorySlots(InventorySc inv, string invName)
+    {
+        if (inv == null)
+            return;
+
+        if (!InventoryData.ContainsKey(invName))
+            InventoryData[invName] = new Dictionary<string, ItemData>();
+
+        foreach (var slotPair in inv.Slots)
+        {
+            string slotKey = slotPair.Key;
+
+            if (string.IsNullOrEmpty(slotKey))
+                continue;
+
+            if (!InventoryData[invName].ContainsKey(slotKey))
+                InventoryData[invName][slotKey] = new ItemData();
+        }
+    }
+
+    public string BuildInventoryJson()
+    {
+        var list = new List<ItemData>();
+
+        foreach (var invPair in InventoryData)
+        {
+            string invName = invPair.Key;
+
+            if (invName == "")
+                continue;
+
+            foreach (var slotPair in invPair.Value)
+            {
+                var item = slotPair.Value;
+
+                if (item == null)
+                    continue;
+
+                if (string.IsNullOrEmpty(item.id) &&
+                    string.IsNullOrEmpty(item.itemType) &&
+                    string.IsNullOrEmpty(item.category))
+                {
+                    continue;
+                }
+
+                list.Add(item);
+            }
+        }
+
+        return JsonUtility.ToJson(new ItemDataList { items = list.ToArray() });
+    }
+
+    public List<UpdatePosDto> BuildUpdatePosDtos()
+    {
+        var result = new List<UpdatePosDto>();
+
+        foreach (var invPair in InventoryData)
+        {
+            string invName = invPair.Key;
+
+            if (invName == "") continue;
+
+            foreach (var slotPair in invPair.Value)
+            {
+                ItemData item = slotPair.Value;
+
+                if (item == null)
+                    continue;
+
+                if (string.IsNullOrEmpty(item.id))
+                    continue;
+
+                result.Add(new UpdatePosDto
+                {
+                    Id = item.id,
+                    InventoryType = invName,
+                    Position = item.position
+                });
+            }
+        }
+
+        return result;
     }
 }

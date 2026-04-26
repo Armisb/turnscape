@@ -1,7 +1,8 @@
-using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using UnityEngine;
 
 public class StatisticsSc : LoaderBehaviour<StatisticsSc>
 {
@@ -15,25 +16,15 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         typeof(InventoryManSc)
     };
 
-    protected override void Load(string sceneName = "")
+    protected override void Load()
     {
         LocateStatisticsUI();
-    }
-
-    protected override void SceneReload(string sceneName = "")
-    {
-        LocateStatisticsUI();
-    }
-
-    protected override void Apply(string sceneName = "")
-    {
-
+        RecalculateStats();
     }
 
     public void LocateStatisticsUI()
     {
         statisticsUIs = FindObjectsByType<StatisticsUI>(FindObjectsSortMode.None).ToList();
-        RecalculateStats();
     }
 
     public void RecalculateStats()
@@ -41,10 +32,10 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         damage = 1;
         protection = 0;
 
-        if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquipped"))
+        if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquiped"))
             return;
 
-        ItemData[] equippedItems = InventoryManSc.Instance.InventoryData["PlayerEquipped"].Values.ToArray();
+        ItemData[] equippedItems = InventoryManSc.Instance.InventoryData["PlayerEquiped"].Values.ToArray();
 
         foreach (var item in equippedItems)
         {
