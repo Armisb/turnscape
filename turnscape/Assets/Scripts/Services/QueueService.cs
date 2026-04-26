@@ -4,12 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.SignalR.Client;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public static class QueueService
 {
     private static string hubUrl = Networking.defaultBaseUrl + "matchhub";
     private static MatchData currentMatch;
-    
+    public static HubConnection Connection;
+    public static event Action<MatchData> OnMatchUpdated;
     
     
     public async static void Connect()
@@ -23,34 +25,43 @@ public static class QueueService
             return;
         }
 
-        var connection = new HubConnectionBuilder()
+        var Connection = new HubConnectionBuilder()
             .WithUrl(hubUrl + "?userId=" + playerId)
             .WithAutomaticReconnect()
             .Build();
 
-        connection.On<MatchData>("MatchFound", mdata =>
+        Connection.On<MatchData>("MatchFound", mdata =>
         {
             Debug.Log("Match Found!");
-            currentMatch = mdata;
-            GameManagerSc.LoadScene("CombatScene");
+            
+            MatchSession.CurrentMatch = mdata;
+            MatchSession.MyPlayerId = Guid.Parse(AuthManager.PlayerId);
+            
+            Debug.Log("I am player one: " + MatchSession.IsPlayerOne);
+            Debug.Log("I am player two: " + MatchSession.IsPlayerTwo);
+            Debug.Log("Is my turn: " + MatchSession.IsMyTurn);
+            SceneManager.LoadScene("CombatScene");
         });
 
-        connection.On("MatchUpdated", (string match) =>
+        Connection.On<MatchData>("MatchUpdated", match =>
         {
-            Debug.Log("Match Updated" + match);
+            MatchSession.CurrentMatch = match;
+            OnMatchUpdated?.Invoke(match);
+            Debug.Log("Match updated");
+            Debug.Log("Current turn: " + match.CurrentTurnPlayerId);
         });
 
-        connection.On<string>("ForceDisconnect", async message =>
+        Connection.On<string>("ForceDisconnect", async message =>
         {
             Debug.Log("Force disconnect: " + message);
 
-            if (connection != null)
-                await connection.StopAsync();
+            if (Connection != null)
+                await Connection.StopAsync();
         });
 
         try
         {
-            await connection.StartAsync();
+            await Connection.StartAsync();
             Debug.Log("Connected as " + playerId);
             string lobbyUrl = "match/lobby/" + playerId;
             Debug.Log("LOBBY URL - " + lobbyUrl);
@@ -79,7 +90,25 @@ public static class QueueService
             Debug.Log("Connection failed: " + ex.Message);
         }
     }
-    
+    public async static void Attack(int attackIndex)
+    {
+        if (!MatchSession.IsMyTurn)
+        {
+            Debug.Log("Not your turn!");
+            return;
+        }
+
+        AttackRequest request = new AttackRequest
+        {
+            MatchId = MatchSession.CurrentMatch.Id,
+            AttackerId = MatchSession.MyPlayerId,
+            TargetId = MatchSession.EnemyPlayerId,
+        };
+
+        await QueueService.Connection.InvokeAsync("Attack", request);
+
+        Debug.Log("Attack sent");
+    }
 }
 [Serializable]
 public class MatchData
@@ -94,4 +123,13 @@ public class MatchData
     public Guid PlayerTwoId {get;set;}
     public List<int> PlayerTwoStats {get;set;}
     public bool IsFinished {get;set;}
+}
+
+[Serializable]
+public class AttackRequest
+{
+    public Guid MatchId;
+    public Guid AttackerId;
+    public Guid TargetId;
+
 }
