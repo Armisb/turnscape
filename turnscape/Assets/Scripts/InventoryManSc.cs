@@ -40,7 +40,8 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
     protected override IEnumerator Upload(CoroutineScope scope)
     {
         Debug.Log("Saving: " + json);
-        //scope.Run(GameManagerSc.Instance.downloader.SaveInventoryJson(json));
+        var UpdatePosList = BuildUpdatePosDtos();
+        scope.Run(GameManagerSc.Instance.downloader.UpdateInventoryPositions(UpdatePosList));
         yield break;
     }
 
@@ -373,5 +374,37 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         }
 
         return JsonUtility.ToJson(new ItemDataList { items = list.ToArray() });
+    }
+
+    public List<UpdatePosDto> BuildUpdatePosDtos()
+    {
+        var result = new List<UpdatePosDto>();
+
+        foreach (var invPair in InventoryData)
+        {
+            string invName = invPair.Key;
+
+            if (invName == "") continue;
+
+            foreach (var slotPair in invPair.Value)
+            {
+                ItemData item = slotPair.Value;
+
+                if (item == null)
+                    continue;
+
+                if (string.IsNullOrEmpty(item.id))
+                    continue;
+
+                result.Add(new UpdatePosDto
+                {
+                    Id = item.id,
+                    InventoryType = invName,
+                    Position = item.position
+                });
+            }
+        }
+
+        return result;
     }
 }
