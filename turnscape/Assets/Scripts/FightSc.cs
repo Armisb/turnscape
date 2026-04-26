@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
+using Microsoft.AspNetCore.SignalR.Client;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,30 +18,81 @@ public class FightSc : MonoBehaviour
     public bool turn;
     public GameObject panel;
     [SerializeField] private TextMeshProUGUI endText;
-    [SerializeField] private float enemyAttackDelay = 1f;
-    
-    
-    void Awake()
+    public TextMeshProUGUI TurnText;
+
+    private void Start()
     {
-        canvas.enabled = true;
-        turn = true;
-        Player.protection = StatisticsSc.Instance.protection;
-        Player.damage = StatisticsSc.Instance.damage;
-        Enemy.protection = 2;
-        Enemy.damage = 10;
+        LoadMatch();
     }
 
-    public void Update()
+    private void OnEnable()
     {
-        CheckTurn();
+        QueueService.OnMatchUpdated += HandleMatchUpdated;
     }
 
-    public void DamageEnemy(float damageMultiplier)
+    private void OnDisable()
     {
-        Enemy.TakeDamage(Player.damage * damageMultiplier);
-        turn = false;
+        QueueService.OnMatchUpdated -= HandleMatchUpdated;
+    }
+
+    private void LoadMatch()
+    {
+        MatchData match = MatchSession.CurrentMatch;
+
+        if (match == null)
+        {
+            Debug.LogError("No match data found!");
+            return;
+        }
+
+        Debug.Log("Match ID: " + match.Id);
+        Debug.Log("My ID: " + MatchSession.MyPlayerId);
+        Debug.Log("I am player one: " + MatchSession.IsPlayerOne);
+        Debug.Log("My turn: " + MatchSession.IsMyTurn);
+
+        ApplyStatsFromMatch(match);
+        HandleMatchUpdated(match);
+    }
+
+    public void HandleMatchUpdated(MatchData match)
+    {
+        MatchSession.CurrentMatch = match;
+
+        ApplyStatsFromMatch(match);
+        RefreshTurn();
         CheckEnd();
-        DoDelayEnemyAttack(Enemy.damage);
+    }
+
+    private void ApplyStatsFromMatch(MatchData match)
+    {
+        List<int> myStats = MatchSession.MyStats;
+        List<int> enemyStats = MatchSession.EnemyStats;
+
+        // Example stats:
+        // [0] = damage
+        // [1] = protection
+        // [2] = HP
+
+        Player.SetStats(myStats[2], myStats[1], myStats[0]);
+        Enemy.SetStats(enemyStats[2], enemyStats[1], enemyStats[0]);
+
+    }
+
+    private void RefreshTurn()
+    {
+        canvas.enabled = MatchSession.IsMyTurn;
+        TurnText.text = "My turn: " + MatchSession.IsMyTurn.ToString();
+    }
+
+    public async void DamageEnemy(float damageMultiplier)
+    {
+        if (!MatchSession.IsMyTurn)
+        {
+            Debug.Log("Not your turn!");
+            return;
+        }
+        await QueueService.Connection.InvokeAsync("Attack", MatchSession.CurrentMatch.Id);
+        canvas.enabled = false;
     }
 
     public void CheckEnd()
@@ -50,33 +102,12 @@ public class FightSc : MonoBehaviour
             endText.text = "You Died!";
             panel.SetActive(true);
         }
+
         if (!Enemy.alive)
         {
             endText.text = "You Won!";
             panel.SetActive(true);
         }
     }
-
-    private void CheckTurn()
-    {
-        canvas.enabled = turn;
-    }
-    
-    
-    private void DoDelayEnemyAttack(float damage)
-    {
-        StartCoroutine(DelayEnemyAttack(enemyAttackDelay, damage));
-    }
-    IEnumerator DelayEnemyAttack(float delayTime, float damage)
-    {
-        yield return new WaitForSeconds(delayTime);
-        
-        Player.TakeDamage(damage);
-        turn = true;
-        CheckEnd();
-        //Wait for the specified delay time before continuing.
-        //Do the action after the delay time has finished.
-    }
-
- 
 }
+
