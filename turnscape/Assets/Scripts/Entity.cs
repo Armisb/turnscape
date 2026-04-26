@@ -41,7 +41,10 @@ public class Entity : MonoBehaviour
 
         float damageTaken = previousHealth - CurrentHealth;
 
-        ShowDamageText(damageTaken);
+        //if (damageTaken > 0)
+        //{
+        //    ShowDamageText(damageTaken);
+        //}
     }
 
     public void TakeDamage(float incomingDamage)
@@ -57,27 +60,32 @@ public class Entity : MonoBehaviour
         }
 
         UpdateHealthBar();
-        ShowDamageText(damageTaken);
     }
 
     private void UpdateHealthBar()
     {
-        if (MaxHealth <= 0)
-            MaxHealth = 1;
 
-        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth);
+        if (CurrentHealth < 0) CurrentHealth = 0;
 
         if (healthBarFill != null)
+        {
             healthBarFill.fillAmount = CurrentHealth / MaxHealth;
 
-        if (healthBarText != null)
             healthBarText.text = CurrentHealth.ToString("0");
+        }
+       
     }
 
     private void ShowDamageText(float damageAmount)
     {
+        if (damageAmount <= 0) return;
+
         if (damageTextPrefab == null || damageTextSpawnPoint == null)
             return;
+
+        if (damageTextSpawnPoint.parent == null)
+            return;
+
 
         Vector3 randomOffset = new Vector3(
             Random.Range(-1f, 1f),

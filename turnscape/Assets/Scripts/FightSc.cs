@@ -18,6 +18,22 @@ public class FightSc : MonoBehaviour
     public bool turn;
     public GameObject panel;
     [SerializeField] private TextMeshProUGUI endText;
+    public TextMeshProUGUI TurnText;
+
+    private void Start()
+    {
+        LoadMatch();
+    }
+
+    private void OnEnable()
+    {
+        QueueService.OnMatchUpdated += HandleMatchUpdated;
+    }
+
+    private void OnDisable()
+    {
+        QueueService.OnMatchUpdated -= HandleMatchUpdated;
+    }
 
     private void LoadMatch()
     {
@@ -35,9 +51,10 @@ public class FightSc : MonoBehaviour
         Debug.Log("My turn: " + MatchSession.IsMyTurn);
 
         ApplyStatsFromMatch(match);
+        HandleMatchUpdated(match);
     }
 
-    private void HandleMatchUpdated(MatchData match)
+    public void HandleMatchUpdated(MatchData match)
     {
         MatchSession.CurrentMatch = match;
 
@@ -64,6 +81,7 @@ public class FightSc : MonoBehaviour
     private void RefreshTurn()
     {
         canvas.enabled = MatchSession.IsMyTurn;
+        TurnText.text = "My turn: " + MatchSession.IsMyTurn.ToString();
     }
 
     public async void DamageEnemy(float damageMultiplier)
@@ -73,17 +91,7 @@ public class FightSc : MonoBehaviour
             Debug.Log("Not your turn!");
             return;
         }
-
-        AttackRequest request = new AttackRequest
-        {
-            MatchId = MatchSession.CurrentMatch.Id,
-            AttackerId = MatchSession.MyPlayerId,
-            TargetId = MatchSession.EnemyPlayerId,
-
-        };
-
-        await QueueService.Connection.InvokeAsync("Attack", request);
-
+        await QueueService.Connection.InvokeAsync("Attack", MatchSession.CurrentMatch.Id);
         canvas.enabled = false;
     }
 
