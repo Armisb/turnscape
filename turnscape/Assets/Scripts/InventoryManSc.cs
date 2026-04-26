@@ -174,7 +174,14 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         if (!slots0.ContainsKey(slot0) || !slots1.ContainsKey(slot1))
             return false;
 
-        if ((cat0 != "" && slots0[slot0].category != cat0) || (cat1 != "" && slots1[slot1].category != cat1))
+        Debug.Log(slot0  + " | " + (!string.IsNullOrEmpty(slots0[slot0].category) ? slots0[slot0].category : "null") + " | " + (cat0 != "" ? cat0 : "null."));
+        Debug.Log(slot1  + " | " + (!string.IsNullOrEmpty(slots1[slot1].category) ? slots1[slot1].category : "null") + " | " + (cat1 != "" ? cat1 : "null."));
+        Debug.Log(!string.IsNullOrEmpty(cat0));
+        Debug.Log(!string.IsNullOrEmpty(cat0) && !string.IsNullOrEmpty(slots0[slot0].category) && !slots0[slot0].category.Equals(cat0));
+        Debug.Log(!string.IsNullOrEmpty(cat1));
+        Debug.Log(!string.IsNullOrEmpty(cat1) && !string.IsNullOrEmpty(slots1[slot1].category) && !slots1[slot1].category.Equals(cat1));
+        if ((!string.IsNullOrEmpty(cat0) && !string.IsNullOrEmpty(slots0[slot0].category) && !slots0[slot0].category.Equals(cat0)) ||
+            (!string.IsNullOrEmpty(cat1) && !string.IsNullOrEmpty(slots1[slot1].category) && !slots1[slot1].category.Equals(cat1)))
             return false;
 
         (slots0[slot0], slots1[slot1]) = (slots1[slot1], slots0[slot0]);
