@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using UnityEditor.Advertisements;
 using UnityEngine;
 
 

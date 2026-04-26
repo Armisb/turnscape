@@ -81,7 +81,7 @@ namespace GameAPI.Services.Authentication
             issuer: configuration.GetValue<string>("AppSettings:Issuer"),
             audience: configuration.GetValue<string>("AppSettings:Audience"),
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(1),
+            expires: DateTime.UtcNow.AddHours(24),
             signingCredentials: creds
         );
 
