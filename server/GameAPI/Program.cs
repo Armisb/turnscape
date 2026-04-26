@@ -66,6 +66,9 @@ var app = builder.Build();
 
 app.UseAuthorization();
 
+var random = new Random();
+
+
 app.MapControllers();
 app.UseCors();
 app.MapHub<GameAPI.Hubs.MatchHub>("/matchhub");

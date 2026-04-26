@@ -27,7 +27,7 @@ public class ItemService(AppDbContext context) : IItemService
 
     public async Task<List<UpdatePosDto>> UpdateItemsPositions(List<UpdatePosDto> updated, Guid id)
   {
-    var items =  await context.Items.Where(x => x.GameUserId == id).ToListAsync();
+    var items =  await context.Items.Where(x => x.GameUserId == id).Include(x => x.ItemType).ToListAsync();
 
     foreach(UpdatePosDto updatePos in updated)
         {
@@ -54,10 +54,11 @@ public class ItemService(AppDbContext context) : IItemService
             }
             else
             {
+
                 var item_in_place = items.FirstOrDefault(x => x.InventoryType != null 
                                                         && item_to_switch.InventoryType != null 
-                                                        && x.InventoryType.ToLower().Equals(updatePos.InventoryType.ToLower()) 
-                                                        && x.ItemType.Category == item_to_switch.ItemType.Category 
+                                                        && x.InventoryType.ToLower().Equals(updatePos.InventoryType.ToLower())
+                                                        && x.ItemType.Category.ToLower().Equals(item_to_switch.ItemType.Category.ToLower()) 
                                                         && x.Id != updatePos.Id );
                 if(item_in_place != null)
                 {

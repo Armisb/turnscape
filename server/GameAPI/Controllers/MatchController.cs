@@ -35,7 +35,7 @@ namespace GameAPI.Controllers
 
         [HttpPost("lobby/{Id}")]
         [Authorize(Roles = "Admin,GameUser")]
-        public async Task<ActionResult<bool>> GetUserStats( Guid Id)
+        public async Task<ActionResult<bool>> JoinLobby( Guid Id)
         {
             var res = await lobbyService.JoinLobby(Id);
             return Ok(res);
