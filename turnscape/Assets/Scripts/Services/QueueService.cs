@@ -12,7 +12,9 @@ public static class QueueService
     private static string hubUrl = Networking.defaultBaseUrl + "matchhub";
     private static MatchData currentMatch;
     public static HubConnection Connection;
+    public static MatchData PendingMatchUpdate;
     public static event Action<MatchData> OnMatchUpdated;
+    public static bool HasPendingMatchUpdate;
     
     
     public async static void Connect()
@@ -47,9 +49,10 @@ public static class QueueService
         Connection.On<MatchData>("MatchUpdated", match =>
         {
             
-            MatchSession.CurrentMatch = match;
-            OnMatchUpdated?.Invoke(match);
-
+            //MatchSession.CurrentMatch = match;
+            //OnMatchUpdated?.Invoke(match);
+            PendingMatchUpdate = match;
+            HasPendingMatchUpdate = true;
             Debug.Log("Match updated");
             Debug.Log("Current turn: " + match.CurrentTurnPlayerId);
         });

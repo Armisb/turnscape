@@ -41,10 +41,10 @@ public class Entity : MonoBehaviour
 
         float damageTaken = previousHealth - CurrentHealth;
 
-        //if (damageTaken > 0)
-        //{
-        //    ShowDamageText(damageTaken);
-        //}
+        if (damageTaken > 0)
+        {
+            ShowDamageText(damageTaken);
+        }
     }
 
     public void TakeDamage(float incomingDamage)
@@ -73,6 +73,8 @@ public class Entity : MonoBehaviour
 
             healthBarText.text = CurrentHealth.ToString("0");
         }
+
+        
        
     }
 

@@ -24,6 +24,14 @@ public class FightSc : MonoBehaviour
     {
         LoadMatch();
     }
+    private void Update()
+    {
+        if (QueueService.HasPendingMatchUpdate)
+        {
+            QueueService.HasPendingMatchUpdate = false;
+            HandleMatchUpdated(QueueService.PendingMatchUpdate);
+        }
+    }
 
     private void OnEnable()
     {
