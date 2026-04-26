@@ -17,6 +17,7 @@ namespace GameAPI.Controllers
         
         
         [HttpGet]
+        [Authorize(Roles = "Admin,GameUser")]
         public async Task<ActionResult<List<GameUser>>> GetUser()
         {
 
@@ -24,14 +25,6 @@ namespace GameAPI.Controllers
             return Ok(user);
         }
     
-        [HttpGet("{Id}")]
-        public async Task<ActionResult<GameUser>> GetUserById( int Id)
-        {
-
-            GameUser? user = await service.GetUserByIdAsync(Id);
-            return user is null ? NotFound("User with specified id is not found") : Ok(user);
-        }
-
         [HttpPost("signup")]
         public async Task<ActionResult<GameUser>> Singup(CreateUserDto newUser)
         {
@@ -61,7 +54,8 @@ namespace GameAPI.Controllers
                 return Unauthorized(e.Message);
             }
         }
-
+        
+        [Authorize(Roles = "Admin,GameUser")]
         [HttpPost("Refresh-token")]
         public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
         {
@@ -71,6 +65,15 @@ namespace GameAPI.Controllers
                 return Unauthorized("Invalid refresh token");
             }
             return Ok(result);
+        }
+        
+        [Authorize(Roles = "Admin,GameUser")]
+        [HttpGet("stat/{Id}")]
+        public async Task<ActionResult<List<int>>> GetUserStats( Guid Id)
+        {
+
+            List<int> stat = await service.CalcStatistics(Id);
+            return Ok(stat);
         }
     }
 }

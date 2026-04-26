@@ -9,9 +9,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using GameAPI.Services.ItemType;
 using GameAPI.Services.Item;
+using GameAPI.Services.Lobby;
+using Microsoft.AspNetCore.SignalR;
+using GameAPI.Hubs;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSignalR();
 
 // Authentication setup and configurations
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -31,10 +35,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://127.0.0.1:5500") // client origin
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // Required for SignalR
+    });
+});
+builder.Services.AddSingleton<IUserIdProvider, QueryUserIdProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>();
 builder.Services.AddScoped<IItemTypeService, ItemTypeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<ILobbyService, LobbyService>();
+builder.Services.AddHostedService<MatchFinder>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -50,5 +67,7 @@ var app = builder.Build();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors();
+app.MapHub<GameAPI.Hubs.MatchHub>("/matchhub");
 
 app.Run();

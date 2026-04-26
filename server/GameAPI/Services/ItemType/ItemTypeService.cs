@@ -3,6 +3,7 @@ using GameAPI.Data;
 using GameAPI.Models;
 using shared_lib.ItemTypeDtos;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 
 namespace GameAPI.Services.ItemType;
 
@@ -47,9 +48,13 @@ public class ItemTypeService(AppDbContext context) : IItemTypeService
         {
             context.ItemTypes.Remove(data);
             
-            await context.Items
+            List<Models.Item> items = await context.Items
             .Where(i => i.ItemTypeId == data.Id)
-            .ExecuteDeleteAsync();
+            .ToListAsync();
+            foreach (var item in items)
+            {
+                context.Items.Remove(item);
+            }
             
             await context.SaveChangesAsync();
             return data;
