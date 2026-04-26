@@ -159,7 +159,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         return invName;
     }
 
-    public bool SwitchSlots(string inv0, string slot0, string inv1, string slot1)
+    public bool SwitchSlots(string inv0, string slot0, string inv1, string slot1, string cat0 = "", string cat1 = "")
     {
         inv0 ??= "";
         inv1 ??= "";
@@ -171,6 +171,9 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
             return false;
 
         if (!slots0.ContainsKey(slot0) || !slots1.ContainsKey(slot1))
+            return false;
+
+        if ((cat0 != "" && slots0[slot0].category != cat0) || (cat1 != "" && slots1[slot1].category != cat1))
             return false;
 
         (slots0[slot0], slots1[slot1]) = (slots1[slot1], slots0[slot0]);
@@ -195,7 +198,9 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
             slot0.inventoryName,
             slot0.uniqueName,
             slot1.inventoryName,
-            slot1.uniqueName
+            slot1.uniqueName,
+            slot0.category,
+            slot1.category
         );
     }
 

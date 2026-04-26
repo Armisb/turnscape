@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    //public Image image;
-
     public string uniqueName;
     public InventorySc inventory;
 
@@ -14,6 +12,8 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
 
     public static SlotSc dragSlot;
     public static SlotSc returnSlot;
+
+    public string category = "";
 
     public InventoryManSc invMan => InventoryManSc.Instance;
     public string inventoryName => (inventory != null) ? inventory.uniqueName : "";
