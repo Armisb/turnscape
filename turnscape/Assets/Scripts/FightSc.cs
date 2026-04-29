@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Timers;
 using Microsoft.AspNetCore.SignalR.Client;
 using TMPro;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ public class FightSc : MonoBehaviour
     public TextMeshProUGUI TurnText;
     public TextMeshProUGUI MyHp;
     public TextMeshProUGUI EnemyHp;
-    
+    private bool hasLoadedstats = false;
 
     private void Start()
     {
@@ -86,9 +87,11 @@ public class FightSc : MonoBehaviour
         // [0] = damage
         // [1] = protection
         // [2] = HP
-
-        Player.SetStats(myStats[2], myStats[1], myStats[0]);
-        Enemy.SetStats(enemyStats[2], enemyStats[1], enemyStats[0]);
+        
+        Player.SetStats(myStats[2], myStats[1], myStats[0], hasLoadedstats);
+        Enemy.SetStats(enemyStats[2], enemyStats[1], enemyStats[0], hasLoadedstats);
+        
+        hasLoadedstats = true;
 
     }
 
@@ -106,15 +109,16 @@ public class FightSc : MonoBehaviour
         CheckEnd();
     }
 
-    public async void DamageEnemy(float damageMultiplier)
+    public async void DamageEnemy(string attackType)
     {
         if (!MatchSession.IsMyTurn)
         {
             Debug.Log("Not your turn!");
             return;
         }
-        await QueueService.Connection.InvokeAsync("Attack", MatchSession.CurrentMatch.Id);
+        await QueueService.Connection.InvokeAsync("Attack", MatchSession.CurrentMatch.Id, attackType);
         canvas.enabled = false;
+        Enemy.hasBeenDamged = !Enemy.hasBeenDamged;
     }
 
     public void CheckEnd()

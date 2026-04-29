@@ -8,6 +8,7 @@ public class Entity : MonoBehaviour
 {
     public float CurrentHealth = 100f;
     public float MaxHealth = 100f;
+    public bool hasBeenDamged = false;
 
     public Image healthBarFill;
     public GameObject damageTextPrefab;
@@ -25,9 +26,10 @@ public class Entity : MonoBehaviour
             MaxHealth = CurrentHealth;
 
         UpdateHealthBar();
+        hasBeenDamged = MatchSession.IsMyTurn;
     }
 
-    public void SetStats(float currentHealth, float protectionValue, float damageValue)
+    public void SetStats(float currentHealth, float protectionValue, float damageValue, bool showDamage = false)
     {
         float previousHealth = CurrentHealth;
 
@@ -39,12 +41,16 @@ public class Entity : MonoBehaviour
 
         UpdateHealthBar();
 
-        float damageTaken = previousHealth - CurrentHealth;
-
-        if (damageTaken > 0)
+        if (showDamage)
         {
-            ShowDamageText(damageTaken);
+            float damageTaken = previousHealth - CurrentHealth;
+            if (hasBeenDamged)
+            {
+                ShowDamageText(damageTaken);
+                hasBeenDamged = !hasBeenDamged;
+            }
         }
+        
     }
 
     public void TakeDamage(float incomingDamage)
@@ -75,7 +81,7 @@ public class Entity : MonoBehaviour
         }
     }
 
-    private void ShowDamageText(float damageAmount)
+    public void ShowDamageText(float damageAmount)
     {
         if (damageTextPrefab == null || damageTextSpawnPoint == null)
             return;

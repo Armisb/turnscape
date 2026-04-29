@@ -19,6 +19,14 @@ public static class QueueService
     
     public static async void LeaveQueue()
     {
+        var playerId = AuthManager.PlayerId;
+        string lobbyUrl = "match/lobby/" + playerId;
+
+        await Networking.SendDeleteGeneric(lobbyUrl,
+                "",
+                x => Debug.Log("Lobby left"),
+                x => Debug.Log("Lobby request failed: " + x)
+                );
         await Connection.StopAsync();
     }
 
@@ -53,7 +61,6 @@ public static class QueueService
 
         Connection.On<MatchData>("MatchUpdated", match =>
         {
-            
             //MatchSession.CurrentMatch = match;
             //OnMatchUpdated?.Invoke(match);
             PendingMatchUpdate = match;

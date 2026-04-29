@@ -11,9 +11,14 @@ using Newtonsoft.Json;
 
 public static class Networking
 {
-    public static string defaultBaseUrl = "https://turnscape-api.azurewebsites.net/"; 
+    public static string defaultBaseUrl = "https://turnscape-api.azurewebsites.net/";
 
-        public static async Task SendPostGeneric(string url, object jsonData, Action<string> onSuccess, Action<string> onError)
+        public static async Task SendDeleteGeneric(string url, object jsonData, Action<string> onSuccess, Action<string> onError)
+        {
+            await SendRequestGen("DELETE", url, jsonData, onSuccess, onError);
+        }
+
+    public static async Task SendPostGeneric(string url, object jsonData, Action<string> onSuccess, Action<string> onError)
         {
             await SendRequestGen("POST", url, jsonData, onSuccess, onError);
         }
