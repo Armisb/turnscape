@@ -66,7 +66,6 @@ var app = builder.Build();
 
 app.UseAuthorization();
 
-var random = new Random();
 
 
 app.MapControllers();
