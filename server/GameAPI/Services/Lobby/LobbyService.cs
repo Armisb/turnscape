@@ -66,6 +66,17 @@ public class LobbyService(AppDbContext context, IHubContext<MatchHub> matchHub, 
             return true;
     }
 
+    public async Task<bool> LeaveLobby(Guid PlayerId)
+    {
+        var exists = await context.Lobby.FirstOrDefaultAsync(x => x.GameUserId == PlayerId);
+        if (exists == null) return false;
+
+        context.Lobby.Remove(exists);
+        await context.SaveChangesAsync();
+        
+        return true;
+    }
+
     public async Task<Match> RemoveMatch(Guid MatchId)
     {
         var toRemove = await context.Matches.FirstOrDefaultAsync<Match>(x => x.Id == MatchId);
