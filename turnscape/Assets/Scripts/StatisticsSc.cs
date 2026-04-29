@@ -29,7 +29,7 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
 
     public void RecalculateStats()
     {
-        damage = 1;
+        damage = 0;
         protection = 0;
 
         if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquiped"))
@@ -41,8 +41,8 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
         {
             if (item != null)
             {
-                damage += item.damage;
-                protection += item.protection;
+                damage += item.damage + item.level;
+                protection += item.protection + item.protection;
             }
         }
 
