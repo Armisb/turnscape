@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -159,6 +160,21 @@ public class GameManagerSc : MonoBehaviour
                 canvas.worldCamera = cam;
             }
         }
+    }
+
+    public Task LoadAllAsync(bool saveOnly = false)
+    {
+        var tcs = new TaskCompletionSource<bool>();
+
+        StartCoroutine(LoadAllRoutine(saveOnly, tcs));
+
+        return tcs.Task;
+    }
+
+    private IEnumerator LoadAllRoutine(bool saveOnly, TaskCompletionSource<bool> tcs)
+    {
+        yield return LoaderBehaviour.LoadAll(saveOnly);
+        tcs.SetResult(true);
     }
 
     public static void QuitGame()

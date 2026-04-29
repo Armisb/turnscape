@@ -13,7 +13,7 @@ namespace GameAPI.Hubs
     public class MatchHub(AppDbContext context, IUserService userService) : Hub
     {
 
-        public async Task Attack(Guid MatchId)
+        public async Task Attack(Guid MatchId, string attack)
         {
             string activeId = Context.UserIdentifier;
             
@@ -31,12 +31,24 @@ namespace GameAPI.Hubs
 
             if(activeId == match.PlayerOneId.ToString())
             {
-                int damage = Helpers.AttackHelpers.CalcDamageLiteAttack(match.PlayerOneStats,match.PlayerTwoStats);
+                int damage = 0;
+                if(attack.ToLower() == "lite")
+                {
+                damage = Helpers.AttackHelpers.CalcDamageLiteAttack(match.PlayerOneStats,match.PlayerTwoStats);
+                }else if(attack.ToLower() == "heavy"){
+                    damage = Helpers.AttackHelpers.CalcDamageHeavyAttack(match.PlayerOneStats,match.PlayerTwoStats);
+                }
                 match.PlayerTwoStats[2] -= damage;
             }
             else
             {
-                int damage = Helpers.AttackHelpers.CalcDamageLiteAttack(match.PlayerTwoStats,match.PlayerOneStats);
+                int damage = 0;
+                if(attack.ToLower() == "lite")
+                {
+                damage = Helpers.AttackHelpers.CalcDamageLiteAttack(match.PlayerTwoStats,match.PlayerOneStats);
+                }else if(attack.ToLower() == "heavy"){
+                    damage = Helpers.AttackHelpers.CalcDamageHeavyAttack(match.PlayerTwoStats,match.PlayerOneStats);
+                }
                 match.PlayerOneStats[2] -= damage;
             }
             

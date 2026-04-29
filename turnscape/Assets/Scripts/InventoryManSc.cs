@@ -28,6 +28,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         ApplyInventoryDataToScene();
         SyncInventoryStructureFromScene();
         Debug.Log(json);
+        DebugPrintInventoryData();
     }
 
     protected override void Prepare()
@@ -420,5 +421,34 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         }
 
         return result;
+    }
+
+    public void DebugPrintInventoryData()
+    {
+        foreach (var invPair in InventoryData)
+        {
+            string invName = string.IsNullOrEmpty(invPair.Key) ? "misc" : invPair.Key;
+            Debug.Log($"Inventory: {invName}");
+
+            foreach (var slotPair in invPair.Value)
+            {
+                string slotKey = slotPair.Key;
+                ItemData item = slotPair.Value;
+
+                if (item == null)
+                {
+                    Debug.Log($"  Slot {slotKey}: EMPTY (null)");
+                    continue;
+                }
+
+                Debug.Log(
+                    $"  Slot {slotKey}: " +
+                    $"Id={item.id ?? "null"}, " +
+                    $"Type={item.itemType ?? "null"}, " +
+                    $"Category={item.category ?? "null"}, " +
+                    $"Pos={item.position}"
+                );
+            }
+        }
     }
 }

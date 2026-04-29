@@ -40,5 +40,13 @@ namespace GameAPI.Controllers
             var res = await lobbyService.JoinLobby(Id);
             return Ok(res);
         }
+
+        [HttpDelete("lobby/{Id}")]
+        [Authorize(Roles = "Admin,GameUser")]
+        public async Task<ActionResult<bool>> LeaveLobby( Guid Id)
+        {
+            var res = await lobbyService.LeaveLobby(Id);
+            return Ok(res);
+        }
     }
 }
