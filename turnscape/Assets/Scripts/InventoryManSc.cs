@@ -174,14 +174,10 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         if (!slots0.ContainsKey(slot0) || !slots1.ContainsKey(slot1))
             return false;
 
-        Debug.Log(slot0  + " | " + (!string.IsNullOrEmpty(slots0[slot0].category) ? slots0[slot0].category : "null") + " | " + (cat0 != "" ? cat0 : "null."));
-        Debug.Log(slot1  + " | " + (!string.IsNullOrEmpty(slots1[slot1].category) ? slots1[slot1].category : "null") + " | " + (cat1 != "" ? cat1 : "null."));
-        Debug.Log(!string.IsNullOrEmpty(cat0));
-        Debug.Log(!string.IsNullOrEmpty(cat0) && !string.IsNullOrEmpty(slots0[slot0].category) && !slots0[slot0].category.Equals(cat0));
-        Debug.Log(!string.IsNullOrEmpty(cat1));
-        Debug.Log(!string.IsNullOrEmpty(cat1) && !string.IsNullOrEmpty(slots1[slot1].category) && !slots1[slot1].category.Equals(cat1));
-        if ((!string.IsNullOrEmpty(cat0) && !string.IsNullOrEmpty(slots0[slot0].category) && !slots0[slot0].category.Equals(cat0)) ||
-            (!string.IsNullOrEmpty(cat1) && !string.IsNullOrEmpty(slots1[slot1].category) && !slots1[slot1].category.Equals(cat1)))
+        if (!IsAllowed(cat1, slots0[slot0]?.category))
+            return false;
+
+        if (!IsAllowed(cat0, slots1[slot1]?.category))
             return false;
 
         (slots0[slot0], slots1[slot1]) = (slots1[slot1], slots0[slot0]);
@@ -195,6 +191,17 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         UpdateSlotUI(inventory0.Slots[slot0], inventory1.Slots[slot1]);
 
         return true;
+    }
+
+    private bool IsAllowed(string slotCategory, string itemCategory)
+    {
+        if (string.IsNullOrEmpty(slotCategory))
+            return true;
+
+        if (string.IsNullOrEmpty(itemCategory))
+            return true;
+
+        return slotCategory == itemCategory;
     }
 
     public bool SwitchSlots(SlotSc slot0, SlotSc slot1)
