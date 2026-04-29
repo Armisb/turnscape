@@ -1,4 +1,5 @@
 using System;
+using System.Xml;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +27,6 @@ public class Entity : MonoBehaviour
             MaxHealth = CurrentHealth;
 
         UpdateHealthBar();
-        hasBeenDamged = MatchSession.IsMyTurn;
     }
 
     public void SetStats(float currentHealth, float protectionValue, float damageValue, bool showDamage = false)
@@ -44,11 +44,7 @@ public class Entity : MonoBehaviour
         if (showDamage)
         {
             float damageTaken = previousHealth - CurrentHealth;
-            if (hasBeenDamged)
-            {
-                ShowDamageText(damageTaken);
-                hasBeenDamged = !hasBeenDamged;
-            }
+            ShowDamageText(damageTaken);
         }
         
     }
@@ -81,8 +77,35 @@ public class Entity : MonoBehaviour
         }
     }
 
+    public void ShowMiss()
+    {
+
+        Vector3 randomOffset = new Vector3(
+            Random.Range(-1f, 1f),
+            Random.Range(-1f, 1f),
+            0f
+        );
+
+        GameObject damageText = Instantiate(
+            damageTextPrefab,
+            damageTextSpawnPoint.position + randomOffset,
+            Quaternion.identity,
+            damageTextSpawnPoint.parent
+        );
+
+        DamageTextSc damageTextSc = damageText.GetComponent<DamageTextSc>();
+        
+        if (damageTextSc != null)
+        {
+            damageTextSc.SetText("*miss*");
+        }
+    } 
+
     public void ShowDamageText(float damageAmount)
     {
+        if (damageAmount <= 0)
+            return;
+        
         if (damageTextPrefab == null || damageTextSpawnPoint == null)
             return;
 
@@ -104,13 +127,15 @@ public class Entity : MonoBehaviour
         );
 
         DamageTextSc damageTextSc = damageText.GetComponent<DamageTextSc>();
-        if (damageAmount <= 0 && damageTextSc != null) 
-        {
-            damageTextSc.SetText("*miss*");
-        }
-        else if (damageTextSc != null)
+        //if (damageAmount <= 0 && damageTextSc != null) 
+        //{
+        //    damageTextSc.SetText("*miss*");
+        //}
+        if (damageTextSc != null)
         {
             damageTextSc.SetText(damageAmount.ToString("0"));
         }
+   
+
     }
 }

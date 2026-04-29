@@ -1368,6 +1368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Entity
   CurrentHealth: 100
   MaxHealth: 0
+  hasBeenDamged: 0
   healthBarFill: {fileID: 1440594371}
   damageTextPrefab: {fileID: 7443850357476783057, guid: a29e23a0bb874ff51b98d4814787fade, type: 3}
   damageTextSpawnPoint: {fileID: 1302836816}
@@ -1757,6 +1758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Entity
   CurrentHealth: 100
   MaxHealth: 0
+  hasBeenDamged: 0
   healthBarFill: {fileID: 82499956}
   damageTextPrefab: {fileID: 7443850357476783057, guid: a29e23a0bb874ff51b98d4814787fade, type: 3}
   damageTextSpawnPoint: {fileID: 378215944}

@@ -32,6 +32,9 @@ public static class QueueService
 
     public async static void Connect()
     {
+
+        await GameManagerSc.Instance.LoadAllAsync();
+
         string playerId = AuthManager.PlayerId;
         
 
