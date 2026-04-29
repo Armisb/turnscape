@@ -32,10 +32,10 @@ namespace GameAPI.Hubs
             if(activeId == match.PlayerOneId.ToString())
             {
                 int damage = 0;
-                if(attack.ToString() == "lite")
+                if(attack.ToLower() == "lite")
                 {
                 damage = Helpers.AttackHelpers.CalcDamageLiteAttack(match.PlayerOneStats,match.PlayerTwoStats);
-                }else if(attack.ToString() == "heavy"){
+                }else if(attack.ToLower() == "heavy"){
                     damage = Helpers.AttackHelpers.CalcDamageHeavyAttack(match.PlayerOneStats,match.PlayerTwoStats);
                 }
                 match.PlayerTwoStats[2] -= damage;
@@ -43,10 +43,10 @@ namespace GameAPI.Hubs
             else
             {
                 int damage = 0;
-                if(attack.ToString() == "lite")
+                if(attack.ToLower() == "lite")
                 {
                 damage = Helpers.AttackHelpers.CalcDamageLiteAttack(match.PlayerTwoStats,match.PlayerOneStats);
-                }else if(attack.ToString() == "heavy"){
+                }else if(attack.ToLower() == "heavy"){
                     damage = Helpers.AttackHelpers.CalcDamageHeavyAttack(match.PlayerTwoStats,match.PlayerOneStats);
                 }
                 match.PlayerOneStats[2] -= damage;
