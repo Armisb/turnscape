@@ -31,6 +31,8 @@ public class FightSc : MonoBehaviour
             QueueService.HasPendingMatchUpdate = false;
             HandleMatchUpdated(QueueService.PendingMatchUpdate);
         }
+        RefreshTurn();
+        CheckEnd();
     }
 
     private void OnEnable()
@@ -89,7 +91,15 @@ public class FightSc : MonoBehaviour
     private void RefreshTurn()
     {
         canvas.enabled = MatchSession.IsMyTurn;
-        TurnText.text = "My turn: " + MatchSession.IsMyTurn.ToString();
+        if (MatchSession.IsMyTurn)
+        {
+            TurnText.text = "My turn!";
+        }
+        else
+        {
+            TurnText.text = "Enemy turn!";
+        }
+        CheckEnd();
     }
 
     public async void DamageEnemy(float damageMultiplier)
@@ -105,16 +115,30 @@ public class FightSc : MonoBehaviour
 
     public void CheckEnd()
     {
-        if (!Player.alive)
-        {
-            endText.text = "You Died!";
-            panel.SetActive(true);
-        }
+        //if (!Player.alive)
+        //{
+        //    endText.text = "You Lost!";
+        //    panel.SetActive(true);
+        //}
 
-        if (!Enemy.alive)
+        //if (!Enemy.alive)
+        //{
+        //    endText.text = "You Won!";
+        //    panel.SetActive(true);
+        //}
+        int myHp = MatchSession.MyStats[2];
+        int enemyHp = MatchSession.EnemyStats[2];
+
+        if (myHp <= 0)
         {
+            endText.text = "You Lost!";
+            panel.SetActive(true);
+            return;
+        }
+        if (enemyHp <= 0) {
             endText.text = "You Won!";
             panel.SetActive(true);
+            return;
         }
     }
 }
