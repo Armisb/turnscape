@@ -73,15 +73,10 @@ public class Entity : MonoBehaviour
 
             healthBarText.text = CurrentHealth.ToString("0");
         }
-
-        
-       
     }
 
     private void ShowDamageText(float damageAmount)
     {
-        if (damageAmount <= 0) return;
-
         if (damageTextPrefab == null || damageTextSpawnPoint == null)
             return;
 
@@ -103,8 +98,13 @@ public class Entity : MonoBehaviour
         );
 
         DamageTextSc damageTextSc = damageText.GetComponent<DamageTextSc>();
-
-        if (damageTextSc != null)
+        if (damageAmount <= 0 && damageTextSc != null) 
+        {
+            damageTextSc.SetText("*miss*");
+        }
+        else if (damageTextSc != null)
+        {
             damageTextSc.SetText(damageAmount.ToString("0"));
+        }
     }
 }
