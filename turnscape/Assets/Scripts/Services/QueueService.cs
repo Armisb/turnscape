@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,7 +17,11 @@ public static class QueueService
     public static event Action<MatchData> OnMatchUpdated;
     public static bool HasPendingMatchUpdate;
     
-    
+    public static async void LeaveQueue()
+    {
+        await Connection.StopAsync();
+    }
+
     public async static void Connect()
     {
         string playerId = AuthManager.PlayerId;
