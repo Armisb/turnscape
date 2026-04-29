@@ -19,11 +19,15 @@ public class FightSc : MonoBehaviour
     public GameObject panel;
     [SerializeField] private TextMeshProUGUI endText;
     public TextMeshProUGUI TurnText;
+    public TextMeshProUGUI MyHp;
+    public TextMeshProUGUI EnemyHp;
+    
 
     private void Start()
     {
         LoadMatch();
     }
+
     private void Update()
     {
         if (QueueService.HasPendingMatchUpdate)
@@ -32,7 +36,7 @@ public class FightSc : MonoBehaviour
             HandleMatchUpdated(QueueService.PendingMatchUpdate);
         }
         RefreshTurn();
-        CheckEnd();
+        //CheckEnd();
     }
 
     private void OnEnable()
@@ -115,17 +119,6 @@ public class FightSc : MonoBehaviour
 
     public void CheckEnd()
     {
-        //if (!Player.alive)
-        //{
-        //    endText.text = "You Lost!";
-        //    panel.SetActive(true);
-        //}
-
-        //if (!Enemy.alive)
-        //{
-        //    endText.text = "You Won!";
-        //    panel.SetActive(true);
-        //}
         int myHp = MatchSession.MyStats[2];
         int enemyHp = MatchSession.EnemyStats[2];
 

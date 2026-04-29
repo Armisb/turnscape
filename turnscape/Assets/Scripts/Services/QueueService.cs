@@ -48,7 +48,7 @@ public static class QueueService
             Debug.Log("I am player one: " + MatchSession.IsPlayerOne);
             Debug.Log("I am player two: " + MatchSession.IsPlayerTwo);
             Debug.Log("Is my turn: " + MatchSession.IsMyTurn);
-            GameManagerSc.LoadScene("CombatScene");
+            SceneManager.LoadScene("CombatScene");
         });
 
         Connection.On<MatchData>("MatchUpdated", match =>
