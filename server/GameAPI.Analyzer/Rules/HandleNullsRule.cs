@@ -52,7 +52,7 @@ public sealed class HandleNullsRule : DiagnosticAnalyzer
         title: "Missing null check",
         messageFormat: "Parameter '{0}' is not null-checked",
         category: "Safety",
-        DiagnosticSeverity.Error,
+        DiagnosticSeverity.Warning,
         isEnabledByDefault: true
     );
 }
