@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -163,6 +163,20 @@ public class GameManagerSc : MonoBehaviour
 
     public static void QuitGame()
     {
+        Instance.StartCoroutine(Instance.QuitRoutine());
+    }
+
+    private IEnumerator QuitRoutine()
+    {
+        loadingPanel.SetActive(true);
+
+        yield return RunBatch(1, 1, "Saving game data", () =>
+        {
+            return RunLoadingBar(LoaderBehaviour.LoadAll(true));
+        });
+
+        yield return new WaitForEndOfFrame();
+
         Application.Quit();
 
 #if UNITY_EDITOR

@@ -8495,21 +8495,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2589631379634420339, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: MainCamera
-      value: 
-      objectReference: {fileID: 1813531807}
     - target: {fileID: 4977410872680699822, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
       propertyPath: m_Name
       value: GameManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5512415336256259019, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5821137434383012955, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

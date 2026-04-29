@@ -30,7 +30,7 @@ public abstract class LoaderBehaviour : MonoBehaviour
 
     protected virtual void Awake() { }
 
-    public static IEnumerator LoadAll()
+    public static IEnumerator LoadAll(bool saveOnly = false)
     {
         IsLoading = true;
         CompletedTasks = 0;
@@ -45,6 +45,12 @@ public abstract class LoaderBehaviour : MonoBehaviour
 
         var snapshot = Loaders.ToArray();
         TotalTasks += snapshot.Length;
+
+        if (saveOnly)
+        {
+            IsLoading = false;
+            yield break;
+        }
 
         yield return DownloadAll();
 
