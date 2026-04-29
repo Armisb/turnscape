@@ -9,6 +9,7 @@ public class AttackHelpers
 
     public static int CalcDamageLiteAttack(List<int> playerOneStat, List<int> playerTwoStat)
     {
+        
         if(playerOneStat[0] == 0)
         {
             return 3;
@@ -19,6 +20,7 @@ public class AttackHelpers
         double damage_percent = Math.Max(0.3,(Random.Shared.Next(80,80)-Math.Max(0,(playerTwoStat[1]-playerOneStat[0])))/100);
 
         int damage = (int)(playerOneStat[0]*damage_percent);
+
 
         return chance <= positive_outcome_chance ? damage : 0;
     }

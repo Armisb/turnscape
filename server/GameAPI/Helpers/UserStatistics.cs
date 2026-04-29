@@ -14,9 +14,9 @@ public class UserStatistics
             if(item.InventoryType.ToLower() == "playerequiped")
             {
                 damage += item.Damage != null ? (int)item.Damage : 0 ;
-                if(item.ItemType == "Weapon") damage += item.Level;
+                if(item.ItemType.ToLower() == "weapon") damage += item.Level;
                 protection += item.Protection != null ? (int)item.Protection : 0;  
-                if(item.ItemType == "Armor") protection += item.Level;   
+                if(item.ItemType.ToLower() == "armor") protection += item.Level;   
             }
         }
 
