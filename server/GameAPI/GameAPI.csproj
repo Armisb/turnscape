@@ -35,5 +35,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\shared_lib\shared_lib.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameAPI.Analyzer\GameAPI.Analyzer.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false"
+                      PrivateAssets="all" />
+  </ItemGroup>
 
 </Project>
