@@ -404,7 +404,7 @@ MonoBehaviour:
   iconImage: {fileID: 6593982152982948344}
   nameText: {fileID: 1192923371461003054}
   priceText: {fileID: 4124652156556318931}
-  buyButton: {fileID: 899711348469667063}
+  btn: {fileID: 899711348469667063}
 --- !u!1001 &4611532585630953623
 PrefabInstance:
   m_ObjectHideFlags: 0
