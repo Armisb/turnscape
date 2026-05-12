@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class InventoryManSc : LoaderBehaviour<InventoryManSc>
@@ -31,7 +32,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         DebugPrintInventoryData();
     }
 
-    protected override void Prepare()
+    protected override void Unload()
     {
         //Debug.Log(json);
         json = BuildInventoryJson();
