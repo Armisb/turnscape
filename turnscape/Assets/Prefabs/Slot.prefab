@@ -93,6 +93,7 @@ MonoBehaviour:
   inventory: {fileID: 0}
   itemHolder: {fileID: 1679022699701746917}
   category: 
+  infoDrop: {fileID: 0}
 --- !u!1 &6332360313033390400
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +210,6 @@ MonoBehaviour:
   title: Item
   description: stats
   backgroundColor: {r: 0, g: 0, b: 0, a: 1}
-  delay: 0
-  priority: 0
+  delay: 0.1
   overrideSize: 0
   size: {x: 250, y: 120}

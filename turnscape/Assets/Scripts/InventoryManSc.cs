@@ -168,36 +168,19 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         inv1 ??= "";
 
         if (!InventoryData.TryGetValue(inv0, out var slots0))
-        {
-            Debug.Log("RETURN: inv0 not found -> " + inv0);
             return false;
-        }
 
         if (!InventoryData.TryGetValue(inv1, out var slots1))
-        {
-            Debug.Log("RETURN: inv1 not found -> " + inv1);
             return false;
-        }
 
         if (!slots0.ContainsKey(slot0) || !slots1.ContainsKey(slot1))
-        {
-            Debug.Log("RETURN: slot missing -> slot0=" + slot0 + " slot1=" + slot1);
             return false;
-        }
 
         if (!IsAllowed(cat1, slots0[slot0]?.category))
-        {
-            Debug.Log("RETURN: IsAllowed FAIL (slot0 item -> slot1)");
             return false;
-        }
 
         if (!IsAllowed(cat0, slots1[slot1]?.category))
-        {
-            Debug.Log("RETURN: IsAllowed FAIL (slot1 item -> slot0)");
             return false;
-        }
-
-        Debug.Log("SwitchSlots: OK -> swap executed");
 
         (slots0[slot0], slots1[slot1]) = (slots1[slot1], slots0[slot0]);
 
