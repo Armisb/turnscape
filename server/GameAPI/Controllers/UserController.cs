@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using shared_lib;
+using GameAPI.Data;
 
 namespace GameAPI.Controllers
 {
@@ -75,5 +76,7 @@ namespace GameAPI.Controllers
             List<int> stat = await service.CalcStatistics(Id);
             return Ok(stat);
         }
+
+        
     }
 }
