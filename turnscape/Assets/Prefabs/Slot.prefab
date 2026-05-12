@@ -92,6 +92,7 @@ MonoBehaviour:
   uniqueName: 
   inventory: {fileID: 0}
   itemHolder: {fileID: 1679022699701746917}
+  category: 
 --- !u!1 &6332360313033390400
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,6 +105,7 @@ GameObject:
   - component: {fileID: 4356334936586011798}
   - component: {fileID: 2685158716391096240}
   - component: {fileID: 4732976224147803723}
+  - component: {fileID: 7663149740058909155}
   m_Layer: 5
   m_Name: ItemHolder
   m_TagString: Untagged
@@ -192,3 +194,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7663149740058909155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332360313033390400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 078cfde14e9c9a945bb4bd8d0389142d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InfoDropSc
+  title: Item
+  description: stats
+  backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+  delay: 0
+  priority: 0
+  overrideSize: 0
+  size: {x: 250, y: 120}
