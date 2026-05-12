@@ -79,7 +79,7 @@ public class HoverInfoManSc : MonoBehaviour
             MouseRaycastUtils.GetObjectUnderMouse(eventSystem, cam);
 
         InfoDropSc resolved =
-            HierarchySearchUtils.ResolveBest<InfoDropSc>(hit, out _);
+            HierarchySearchUtils.ResolveBest<InfoDropSc>(hit, out _, Input.mousePosition);
 
         if (current != null)
         {
@@ -140,6 +140,8 @@ public class HoverInfoManSc : MonoBehaviour
         }
 
         panel.gameObject.SetActive(true);
+
+        if (info == null) return;
 
         ApplyText(info);
         LayoutManually(info);
@@ -290,8 +292,10 @@ public class HoverInfoManSc : MonoBehaviour
         int spaces = 1;
         int lastValidSpaces = 1;
 
-        while (true)
+        int breakTimer = 0;
+        while (breakTimer < 100)
         {
+            breakTimer++;
             string test = left + new string(' ', spaces) + right;
 
             float testWidth = titleText.GetPreferredValues(test).x;

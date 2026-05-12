@@ -15,4 +15,6 @@ public class InfoDropSc : MonoBehaviour
 
     public bool overrideSize = false;
     public Vector2 size = new Vector2(250, 120);
+
+    public bool directOnly = true;
 }
