@@ -28,9 +28,6 @@ namespace GameAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Money")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -64,33 +61,6 @@ namespace GameAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Lobby");
-                });
-
-            modelBuilder.Entity("GameAPI.Models.InStoreItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DatePosted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("GameUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameUserId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("InStoreItems");
                 });
 
             modelBuilder.Entity("GameAPI.Models.Item", b =>
@@ -207,23 +177,6 @@ namespace GameAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Weapon");
-                });
-
-            modelBuilder.Entity("GameAPI.Models.InStoreItem", b =>
-                {
-                    b.HasOne("GameAPI.Models.GameUser", "GameUser")
-                        .WithMany()
-                        .HasForeignKey("GameUserId");
-
-                    b.HasOne("GameAPI.Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GameUser");
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("GameAPI.Models.Item", b =>

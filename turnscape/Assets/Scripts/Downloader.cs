@@ -31,9 +31,6 @@ public class Downloader : MonoBehaviour
         string url = $"https://turnscape-api.azurewebsites.net/Item/update-positions/{AuthManager.PlayerId}";
 
         string json = Newtonsoft.Json.JsonConvert.SerializeObject(items);
-
-        if (json == null || json == "" || json == "[]") yield break;
-
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
 
         using (UnityWebRequest request = new UnityWebRequest(url, "PUT"))
@@ -51,9 +48,7 @@ public class Downloader : MonoBehaviour
             yield return request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)
-            {
                 Debug.LogError(request.error + " | " + request.downloadHandler.text);
-            }
         }
     }
 }

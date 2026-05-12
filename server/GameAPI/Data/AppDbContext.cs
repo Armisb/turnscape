@@ -12,7 +12,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<InLobby> Lobby {get;set;}
 
     public DbSet<Match> Matches {get;set;}
-    public DbSet<InStoreItem> InStoreItems {get;set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
 {

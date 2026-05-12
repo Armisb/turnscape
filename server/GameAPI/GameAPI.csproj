@@ -27,11 +27,9 @@
     <Folder Include="Helpers\" />
     <Folder Include="Hubs\" />
     <Folder Include="NewFolder\ItemDtos\" />
-    <Folder Include="NewFolder\StoreDtos\" />
     <Folder Include="Services\ItemType\" />
     <Folder Include="Services\Item\" />
     <Folder Include="Services\Lobby\" />
-    <Folder Include="Services\Store\" />
   </ItemGroup>
 
   <ItemGroup>

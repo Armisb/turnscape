@@ -12,7 +12,6 @@ using GameAPI.Services.Item;
 using GameAPI.Services.Lobby;
 using Microsoft.AspNetCore.SignalR;
 using GameAPI.Hubs;
-using GameAPI.Services.Store;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,7 +51,6 @@ builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>(
 builder.Services.AddScoped<IItemTypeService, ItemTypeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ILobbyService, LobbyService>();
-builder.Services.AddScoped<IStoreServices, StoreServices>();
 builder.Services.AddHostedService<MatchFinder>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
