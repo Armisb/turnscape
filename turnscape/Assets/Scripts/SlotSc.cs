@@ -15,6 +15,8 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
 
     public string category = "";
 
+    public InfoDropSc infoDrop;
+
     public InventoryManSc invMan => InventoryManSc.Instance;
     public string inventoryName => (inventory != null) ? inventory.uniqueName : "";
     public bool hasItem => itemHolder.gameObject.activeSelf;
@@ -22,10 +24,11 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
     private void Awake()
     {
         itemImage = itemHolder.GetComponent<Image>();
+        infoDrop = itemHolder.GetComponent<InfoDropSc>();
 
         if (uniqueName == "DragSlot") dragSlot = this;
 
-        UpdateUI(itemImage.sprite);
+        //UpdateUI(itemImage.sprite);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -55,12 +58,12 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (invMan.SwitchSlots(dragSlot, returnSlot))
+        if (dragSlot.hasItem && invMan.SwitchSlots(dragSlot, returnSlot))
         {
             returnSlot = null;
         }
 
-        if (dragSlot != null)
+        if (dragSlot.hasItem)
         {
             invMan.SwitchSlots(dragSlot, invMan.InventoryObjects["PlayerInventory"]);
         }
@@ -68,7 +71,7 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
         StatisticsSc.Instance.RecalculateStats();
     }
 
-    public void UpdateUI(Sprite icon = null)
+    /*public void UpdateUI(Sprite icon = null)
     {
         if (icon != null)
         {
@@ -80,6 +83,37 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
             itemHolder.gameObject.SetActive(false);
             itemImage.sprite = null;
         }
+    }*/
+
+    public void UpdateUI(ItemData item = null)
+    {
+        Sprite icon = null;
+        if (item != null && !string.IsNullOrEmpty(item.category)) icon = FileReader.GetTextureSprite(item.category + ".png");
+
+        if (icon != null && item != null)
+        {
+            itemImage.sprite = icon;
+            itemHolder.gameObject.SetActive(true);
+            infoDrop.title = item.category + "@lvl " + item.level;
+            infoDrop.description = FormatStatistics(item);
+        }
+        else
+        {
+            itemHolder.gameObject.SetActive(false);
+            itemImage.sprite = null;
+            infoDrop.title = "";
+            infoDrop.description = "";
+        }
+    }
+
+    public string FormatStatistics(ItemData item)
+    {
+        string text = "";
+
+        if (item.damage > 0) text += "Damage: " + (item.damage + item.level);
+        if (item.protection > 0) text += "Protection: " + (item.protection + item.level);
+
+        return text;
     }
 
     public Sprite GetItemSprite()

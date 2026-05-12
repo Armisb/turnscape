@@ -44,7 +44,7 @@ public class GameManagerSc : MonoBehaviour
 
         yield return RunBatch(1, 1, "Loading game data", () =>
         {
-            return RunLoadingBar(LoaderBehaviour.LoadAll());
+            return RunLoadingBar(LoaderBehaviour.ReloadAll());
         });
 
         yield return new WaitForEndOfFrame();
@@ -68,7 +68,7 @@ public class GameManagerSc : MonoBehaviour
 
         yield return RunBatch(2, 2, "Loading game data", () =>
         {
-            return RunLoadingBar(LoaderBehaviour.LoadAll());
+            return RunLoadingBar(LoaderBehaviour.ReloadAll());
         });
 
         yield return new WaitForEndOfFrame();
@@ -162,18 +162,48 @@ public class GameManagerSc : MonoBehaviour
         }
     }
 
-    public Task LoadAllAsync(bool saveOnly = false)
+    public Task LoadAllAsync()
     {
         var tcs = new TaskCompletionSource<bool>();
 
-        StartCoroutine(LoadAllRoutine(saveOnly, tcs));
+        StartCoroutine(LoadAllRoutine(tcs));
 
         return tcs.Task;
     }
 
-    private IEnumerator LoadAllRoutine(bool saveOnly, TaskCompletionSource<bool> tcs)
+    private IEnumerator LoadAllRoutine(TaskCompletionSource<bool> tcs)
     {
-        yield return LoaderBehaviour.LoadAll(saveOnly);
+        yield return LoaderBehaviour.ReloadAll();
+        tcs.SetResult(true);
+    }
+
+    public Task SaveAllAsync()
+    {
+        var tcs = new TaskCompletionSource<bool>();
+
+        StartCoroutine(SaveAllRoutine(tcs));
+
+        return tcs.Task;
+    }
+
+    private IEnumerator SaveAllRoutine(TaskCompletionSource<bool> tcs)
+    {
+        yield return LoaderBehaviour.SaveAll();
+        tcs.SetResult(true);
+    }
+
+    public Task LoadAllAsyncWithoutSaving()
+    {
+        var tcs = new TaskCompletionSource<bool>();
+
+        StartCoroutine(LoadAllRoutineWithoutSaving(tcs));
+
+        return tcs.Task;
+    }
+
+    private IEnumerator LoadAllRoutineWithoutSaving(TaskCompletionSource<bool> tcs)
+    {
+        yield return LoaderBehaviour.LoadAllWithoutSaving();
         tcs.SetResult(true);
     }
 
@@ -188,7 +218,7 @@ public class GameManagerSc : MonoBehaviour
 
         yield return RunBatch(1, 1, "Saving game data", () =>
         {
-            return RunLoadingBar(LoaderBehaviour.LoadAll(true));
+            return RunLoadingBar(LoaderBehaviour.SaveAll());
         });
 
         yield return new WaitForEndOfFrame();

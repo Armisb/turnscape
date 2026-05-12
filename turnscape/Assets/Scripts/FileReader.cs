@@ -10,7 +10,7 @@ public static class FileReader
 
         if (sprite == null)
         {
-            Debug.LogError($"Sprite not found in Resources/Textures: {fileNameNoExt}");
+            Debug.Log($"Sprite not found in Resources/Textures: {fileNameNoExt}");
         }
 
         return sprite;
