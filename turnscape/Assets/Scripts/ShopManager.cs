@@ -48,7 +48,7 @@ public class ShopManager : MonoBehaviour
         var items = InventoryManSc.Instance.InventoryData;
         foreach (var item in items)
         {
-            
+3            
         }
     }
     
