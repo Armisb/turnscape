@@ -9,28 +9,26 @@ public class ShopItemUI : MonoBehaviour
     public TMP_Text nameText;
     public TMP_Text priceText;
     public Button btn;
-
-    private ShopItem item;
+    
     private ShopManager shopManager;
 
-    public void Setup(ShopItem newItem, ShopManager manager, ShopItemUIMode mode)
+    public void Setup(ShopManager manager, ShopItemUIMode mode, string itemName, float itemPrice, string itemCategory, string itemId)
     {
-        item = newItem;
         shopManager = manager;
 
-        iconImage.sprite = FileReader.GetTextureSprite(item.category + ".png");
-        nameText.text = item.name;
-        priceText.text = item.price + " coins";
-        //btn.onClick.RemoveAllListeners();
+        iconImage.sprite = FileReader.GetTextureSprite(itemCategory + ".png");
+        nameText.text = itemName;
+        priceText.text = itemPrice + " coins";
+        btn.onClick.RemoveAllListeners();
         if (mode == ShopItemUIMode.Buy)
         {
             btn.GetComponentInChildren<TextMeshProUGUI>().text = "Buy";
-            btn.onClick.AddListener(() => shopManager.BuyItem(item));
+            btn.onClick.AddListener(() => shopManager.BuyItem(itemId));
         }
         else
         {
             btn.GetComponentInChildren<TextMeshProUGUI>().text = "Sell";
-            btn.onClick.AddListener(() => shopManager.SellItem(item));
+            btn.onClick.AddListener(() => shopManager.SellItem(itemId));
         }
 
     }
