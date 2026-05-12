@@ -10,7 +10,7 @@ public class StoreServices(AppDbContext context) : IStoreServices
 {
   public async Task<InStoreItem> BuyItemInStore(Guid buyerId, Guid itemId)
   {
-   var itemInStore = await context.InStoreItems.Include(x => x.Item).FirstOrDefaultAsync(x => x.Item.Id == itemId);
+   var itemInStore = await context.InStoreItems.Include(x => x.Item).FirstOrDefaultAsync(x => x.Id == itemId);
 
    if(itemInStore == null)
     {
@@ -125,7 +125,7 @@ if (alreadyListed)
  // DONE
   public async Task<InStoreItem> RemoveItemInStore(Guid sellerId, Guid itemId)
   {
-    var itemInStore = await context.InStoreItems.Include(x => x.Item).FirstOrDefaultAsync(x => x.Item.Id == itemId);
+    var itemInStore = await context.InStoreItems.Include(x => x.Item).FirstOrDefaultAsync(x => x.Id == itemId);
 
     if(itemInStore == null)
     {
@@ -152,7 +152,7 @@ if (alreadyListed)
   {
     var itemInStore = await context.InStoreItems
         .Include(x => x.Item)
-        .FirstOrDefaultAsync(x => x.ItemId == inStoreDto.ItemID);
+        .FirstOrDefaultAsync(x => x.Id == inStoreDto.ItemID);
 
     if (itemInStore == null)
     {
