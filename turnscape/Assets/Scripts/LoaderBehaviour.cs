@@ -16,20 +16,21 @@ public abstract class LoaderBehaviour : MonoBehaviour
         TotalTasks == 0 ? 1f : (float)CompletedTasks / TotalTasks;
 
     public abstract bool isLoaded { get; set; }
+
     public abstract void LoadWithDependencies();
     public abstract void PrepareWithDependencies();
 
     protected abstract IEnumerator Download(CoroutineScope scope);
     protected abstract void Load();
     protected abstract void Apply();
-    protected abstract void Unload();
+    protected abstract void Prepare();
     protected abstract IEnumerator Upload(CoroutineScope scope);
 
     protected static int isUploading = 0;
 
     protected virtual void Awake() { }
 
-    public static IEnumerator ReloadAll()
+    public static IEnumerator LoadAll(bool saveOnly = false)
     {
         IsLoading = true;
         CompletedTasks = 0;
@@ -45,44 +46,11 @@ public abstract class LoaderBehaviour : MonoBehaviour
         var snapshot = Loaders.ToArray();
         TotalTasks += snapshot.Length;
 
-        yield return DownloadAll();
-
-        foreach (var loader in snapshot)
-            loader.LoadWithDependencies();
-
-        foreach (var loader in snapshot)
-            loader.Apply();
-
-        IsLoading = false;
-    }
-
-    public static IEnumerator SaveAll()
-    {
-        IsLoading = true;
-        CompletedTasks = 0;
-        TotalTasks = 0;
-
-        yield return new WaitUntil(() => isUploading == 0);
-
-        foreach (var loader in Loaders)
-            loader.PrepareWithDependencies();
-
-        yield return new WaitUntil(() => isUploading == 0);
-
-        var snapshot = Loaders.ToArray();
-        TotalTasks += snapshot.Length;
-
-        IsLoading = false;
-    }
-
-    public static IEnumerator LoadAllWithoutSaving()
-    {
-        IsLoading = true;
-        CompletedTasks = 0;
-        TotalTasks = 0;
-
-        var snapshot = Loaders.ToArray();
-        TotalTasks += snapshot.Length;
+        if (saveOnly)
+        {
+            IsLoading = false;
+            yield break;
+        }
 
         yield return DownloadAll();
 
@@ -195,7 +163,7 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
                 dep.PrepareWithDependencies();
         }
 
-        Unload();
+        Prepare();
 
         isLoaded = false;
         isUploading++;
@@ -215,6 +183,6 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
     protected override IEnumerator Download(CoroutineScope scope) { yield break; }
     protected override void Load() { }
     protected override void Apply() { }
-    protected override void Unload() { }
+    protected override void Prepare() { }
     protected override IEnumerator Upload(CoroutineScope scope) { yield break; }
 }

@@ -315,7 +315,6 @@ public class HoverInfoManSc : MonoBehaviour
 
         string finalTitle = left + new string(' ', spaces) + right;
 
-        // jei vis dar netelpa → truncate RIGHT
         float finalWidth = titleText.GetPreferredValues(finalTitle).x;
 
         if (finalWidth > availableWidth)

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class InventoryManSc : LoaderBehaviour<InventoryManSc>
@@ -28,15 +27,15 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         LoadInventoryDataFromJson(json);
         ApplyInventoryDataToScene();
         SyncInventoryStructureFromScene();
-        //Debug.Log(json);
+        Debug.Log(json);
         DebugPrintInventoryData();
     }
 
-    protected override void Unload()
+    protected override void Prepare()
     {
-        //Debug.Log(json);
+        Debug.Log(json);
         json = BuildInventoryJson();
-        //Debug.Log("Build: " + json);
+        Debug.Log("Build: " + json);
     }
 
     protected override IEnumerator Upload(CoroutineScope scope)
@@ -143,8 +142,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
             if (inv.Slots.TryGetValue(slotKey, out var slot) && !slot.hasItem)
             {
                 InventoryData[invName][slotKey] = item;
-                //slot.UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
-                slot.UpdateUI(item);
+                slot.UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
                 return;
             }
 
@@ -191,10 +189,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         UpdateItemMeta(slots0[slot0], inventory0, slot0);
         UpdateItemMeta(slots1[slot1], inventory1, slot1);
 
-        inventory0.Slots[slot0].UpdateUI(slots0[slot0]);
-        inventory1.Slots[slot1].UpdateUI(slots1[slot1]);
-
-        //UpdateSlotUI(inventory0.Slots[slot0], inventory1.Slots[slot1]);
+        UpdateSlotUI(inventory0.Slots[slot0], inventory1.Slots[slot1]);
 
         return true;
     }
@@ -304,10 +299,8 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
                 if (item == null) continue;
                 if (!inv.Slots.TryGetValue(slotKey, out SlotSc slot)) continue;
                 if (slot.hasItem) continue;
-                if (item.category == null) continue;
 
-                //slot.UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
-                slot.UpdateUI(item);
+                slot.UpdateUI(FileReader.GetTextureSprite(item.category + ".png"));
             }
         }
     }
@@ -320,14 +313,14 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         item.position = int.TryParse(slotKey, out int pos) ? pos : 0;
     }
 
-    /*private void UpdateSlotUI(SlotSc a, SlotSc b)
+    private void UpdateSlotUI(SlotSc a, SlotSc b)
     {
         Sprite spriteA = a.GetItemSprite();
         Sprite spriteB = b.GetItemSprite();
 
         a.UpdateUI(spriteB);
         b.UpdateUI(spriteA);
-    }*/
+    }
 
     private void SyncInventoryStructureFromScene()
     {
@@ -435,7 +428,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         foreach (var invPair in InventoryData)
         {
             string invName = string.IsNullOrEmpty(invPair.Key) ? "misc" : invPair.Key;
-            //Debug.Log($"Inventory: {invName}");
+            Debug.Log($"Inventory: {invName}");
 
             foreach (var slotPair in invPair.Value)
             {
@@ -444,17 +437,17 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
                 if (item == null)
                 {
-                    //Debug.Log($"  Slot {slotKey}: EMPTY (null)");
+                    Debug.Log($"  Slot {slotKey}: EMPTY (null)");
                     continue;
                 }
 
-                /*Debug.Log(
+                Debug.Log(
                     $"  Slot {slotKey}: " +
                     $"Id={item.id ?? "null"}, " +
                     $"Type={item.itemType ?? "null"}, " +
                     $"Category={item.category ?? "null"}, " +
                     $"Pos={item.position}"
-                );*/
+                );
             }
         }
     }
