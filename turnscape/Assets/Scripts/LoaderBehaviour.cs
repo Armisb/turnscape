@@ -83,7 +83,8 @@ public abstract class LoaderBehaviour : MonoBehaviour
 
         var snapshot = Loaders.ToArray();
         TotalTasks += snapshot.Length;
-
+        foreach (var loader in snapshot)
+            loader.isLoaded = false;
         yield return DownloadAll();
 
         foreach (var loader in snapshot)

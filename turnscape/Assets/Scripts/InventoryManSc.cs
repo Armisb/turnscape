@@ -28,7 +28,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         LoadInventoryDataFromJson(json);
         ApplyInventoryDataToScene();
         SyncInventoryStructureFromScene();
-        //Debug.Log(json);
+        Debug.Log(json);
         DebugPrintInventoryData();
     }
 

@@ -23,7 +23,8 @@ public class FightSc : MonoBehaviour
     public TextMeshProUGUI MyHp;
     public TextMeshProUGUI EnemyHp;
     private bool hasLoadedstats = false;
-
+    public TMP_Text rewardText;
+    
     private void Start()
     {
         LoadMatch();
@@ -130,11 +131,13 @@ public class FightSc : MonoBehaviour
         {
             endText.text = "You Lost!";
             panel.SetActive(true);
+            rewardText.text = $"";
             return;
         }
         if (enemyHp <= 0) {
             endText.text = "You Won!";
             panel.SetActive(true);
+            rewardText.text = $"Reward: ${QueueService.reward}";
             return;
         }
     }
