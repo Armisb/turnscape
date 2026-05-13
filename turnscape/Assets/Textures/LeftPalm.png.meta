@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ebb3444914cb5ff47a851be47ec40e64
+guid: a625d3de69eb09e44957062881a052d6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3166533520430183294
-    second: PlayerBody_0
+      213: -6388143296627711073
+    second: LeftPalm_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -74,7 +74,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
+    textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayerBody_0
+      name: LeftPalm_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 28c44694a863e04d0800000000000000
-      internalID: -3166533520430183294
+      spriteID: f93663e7481c857a0800000000000000
+      internalID: -6388143296627711073
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 1df79d617b58a5141a4dce601bd65d76
+    spriteID: 3ff42e339aff88a4e975c0044b7bb8fc
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PlayerBody_0: -3166533520430183294
+      LeftPalm_0: -6388143296627711073
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

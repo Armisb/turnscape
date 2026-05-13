@@ -142,6 +142,8 @@ public class ShopManager : MonoBehaviour
 
     public void OpenShop()
     {
+        GameManagerSc.Instance.SaveAllAsync();
+
         RefreshBuyShop();
         this.gameObject.SetActive(true);
         ResetErrorText();

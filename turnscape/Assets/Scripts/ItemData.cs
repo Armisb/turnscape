@@ -16,6 +16,7 @@ public class ItemData
     public int health;
     public string itemType;
     public string category;
+    public string name;
     public int damage;
     public int protection;
 }

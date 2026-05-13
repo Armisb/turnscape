@@ -4,7 +4,7 @@ public static class FileReader
 {
     public static Sprite GetTextureSprite(string fileName)
     {
-        string fileNameNoExt = System.IO.Path.GetFileNameWithoutExtension(fileName);
+        string fileNameNoExt = System.IO.Path.GetFileNameWithoutExtension(fileName.ToLower());
 
         Sprite sprite = Resources.Load<Sprite>($"Textures/{fileNameNoExt}");
 

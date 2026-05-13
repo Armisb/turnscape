@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: feafbcf9fa0ee39479605ad1b77c79d2
+guid: 0b419b7b536dac942ab6da73c06145b3
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -103,10 +103,10 @@ TextureImporter:
       name: helmet_0
       rect:
         serializedVersion: 2
-        x: 25
-        y: 5
-        width: 215
-        height: 251
+        x: 42
+        y: 48
+        width: 35
+        height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

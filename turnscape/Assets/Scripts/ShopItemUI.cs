@@ -17,9 +17,10 @@ public class ShopItemUI : MonoBehaviour
     {
         shopManager = manager;
 
-        iconImage.sprite = FileReader.GetTextureSprite(itemCategory + ".png");
-        nameText.text = itemName;
-        btn.onClick.RemoveAllListeners();
+        iconImage.sprite = FileReader.GetTextureSprite(item.name + ".png");
+        nameText.text = item.name;
+        priceText.text = item.price + " coins";
+        //btn.onClick.RemoveAllListeners();
         if (mode == ShopItemUIMode.Buy)
         {
             priceField.text = itemPrice.ToString("0.00");

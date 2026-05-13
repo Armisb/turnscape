@@ -88,13 +88,13 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
     public void UpdateUI(ItemData item = null)
     {
         Sprite icon = null;
-        if (item != null && !string.IsNullOrEmpty(item.category)) icon = FileReader.GetTextureSprite(item.category + ".png");
+        if (item != null && !string.IsNullOrEmpty(item.category)) icon = FileReader.GetTextureSprite(item.name + ".png");
 
         if (icon != null && item != null)
         {
             itemImage.sprite = icon;
             itemHolder.gameObject.SetActive(true);
-            infoDrop.title = item.category + "@lvl " + item.level;
+            infoDrop.title = item.name + "@lvl " + item.level;
             infoDrop.description = FormatStatistics(item);
         }
         else

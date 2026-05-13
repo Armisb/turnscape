@@ -194,6 +194,8 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         inventory0.Slots[slot0].UpdateUI(slots0[slot0]);
         inventory1.Slots[slot1].UpdateUI(slots1[slot1]);
 
+        DresserManSc.Instance.ReloadDressed();
+
         //UpdateSlotUI(inventory0.Slots[slot0], inventory1.Slots[slot1]);
 
         return true;
