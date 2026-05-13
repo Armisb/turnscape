@@ -55,7 +55,7 @@ public static class Networking
             else
             {
                 Debug.LogError("Error: " + request.error);
-                onError?.Invoke(request.error);
+                onError?.Invoke(request.downloadHandler.text);
             }
         }
     }
