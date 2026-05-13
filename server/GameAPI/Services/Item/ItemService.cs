@@ -33,6 +33,7 @@ public class ItemService(AppDbContext context) : IItemService
         {
             var item_to_switch = items.FirstOrDefault(x=> x.Id == updatePos.Id);
             if (item_to_switch == null) continue; // or throw
+            if (item_to_switch.InventoryType.ToLower() == "shopinventory") continue; // or throw
 
             if(updatePos.InventoryType.ToLower() != "playerequiped")
             {
