@@ -18,7 +18,7 @@ public class ShopItemUI : MonoBehaviour
         item = newItem;
         shopManager = manager;
 
-        iconImage.sprite = FileReader.GetTextureSprite(item.category + ".png");
+        iconImage.sprite = FileReader.GetTextureSprite(item.name + ".png");
         nameText.text = item.name;
         priceText.text = item.price + " coins";
         //btn.onClick.RemoveAllListeners();

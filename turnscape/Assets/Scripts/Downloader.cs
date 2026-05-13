@@ -1,11 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class Downloader : MonoBehaviour
 {
+    private Task<string> DownloadInventoryJsonAsyncHelper()
+    {
+        var tcs = new TaskCompletionSource<string>();
+
+        StartCoroutine(DownloadInventoryJson(result =>
+        {
+            tcs.SetResult(result);
+        }));
+
+        return tcs.Task;
+    }
+
     public IEnumerator DownloadInventoryJson(Action<string> onComplete)
     {
         string url = "https://turnscape-api.azurewebsites.net/Item/" + AuthManager.PlayerId;

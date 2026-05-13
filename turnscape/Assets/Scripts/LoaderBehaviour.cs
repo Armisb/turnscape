@@ -170,8 +170,6 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
 
     public sealed override void LoadWithDependencies()
     {
-        Debug.Log("Loading, " + isLoaded);
-
         if (isLoaded)
             return;
 

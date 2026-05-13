@@ -88,7 +88,7 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
     public void UpdateUI(ItemData item = null)
     {
         Sprite icon = null;
-        if (item != null && !string.IsNullOrEmpty(item.category)) icon = FileReader.GetTextureSprite(item.category + ".png");
+        if (item != null && !string.IsNullOrEmpty(item.category)) icon = FileReader.GetTextureSprite(item.name + ".png");
 
         if (icon != null && item != null)
         {
