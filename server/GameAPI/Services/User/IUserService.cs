@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<List<GameUser>> GetAllUsersAsync();
     Task<List<int>> CalcStatistics(Guid id);
+    Task<decimal> GetMoney(Guid id);
 }

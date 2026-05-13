@@ -44,4 +44,12 @@ public class UserService(AppDbContext context, IConfiguration configuration) : I
             return(UserStatistics.CalcPlayerStats(playeritems));
 
     }
+
+  public async Task<decimal> GetMoney(Guid id)
+  {
+    GameUser user = await context.GameUsers.FirstOrDefaultAsync(x => x.Id == id);
+
+
+    return user.Money;
+  }
 }
