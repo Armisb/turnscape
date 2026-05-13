@@ -10,17 +10,16 @@ public class ShopItemUI : MonoBehaviour
     public TMP_Text priceText;
     public TMP_InputField priceField;
     public Button btn;
-    
+
     private ShopManager shopManager;
 
     public void Setup(ShopManager manager, ShopItemUIMode mode, string itemName, float itemPrice, string itemCategory, string itemId)
     {
         shopManager = manager;
 
-        iconImage.sprite = FileReader.GetTextureSprite(item.name + ".png");
-        nameText.text = item.name;
-        priceText.text = item.price + " coins";
-        //btn.onClick.RemoveAllListeners();
+        iconImage.sprite = FileReader.GetTextureSprite(itemName + ".png");
+        nameText.text = itemName;
+        btn.onClick.RemoveAllListeners();
         if (mode == ShopItemUIMode.Buy)
         {
             priceField.text = itemPrice.ToString("0.00");
