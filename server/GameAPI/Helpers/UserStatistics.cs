@@ -1,4 +1,5 @@
 using System;
+using GameAPI.Models;
 using shared_lib.ItemDtos;
 
 namespace GameAPI.Helpers;
@@ -21,5 +22,23 @@ public class UserStatistics
         }
 
         return new List<int>{damage, protection};
+    } 
+
+    public static int GetEmptyInvPosition(List<Models.Item> items)
+    {
+        int pos = -1;
+        int inv_size = 25;
+        for(int i = 0; i < inv_size; i++)
+        {
+            var it = items.FirstOrDefault(x=> x.InventoryType.ToLower() == "playerinventory" && x.Position == i);
+            if(it is null)
+            {
+                pos = i;
+                return pos;
+            }
+            
+        }
+        
+        return pos;
     } 
 }

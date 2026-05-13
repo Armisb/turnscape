@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using shared_lib;
 using GameAPI.Data;
+using System.Security.Claims;
 
 namespace GameAPI.Controllers
 {
@@ -24,6 +25,29 @@ namespace GameAPI.Controllers
 
             List<GameUser> user = await service.GetAllUsersAsync();
             return Ok(user);
+        }
+
+        [HttpGet("money")]
+        [Authorize(Roles = "Admin,GameUser")]
+        public async Task<ActionResult<decimal>> GetMoney()
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+             return Unauthorized("Invalid token.");
+            }
+
+            Guid Id = Guid.Parse(userIdClaim.Value);
+
+            decimal money = await service.GetMoney(Id);
+            return Ok(money);
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     
         [HttpPost("signup")]

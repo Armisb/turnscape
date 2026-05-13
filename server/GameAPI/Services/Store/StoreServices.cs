@@ -43,10 +43,20 @@ public class StoreServices(AppDbContext context) : IStoreServices
       throw new InvalidOperationException("You don't have enough funds.");
     }
 
+    List<Models.Item> buyeritems = await context.Items.Where(x=>x.GameUserId == buyerId).ToListAsync();
+
+    int pos = Helpers.UserStatistics.GetEmptyInvPosition(buyeritems);
+
+     if(pos == -1)
+    {
+      throw new InvalidOperationException("You don't have enough space in inventory.");
+    }
+
     seller.Money += itemInStore.Price;
     buyer.Money -= itemInStore.Price;
     itemInStore.Item.GameUserId = buyerId;
     itemInStore.Item.InventoryType = "PlayerInventory";
+    itemInStore.Item.Position = pos;
 
     context.InStoreItems.Remove(itemInStore);
     await context.SaveChangesAsync();
@@ -142,7 +152,17 @@ if (alreadyListed)
       throw new InvalidOperationException("Item is not in in store.");
     }
 
+    List<Models.Item> buyeritems = await context.Items.Where(x=>x.GameUserId == sellerId).ToListAsync();
+
+    int pos = Helpers.UserStatistics.GetEmptyInvPosition(buyeritems);
+
+     if(pos == -1)
+    {
+      throw new InvalidOperationException("You don't have enough space in inventory.");
+    }
+
     itemInStore.Item.InventoryType = "PlayerInventory";
+    itemInStore.Item.Position = pos;
     context.InStoreItems.Remove(itemInStore);
     await context.SaveChangesAsync();
     return itemInStore;
