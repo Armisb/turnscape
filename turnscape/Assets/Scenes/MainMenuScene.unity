@@ -833,6 +833,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7238045599724517382, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: offset.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7238045599724517382, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: offset.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7238045599724517382, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: maxTextWidth
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7238045599724517382, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: scanInterval
+      value: 0.025
+      objectReference: {fileID: 0}
+    - target: {fileID: 7238045599724517382, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: refreshInterval
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
