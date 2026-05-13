@@ -16,6 +16,7 @@ public static class QueueService
     public static MatchData PendingMatchUpdate;
     public static event Action<MatchData> OnMatchUpdated;
     public static bool HasPendingMatchUpdate;
+    public static float reward;
     
     public static async void LeaveQueue()
     {
@@ -72,6 +73,11 @@ public static class QueueService
             Debug.Log("Current turn: " + match.CurrentTurnPlayerId);
         });
 
+        Connection.On<float>("Reward", rw =>
+        {
+            reward = rw;
+        });
+        
         Connection.On<string>("ForceDisconnect", async message =>
         {
             Debug.Log("Force disconnect: " + message);

@@ -13,6 +13,7 @@ public class ShopManager : MonoBehaviour
     public Transform contentParent;
     public ShopItemUI itemUIPrefab;
     private ShopItemUIMode mode = ShopItemUIMode.Buy;
+    public TMP_Text moneyText;
 
     private async void GetShopItems()
     {
@@ -50,12 +51,14 @@ public class ShopManager : MonoBehaviour
     {
         ClearShop();
         GetShopItems();
+        GetMoney();
     }
     
     public void RefreshSellShop()
     {
         ClearShop();
         GetInventoryItems();
+        GetMoney();
     }
 
     private void GetInventoryItems()
@@ -134,6 +137,7 @@ public class ShopManager : MonoBehaviour
         GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
 
         this.gameObject.SetActive(false);
+        GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
     }
 
     public void OpenShop()
@@ -141,8 +145,19 @@ public class ShopManager : MonoBehaviour
         RefreshBuyShop();
         this.gameObject.SetActive(true);
         ResetErrorText();
+        GetMoney();
     }
-
+    
+    private async void GetMoney()
+    {
+        await Networking.SendGetGeneric(
+            "user/money",
+            "",
+            response => moneyText.text = $"${response}",
+            error => Debug.LogError(error)
+        );
+    }
+    
     public void SwitchShop()
     {
         if (mode == ShopItemUIMode.Buy)
