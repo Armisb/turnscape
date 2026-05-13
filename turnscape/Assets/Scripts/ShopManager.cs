@@ -1,10 +1,15 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
     public List<ShopItem> items;
+    public TMP_Text errorText;
     public Transform contentParent;
     public ShopItemUI itemUIPrefab;
     private ShopItemUIMode mode = ShopItemUIMode.Buy;
@@ -28,9 +33,19 @@ public class ShopManager : MonoBehaviour
             Debug.Log(item.name);
         }
         
-        PopulateShop();
+        PopulateBuyShop(items);
     }
 
+    private void ResetErrorText()
+    {
+        errorText.text = "";
+    }
+
+    private void SetErrorText(string error)
+    {
+        errorText.text = error;
+    }
+    
     public void RefreshBuyShop()
     {
         ClearShop();
@@ -45,24 +60,29 @@ public class ShopManager : MonoBehaviour
 
     private void GetInventoryItems()
     {
-        var items = InventoryManSc.Instance.InventoryData;
-        foreach (var item in items)
+        var items = InventoryManSc.Instance.InventoryData["PlayerInventory"];
+        foreach (var item in items.Values)
         {
-            
+            if (item.id != null)
+            {
+                ShopItemUI ui = Instantiate(itemUIPrefab, contentParent);
+                // reiiktu pakeisti, koki price uzdet, tyngiu dabar
+                ui.Setup(this, ShopItemUIMode.Sell, item.category, 1337, item.category, item.id);
+            }
+        
         }
     }
     
-    void PopulateShop()
+    void PopulateBuyShop(List<ShopItem> items)
     {
         foreach (var x in items)
         {
             ShopItemUI ui = Instantiate(itemUIPrefab, contentParent);
-            ui.Setup(x, this, ShopItemUIMode.Buy);
+            ui.Setup(this, ShopItemUIMode.Buy, x.name, x.price, x.category, x.id);
         }
-      
     }
 
-    public async void BuyItem(ShopItem item)
+    public async void BuyItem(string itemId)
     {
         // Check player coins
   
@@ -70,30 +90,34 @@ public class ShopManager : MonoBehaviour
         
         // Add item to inventory
         await Networking.SendPostGeneric(
-            $"store/buy/{item.id}",
+            $"store/buy/{itemId}",
             "",
             x => Debug.Log("Buy item: " + x),
-            x => Debug.LogError($" buy Error: {x}")
+            x => this.SetErrorText(x)
         );
 
         RefreshBuyShop();
     }
 
-    public async void SellItem(ShopItem item)
+    public async void SellItem(string itemId, decimal price)
     {
-        // Check player coins
-  
-        // Subtract price
         
+
+        SellItemRequest request = new SellItemRequest
+        {
+            ItemId = itemId,
+            Price = (float)price
+        };
+
         // Add item to inventory
         await Networking.SendPostGeneric(
             "store",
-            JsonConvert.SerializeObject(item),
+            request,            
             x => Debug.Log($"Sell item: " + x),
-            x => Debug.LogError($" sell Error: {x}")
+            x => SetErrorText(x)
         );
 
-        RefreshBuyShop();
+        RefreshSellShop();
     }
     
     private void ClearShop()
@@ -114,7 +138,7 @@ public class ShopManager : MonoBehaviour
     {
         RefreshBuyShop();
         this.gameObject.SetActive(true);
-        //PopulateShop();
+        ResetErrorText();
     }
 
     public void SwitchShop()
@@ -129,6 +153,13 @@ public class ShopManager : MonoBehaviour
             RefreshBuyShop();
             mode = ShopItemUIMode.Buy;
         }
+        ResetErrorText();
     }
 }
 
+[System.Serializable]
+public class SellItemRequest
+{
+    public float Price;
+    public string ItemId;
+}
