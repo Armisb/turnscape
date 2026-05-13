@@ -57,11 +57,32 @@ namespace GameAPI.Hubs
                 : match.PlayerOneId;
 
 
+            decimal reward = Math.Round(
+                    (decimal)(Random.Shared.NextDouble() * 40 + 10),
+                        2
+                        );
+
             if( match.PlayerTwoStats[2]<0 || match.PlayerOneStats[2] < 0)
-            {   
+            {
+                if (match.PlayerTwoStats[2] < 0)
+                {
+                    GameUser user = await context.GameUsers.FirstOrDefaultAsync(x=>x.Id == match.PlayerOneId);
+                    user.Money += reward;
+                }
+                if (match.PlayerOneStats[2] < 0)
+                {
+                    GameUser user = await context.GameUsers.FirstOrDefaultAsync(x=>x.Id == match.PlayerTwoId);
+                    user.Money += reward;
+                }
+
                 match.IsFinished=true;
             }
             await context.SaveChangesAsync();
+
+            await Clients.Users(
+                match.PlayerOneId.ToString(),
+                match.PlayerTwoId.ToString()
+            ).SendAsync("Reward", reward);
 
             await Clients.Users(
                 match.PlayerOneId.ToString(),
