@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 public class ShopManager : MonoBehaviour
 {
@@ -84,21 +87,37 @@ public class ShopManager : MonoBehaviour
         RefreshBuyShop();
     }
 
-    public async void SellItem(string itemId)
+    public async void SellItem(string itemId, decimal price)
     {
-        // Check player coins
-  
-        // Subtract price
+
+        // string cleanPrice = price.Trim().Replace(",", ".");
+        //
+        // if (!decimal.TryParse(
+        //         cleanPrice,
+        //         NumberStyles.Number,
+        //         CultureInfo.InvariantCulture,
+        //         out decimal parsedPrice))
+        // {
+        //     Debug.LogError("Invalid price input: " + price);
+        //     return;
+        // }
+
+        SellItemRequest request = new SellItemRequest
+        {
+            ItemID = itemId,
+            Price = price
+        };
+
         
         // Add item to inventory
         await Networking.SendPostGeneric(
-            $"store/sell/{itemId}",
-            "",
+            "store",
+            JsonUtility.ToJson(request),            
             x => Debug.Log($"Sell item: " + x),
             x => Debug.LogError($" sell Error: {x}")
         );
 
-        RefreshBuyShop();
+        RefreshSellShop();
     }
     
     private void ClearShop()
@@ -137,3 +156,9 @@ public class ShopManager : MonoBehaviour
     }
 }
 
+[System.Serializable]
+public class SellItemRequest
+{
+    public decimal Price;
+    public string ItemID;
+}
