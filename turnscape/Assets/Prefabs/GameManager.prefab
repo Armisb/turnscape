@@ -519,6 +519,8 @@ MonoBehaviour:
   spacing: 6
   maxTextWidth: 500
   scanInterval: 0.05
+  refreshInterval: 20
+  titleSeparator: 64
   cam: {fileID: 8963765380267355354}
   current: {fileID: 0}
 --- !u!1 &2648257825588110074
@@ -538,7 +540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7417567482906051075
 RectTransform:
   m_ObjectHideFlags: 0

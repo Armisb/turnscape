@@ -5,42 +5,44 @@ using UnityEngine.UI;
 
 public class HoverInfoManSc : MonoBehaviour
 {
-    [Header("UI")]
     public RectTransform panel;
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI descText;
     public Image background;
 
-    [Header("Size Limits")]
     public Vector2 minSize = new Vector2(250, 120);
     public Vector2 maxSize = new Vector2(600, 350);
+    public Vector2 offset = new Vector2(1, 1);
+    public bool clampToScreen = true;
 
-    [Header("Text Settings")]
     public float titleFontSize = 24f;
     public float descFontSize = 18f;
 
-    [Header("Layout")]
     public float padding = 10f;
     public float spacing = 6f;
     public float maxTextWidth = 500f;
 
-    [Header("Settings")]
     public float scanInterval = 0.1f;
     public int refreshInterval = 10;
 
     [SerializeField] private char titleSeparator = '@';
-
-    int refreshCounter = 0;
 
     public Camera cam;
 
     public InfoDropSc current;
 
     InfoDropSc candidate;
+
     float delayTimer;
     float scanTimer;
+    int refreshCounter;
 
     EventSystem eventSystem;
+
+    Vector2 MinSize => current != null && current.overrideParameters ? current.minSize : minSize;
+    Vector2 MaxSize => current != null && current.overrideParameters ? current.maxSize : maxSize;
+    Vector2 Offset => current != null && current.overrideParameters ? current.offset : offset;
+    bool ClampToScreen => current != null && current.overrideParameters ? current.clampToScreen : clampToScreen;
 
     void Start()
     {
@@ -86,20 +88,18 @@ public class HoverInfoManSc : MonoBehaviour
             if (resolved != current)
             {
                 SetCurrent(resolved);
+                return;
+            }
+
+            if (refreshCounter >= refreshInterval)
+            {
+                ApplyText(current);
+                LayoutManually(current);
+                refreshCounter = 0;
             }
             else
             {
-                if (refreshCounter >= refreshInterval)
-                {
-                    ApplyText(current);
-                    LayoutManually(current);
-
-                    refreshCounter = 0;
-                }
-                else
-                {
-                    refreshCounter++;
-                }
+                refreshCounter++;
             }
         }
         else
@@ -117,11 +117,7 @@ public class HoverInfoManSc : MonoBehaviour
             else
             {
                 candidate = resolved;
-
-                delayTimer =
-                    resolved != null
-                    ? resolved.delay
-                    : 0;
+                delayTimer = resolved != null ? resolved.delay : 0;
             }
         }
     }
@@ -140,8 +136,6 @@ public class HoverInfoManSc : MonoBehaviour
         }
 
         panel.gameObject.SetActive(true);
-
-        if (info == null) return;
 
         ApplyText(info);
         LayoutManually(info);
@@ -171,58 +165,23 @@ public class HoverInfoManSc : MonoBehaviour
 
         titleText.ForceMeshUpdate();
 
-        float width;
-        float height;
-
         Vector2 titleSize =
-            titleText.GetPreferredValues(
-                titleText.text,
-                maxTextWidth,
-                0
-            );
+            titleText.GetPreferredValues(titleText.text, maxTextWidth, 0);
 
         Vector2 descSize =
-            descText.GetPreferredValues(
-                descText.text,
-                maxTextWidth,
-                0
-            );
+            descText.GetPreferredValues(descText.text, maxTextWidth, 0);
 
-        if (info != null && info.overrideSize)
-        {
-            width = Mathf.Clamp(
-                info.size.x,
-                minSize.x,
-                maxSize.x
-            );
+        float width = Mathf.Clamp(
+            Mathf.Max(titleSize.x, descSize.x) + padding * 2,
+            MinSize.x,
+            MaxSize.x
+        );
 
-            height = Mathf.Clamp(
-                info.size.y,
-                minSize.y,
-                maxSize.y
-            );
-        }
-        else
-        {
-            width = Mathf.Clamp(
-                Mathf.Max(titleSize.x, descSize.x) + padding * 2,
-                minSize.x,
-                maxSize.x
-            );
-
-            float preferredHeight =
-                padding
-                + titleSize.y
-                + spacing
-                + descSize.y
-                + padding;
-
-            height = Mathf.Clamp(
-                preferredHeight,
-                minSize.y,
-                maxSize.y
-            );
-        }
+        float height = Mathf.Clamp(
+            padding + titleSize.y + spacing + descSize.y + padding,
+            MinSize.y,
+            MaxSize.y
+        );
 
         panel.sizeDelta = new Vector2(width, height);
 
@@ -230,46 +189,24 @@ public class HoverInfoManSc : MonoBehaviour
 
         tr.anchorMin = new Vector2(0, 1);
         tr.anchorMax = new Vector2(0, 1);
-
         tr.pivot = new Vector2(0, 1);
 
-        tr.anchoredPosition =
-            new Vector2(
-                padding,
-                -padding
-            );
+        tr.anchoredPosition = new Vector2(padding, -padding);
 
-        tr.sizeDelta =
-            new Vector2(
-                width - padding * 2,
-                titleSize.y
-            );
+        tr.sizeDelta = new Vector2(width - padding * 2, titleSize.y);
 
         RectTransform dr = descText.rectTransform;
 
         dr.anchorMin = new Vector2(0, 1);
         dr.anchorMax = new Vector2(0, 1);
-
         dr.pivot = new Vector2(0, 1);
 
         dr.anchoredPosition =
-            new Vector2(
-                padding,
-                -padding - titleSize.y - spacing
-            );
-
-        float allowedHeight =
-            height
-            - padding
-            - titleSize.y
-            - spacing
-            - padding;
+            new Vector2(padding, -padding - titleSize.y - spacing);
 
         dr.sizeDelta =
-            new Vector2(
-                width - padding * 2,
-                allowedHeight
-            );
+            new Vector2(width - padding * 2,
+                height - padding - titleSize.y - spacing - padding);
 
         string raw = titleText.text ?? "";
 
@@ -284,25 +221,19 @@ public class HoverInfoManSc : MonoBehaviour
             right = raw.Substring(sep + 1);
         }
 
-        float availableWidth = width - (padding * 2);
-
-        Vector2 leftSize = titleText.GetPreferredValues(left);
-        Vector2 rightSize = titleText.GetPreferredValues(right);
+        float availableWidth = width - padding * 2;
 
         int spaces = 1;
-        int lastValidSpaces = 1;
+        int lastValid = 1;
 
-        int breakTimer = 0;
-        while (breakTimer < 100)
+        for (int i = 0; i < 100; i++)
         {
-            breakTimer++;
             string test = left + new string(' ', spaces) + right;
+            float w = titleText.GetPreferredValues(test).x;
 
-            float testWidth = titleText.GetPreferredValues(test).x;
-
-            if (testWidth <= availableWidth)
+            if (w <= availableWidth)
             {
-                lastValidSpaces = spaces;
+                lastValid = spaces;
                 spaces++;
             }
             else
@@ -311,7 +242,7 @@ public class HoverInfoManSc : MonoBehaviour
             }
         }
 
-        spaces = Mathf.Max(1, lastValidSpaces);
+        spaces = Mathf.Max(1, lastValid);
 
         string finalTitle = left + new string(' ', spaces) + right;
 
@@ -327,9 +258,7 @@ public class HoverInfoManSc : MonoBehaviour
 
                 string test = left + new string(' ', spaces) + cutRight + "...";
 
-                float w = titleText.GetPreferredValues(test).x;
-
-                if (w <= availableWidth)
+                if (titleText.GetPreferredValues(test).x <= availableWidth)
                 {
                     finalTitle = test;
                     break;
@@ -340,33 +269,89 @@ public class HoverInfoManSc : MonoBehaviour
         titleText.text = finalTitle;
     }
 
-        void UpdatePanelPosition()
-        {
+    void UpdatePanelPosition()
+    {
         if (current == null)
             return;
 
         Vector2 mouse = Input.mousePosition;
 
-        RectTransform parent =
-            panel.parent as RectTransform;
+        RectTransform parent = panel.parent as RectTransform;
 
-        RectTransformUtility
-            .ScreenPointToLocalPointInRectangle(
-                parent,
-                mouse,
-                cam,
-                out Vector2 localMouse
-            );
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            parent,
+            mouse,
+            cam,
+            out Vector2 localMouse
+        );
 
         Vector2 size = panel.rect.size;
 
-        Vector2 pivotOffset =
-            new Vector2(
-                size.x * panel.pivot.x,
-                size.y * panel.pivot.y
-            );
+        Vector2 correctedOffset = Offset;
 
-        panel.anchoredPosition =
-            localMouse - pivotOffset;
+        if (ClampToScreen)
+        {
+            correctedOffset = ClampOffsetToScreen(localMouse, size, Offset, parent, cam);
+        }
+
+        Vector2 pivotOffset = new Vector2(
+            size.x * correctedOffset.x * -0.5f,
+            size.y * correctedOffset.y * -0.5f
+        );
+
+        panel.anchoredPosition = localMouse - pivotOffset;
+    }
+
+    Vector2 ClampOffsetToScreen(
+        Vector2 localMouse,
+        Vector2 size,
+        Vector2 offset,
+        RectTransform parent,
+        Camera cam)
+    {
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(
+            cam,
+            parent.TransformPoint(localMouse)
+        );
+
+        Vector2 half = size * 0.5f;
+
+        Vector2 desired = screenPos + new Vector2(
+            offset.x * half.x,
+            offset.y * half.y
+        );
+
+        float left = desired.x - half.x;
+        float right = desired.x + half.x;
+        float bottom = desired.y - half.y;
+        float top = desired.y + half.y;
+
+        float correctionX = 0f;
+        float correctionY = 0f;
+
+        if (left < 0)
+            correctionX = -left;
+        else if (right > Screen.width)
+            correctionX = Screen.width - right;
+
+        if (bottom < 0)
+            correctionY = -bottom;
+        else if (top > Screen.height)
+            correctionY = Screen.height - top;
+
+        Vector2 correctedOffset = offset;
+
+        if (half.x > 0.0001f)
+            correctedOffset.x += correctionX / half.x;
+
+        if (half.y > 0.0001f)
+            correctedOffset.y += correctionY / half.y;
+
+        desired = screenPos + new Vector2(
+            correctedOffset.x * half.x,
+            correctedOffset.y * half.y
+        );
+
+        return correctedOffset;
     }
 }
