@@ -87,6 +87,9 @@ public abstract class LoaderBehaviour : MonoBehaviour
         yield return DownloadAll();
 
         foreach (var loader in snapshot)
+            loader.isLoaded = false;
+
+        foreach (var loader in snapshot)
             loader.LoadWithDependencies();
 
         foreach (var loader in snapshot)
@@ -167,6 +170,8 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
 
     public sealed override void LoadWithDependencies()
     {
+        Debug.Log("Loading, " + isLoaded);
+
         if (isLoaded)
             return;
 

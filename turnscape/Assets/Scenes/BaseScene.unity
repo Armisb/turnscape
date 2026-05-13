@@ -3324,6 +3324,7 @@ GameObject:
   - component: {fileID: 695625552}
   - component: {fileID: 695625551}
   - component: {fileID: 695625550}
+  - component: {fileID: 695625554}
   m_Layer: 5
   m_Name: MenuCanvas
   m_TagString: Untagged
@@ -3415,6 +3416,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &695625554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695625549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3c89689baa4c0a48913a74d6489060d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleManager
+  items:
+  - toggle: {fileID: 1579547909}
+    targetObject: {fileID: 170402793}
+  activeToggle: {fileID: 0}
+  activeObject: {fileID: 0}
 --- !u!1001 &707506990
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7051,7 +7069,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1579547908}
   - component: {fileID: 1579547909}
-  - component: {fileID: 1579547910}
   m_Layer: 5
   m_Name: MenuToggle
   m_TagString: Untagged
@@ -7126,35 +7143,8 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1579547910}
-        m_TargetAssemblyTypeName: ToggleObjectSc, Assembly-CSharp
-        m_MethodName: ChangeObjectState
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 0
---- !u!114 &1579547910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1579547907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fe400a8f723eb4aa5d0a66cc04f2a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ToggleObjectSc
-  MenuObj: {fileID: 170402793}
-  toggle: {fileID: 1579547909}
-  body: {fileID: 475341299}
 --- !u!1001 &1603016932
 PrefabInstance:
   m_ObjectHideFlags: 0
