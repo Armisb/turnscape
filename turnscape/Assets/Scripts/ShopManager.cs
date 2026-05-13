@@ -4,10 +4,12 @@ using Newtonsoft.Json;
 using UnityEngine;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
     public List<ShopItem> items;
+    public TMP_Text errorText;
     public Transform contentParent;
     public ShopItemUI itemUIPrefab;
     private ShopItemUIMode mode = ShopItemUIMode.Buy;
@@ -34,6 +36,16 @@ public class ShopManager : MonoBehaviour
         PopulateBuyShop(items);
     }
 
+    private void ResetErrorText()
+    {
+        errorText.text = "";
+    }
+
+    private void SetErrorText(string error)
+    {
+        errorText.text = error;
+    }
+    
     public void RefreshBuyShop()
     {
         ClearShop();
@@ -81,7 +93,7 @@ public class ShopManager : MonoBehaviour
             $"store/buy/{itemId}",
             "",
             x => Debug.Log("Buy item: " + x),
-            x => Debug.LogError($" buy Error: {x}")
+            x => this.SetErrorText(x)
         );
 
         RefreshBuyShop();
@@ -89,32 +101,20 @@ public class ShopManager : MonoBehaviour
 
     public async void SellItem(string itemId, decimal price)
     {
-
-        // string cleanPrice = price.Trim().Replace(",", ".");
-        //
-        // if (!decimal.TryParse(
-        //         cleanPrice,
-        //         NumberStyles.Number,
-        //         CultureInfo.InvariantCulture,
-        //         out decimal parsedPrice))
-        // {
-        //     Debug.LogError("Invalid price input: " + price);
-        //     return;
-        // }
+        
 
         SellItemRequest request = new SellItemRequest
         {
-            ItemID = itemId,
-            Price = price
+            ItemId = itemId,
+            Price = (float)price
         };
 
-        
         // Add item to inventory
         await Networking.SendPostGeneric(
             "store",
-            JsonUtility.ToJson(request),            
+            request,            
             x => Debug.Log($"Sell item: " + x),
-            x => Debug.LogError($" sell Error: {x}")
+            x => SetErrorText(x)
         );
 
         RefreshSellShop();
@@ -138,7 +138,7 @@ public class ShopManager : MonoBehaviour
     {
         RefreshBuyShop();
         this.gameObject.SetActive(true);
-        //PopulateShop();
+        ResetErrorText();
     }
 
     public void SwitchShop()
@@ -153,12 +153,13 @@ public class ShopManager : MonoBehaviour
             RefreshBuyShop();
             mode = ShopItemUIMode.Buy;
         }
+        ResetErrorText();
     }
 }
 
 [System.Serializable]
 public class SellItemRequest
 {
-    public decimal Price;
-    public string ItemID;
+    public float Price;
+    public string ItemId;
 }
