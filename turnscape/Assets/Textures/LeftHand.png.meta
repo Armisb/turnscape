@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ebb3444914cb5ff47a851be47ec40e64
+guid: 96eb5c01690859d47993cab82473eec7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3166533520430183294
-    second: PlayerBody_0
+      213: -7779679759674261937
+    second: LeftHand_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -74,7 +74,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
+    textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayerBody_0
+      name: LeftHand_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 28c44694a863e04d0800000000000000
-      internalID: -3166533520430183294
+      spriteID: f4eb1522a76090490800000000000000
+      internalID: -7779679759674261937
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 1df79d617b58a5141a4dce601bd65d76
+    spriteID: 2d25be31515bade4aa03276960ed4617
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PlayerBody_0: -3166533520430183294
+      LeftHand_0: -7779679759674261937
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

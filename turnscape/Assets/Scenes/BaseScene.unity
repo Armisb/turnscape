@@ -757,7 +757,7 @@ PrefabInstance:
     - target: {fileID: 2279438831493765314, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1863857695669490757, guid: 7111bedc221ee714dbb68d2ecc4a29d0, type: 3}
+      objectReference: {fileID: 6535389403491987954, guid: 75c9472887a0eb74397bd6b1a8bca0cf, type: 3}
     - target: {fileID: 2279438831493765314, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: m_Color.a
       value: 1
@@ -884,7 +884,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8098463322876773781, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: category
-      value: bottle
+      value: chest
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -1798,7 +1798,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 1000
   m_TargetDisplay: 0
 --- !u!224 &427020074
 RectTransform:
@@ -2234,7 +2234,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 1000
   m_TargetDisplay: 0
 --- !u!1 &499212591
 GameObject:
@@ -2430,7 +2430,7 @@ PrefabInstance:
     - target: {fileID: 2279438831493765314, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -8358113870863188520, guid: 7ab16d19c0b785c409eb323cdcb62653, type: 3}
+      objectReference: {fileID: -3814612280702224284, guid: 08e1ae3cf80188d4db90d21f9a774082, type: 3}
     - target: {fileID: 2279438831493765314, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: m_Color.a
       value: 1
@@ -2542,6 +2542,10 @@ PrefabInstance:
     - target: {fileID: 6016689214347572125, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098463322876773781, guid: d1715476dafc77447b814a0e3380544f, type: 3}
+      propertyPath: category
+      value: pants
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -3302,7 +3306,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 1
   m_SortingLayerID: 0
-  m_SortingOrder: 100
+  m_SortingOrder: 1000
   m_TargetDisplay: 0
 --- !u!224 &695625553
 RectTransform:
@@ -4735,7 +4739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8098463322876773781, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: category
-      value: bottle
+      value: weapon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -6312,7 +6316,7 @@ PrefabInstance:
     - target: {fileID: 2279438831493765314, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -8358113870863188520, guid: 7ab16d19c0b785c409eb323cdcb62653, type: 3}
+      objectReference: {fileID: -8832084061015963671, guid: cac1f2c81cfd48d4d97e0157f25f3c29, type: 3}
     - target: {fileID: 2279438831493765314, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: m_Color.a
       value: 1
@@ -6424,6 +6428,10 @@ PrefabInstance:
     - target: {fileID: 6016689214347572125, guid: d1715476dafc77447b814a0e3380544f, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098463322876773781, guid: d1715476dafc77447b814a0e3380544f, type: 3}
+      propertyPath: category
+      value: locked
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

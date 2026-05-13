@@ -94,7 +94,7 @@ public class SlotSc : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandl
         {
             itemImage.sprite = icon;
             itemHolder.gameObject.SetActive(true);
-            infoDrop.title = item.category + "@lvl " + item.level;
+            infoDrop.title = item.name + "@lvl " + item.level;
             infoDrop.description = FormatStatistics(item);
         }
         else
