@@ -107,6 +107,8 @@ public class ShopManager : MonoBehaviour
     
     public void CloseShop()
     {
+        GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
+
         this.gameObject.SetActive(false);
     }
 
