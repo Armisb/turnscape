@@ -44,8 +44,10 @@ public class StatisticsSc : LoaderBehaviour<StatisticsSc>
                 damage += item.damage;
                 protection += item.protection;
 
-                if (item.category == "bottle") damage += item.level;
+                if (item.category == "weapon") damage += item.level;
                 if (item.category == "helmet") protection += item.level;
+                if (item.category == "chest") protection += item.level;
+                if (item.category == "pants") protection += item.level;
             }
         }
 
