@@ -513,13 +513,15 @@ MonoBehaviour:
   background: {fileID: 2134987761477740743}
   minSize: {x: 250, y: 120}
   maxSize: {x: 600, y: 350}
+  offset: {x: -1, y: -1}
+  clampToScreen: 1
   titleFontSize: 24
   descFontSize: 18
   padding: 10
   spacing: 6
-  maxTextWidth: 500
-  scanInterval: 0.05
-  refreshInterval: 20
+  maxTextWidth: 1000
+  scanInterval: 0.025
+  refreshInterval: 50
   titleSeparator: 64
   cam: {fileID: 8963765380267355354}
   current: {fileID: 0}
@@ -930,6 +932,7 @@ GameObject:
   - component: {fileID: -8908602343444171370}
   - component: {fileID: 5970976004033124587}
   - component: {fileID: 2096784753737954561}
+  - component: {fileID: 2107776305067599660}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1013,6 +1016,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StatisticsSc
   damage: 1
   protection: 0
+--- !u!114 &2107776305067599660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4977410872680699822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d233596c8f9cec140ba4d1a23ee6053a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &6145543482325665908
 GameObject:
   m_ObjectHideFlags: 0

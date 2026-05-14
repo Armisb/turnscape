@@ -111,6 +111,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
             slot.inventory = inv;
             inv.Slots[slot.uniqueName] = slot;
+            slot.UpdateUI();
         }
     }
 
@@ -127,6 +128,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
             if (!miscInv.Slots.ContainsKey(slot.uniqueName))
                 miscInv.Slots[slot.uniqueName] = slot;
+            slot.UpdateUI();
         }
     }
 

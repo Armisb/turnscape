@@ -52,6 +52,7 @@ public class ShopManager : MonoBehaviour
         ClearShop();
         GetShopItems();
         GetMoney();
+        //GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
     }
     
     public void RefreshSellShop()
@@ -59,6 +60,7 @@ public class ShopManager : MonoBehaviour
         ClearShop();
         GetInventoryItems();
         GetMoney();
+        GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
     }
 
     private void GetInventoryItems()
@@ -104,8 +106,6 @@ public class ShopManager : MonoBehaviour
 
     public async void SellItem(string itemId, decimal price)
     {
-        
-
         SellItemRequest request = new SellItemRequest
         {
             ItemId = itemId,
@@ -137,7 +137,6 @@ public class ShopManager : MonoBehaviour
         GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
 
         this.gameObject.SetActive(false);
-        GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
     }
 
     public void OpenShop()

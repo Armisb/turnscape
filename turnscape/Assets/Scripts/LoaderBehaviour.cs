@@ -73,6 +73,9 @@ public abstract class LoaderBehaviour : MonoBehaviour
         yield return new WaitUntil(() => isUploading == 0);
 
         foreach (var loader in Loaders)
+            loader.isLoaded = true;
+
+        foreach (var loader in Loaders)
             loader.PrepareWithDependencies();
 
         yield return new WaitUntil(() => isUploading == 0);
