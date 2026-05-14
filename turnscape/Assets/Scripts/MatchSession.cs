@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class MatchSession
 {
-    public static MatchData CurrentMatch;
+    public static MatchData CurrentMatch = new MatchData();
     public static Guid MyPlayerId;
 
     public static bool IsPlayerOne =>

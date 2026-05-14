@@ -53,6 +53,8 @@ public class GameManagerSc : MonoBehaviour
 
     public static void LoadScene(string sceneName)
     {
+
+
         Instance.loadingPanel.SetActive(true);
         Instance.StartCoroutine(Instance.LoadSceneRoutine(sceneName));
     }
@@ -65,6 +67,8 @@ public class GameManagerSc : MonoBehaviour
         });
 
         SetCanvasCamera();
+
+        Debug.Log("Before relaod all");
 
         yield return RunBatch(2, 2, "Loading game data", () =>
         {

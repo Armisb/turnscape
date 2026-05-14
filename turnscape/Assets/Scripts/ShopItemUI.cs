@@ -13,13 +13,13 @@ public class ShopItemUI : MonoBehaviour
     
     private ShopManager shopManager;
 
-    public void Setup(ShopManager manager, ShopItemUIMode mode, string itemName, float itemPrice, string itemCategory, string itemId)
+    public void Setup(ShopManager manager, ShopItemUIMode mode, string itemName, float itemPrice, string itemCategory, string itemId, string itemLevel)
     {
         shopManager = manager;
 
-        iconImage.sprite = FileReader.GetTextureSprite(item.name + ".png");
-        nameText.text = item.name;
-        priceText.text = item.price + " coins";
+        iconImage.sprite = FileReader.GetTextureSprite(itemName + ".png");
+        nameText.text = itemName + " lvl " + itemLevel;
+        priceText.text = itemPrice + " coins";
         //btn.onClick.RemoveAllListeners();
         if (mode == ShopItemUIMode.Buy)
         {
