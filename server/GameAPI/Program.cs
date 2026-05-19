@@ -54,9 +54,9 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ILobbyService, LobbyService>();
 builder.Services.AddScoped<IStoreServices, StoreServices>();
 builder.Services.AddHostedService<MatchFinder>();
-
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
+    //options.UseInMemoryDatabase("turnscape");
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
