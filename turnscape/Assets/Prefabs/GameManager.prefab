@@ -618,16 +618,7 @@ MonoBehaviour:
   m_Value: 0
   m_MultiSelect: 0
   m_Options:
-    m_Options:
-    - m_Text: Option A
-      m_Image: {fileID: 0}
-      m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Option B
-      m_Image: {fileID: 0}
-      m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Option C
-      m_Image: {fileID: 0}
-      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2351,8 +2342,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77fad74c811c5e743942687de707e280, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  resolutionDropdown: {fileID: 0}
-  fullscreenToggle: {fileID: 0}
+  resolutionDropdown: {fileID: 2545611906037008631}
+  fullscreenToggle: {fileID: 7692300411199713740}
 --- !u!114 &8497477568984118032
 MonoBehaviour:
   m_ObjectHideFlags: 0
