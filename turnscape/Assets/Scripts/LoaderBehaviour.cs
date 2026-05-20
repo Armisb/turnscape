@@ -31,6 +31,8 @@ public abstract class LoaderBehaviour : MonoBehaviour
 
     public static IEnumerator ReloadAll()
     {
+        Debug.Log("Relaoding all");
+
         IsLoading = true;
         CompletedTasks = 0;
         TotalTasks = 0;
@@ -38,9 +40,15 @@ public abstract class LoaderBehaviour : MonoBehaviour
         yield return new WaitUntil(() => isUploading == 0);
 
         foreach (var loader in Loaders)
+            loader.isLoaded = true;
+
+        foreach (var loader in Loaders)
             loader.PrepareWithDependencies();
 
         yield return new WaitUntil(() => isUploading == 0);
+
+        foreach (var loader in Loaders)
+            loader.isLoaded = false;
 
         var snapshot = Loaders.ToArray();
         TotalTasks += snapshot.Length;
@@ -174,6 +182,8 @@ public abstract class LoaderBehaviour<T> : LoaderBehaviour where T : LoaderBehav
 
     public sealed override void LoadWithDependencies()
     {
+        Debug.Log("loading");
+
         if (isLoaded)
             return;
 

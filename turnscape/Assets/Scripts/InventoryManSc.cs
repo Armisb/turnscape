@@ -22,15 +22,25 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         yield break;
     }
 
+    public void PublicLoad()
+    {
+        Load();
+    }
+
     protected override void Load()
     {
+        Debug.Log("Loading inventories");
+
         InventoryObjects.Clear();
 
         CollectInvetoryUI();
         LoadInventoryDataFromJson(json);
+
+        DebugPrintInventoryData();
+
         ApplyInventoryDataToScene();
         SyncInventoryStructureFromScene();
-        Debug.Log(json);
+        //Debug.Log(json);
         DebugPrintInventoryData();
     }
 
@@ -161,8 +171,8 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         if (string.IsNullOrEmpty(invName))
             return "";
 
-        if (!InventoryObjects.ContainsKey(invName))
-            return "";
+        /*if (!InventoryObjects.ContainsKey(invName))
+            return "";*/
 
         return invName;
     }
@@ -441,7 +451,7 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
         foreach (var invPair in InventoryData)
         {
             string invName = string.IsNullOrEmpty(invPair.Key) ? "misc" : invPair.Key;
-            //Debug.Log($"Inventory: {invName}");
+            Debug.Log($"Inventory: {invName}");
 
             foreach (var slotPair in invPair.Value)
             {
@@ -450,17 +460,17 @@ public class InventoryManSc : LoaderBehaviour<InventoryManSc>
 
                 if (item == null)
                 {
-                    //Debug.Log($"  Slot {slotKey}: EMPTY (null)");
+                    Debug.Log($"  Slot {slotKey}: EMPTY (null)");
                     continue;
                 }
 
-                /*Debug.Log(
+                Debug.Log(
                     $"  Slot {slotKey}: " +
                     $"Id={item.id ?? "null"}, " +
                     $"Type={item.itemType ?? "null"}, " +
                     $"Category={item.category ?? "null"}, " +
                     $"Pos={item.position}"
-                );*/
+                );
             }
         }
     }
