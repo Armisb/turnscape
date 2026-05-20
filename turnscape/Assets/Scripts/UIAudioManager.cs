@@ -15,6 +15,11 @@ public class UIAudioManager : MonoBehaviour
         Instance = this;
     }
 
+    public void ChangeVolume(int volume)
+    {
+        audioSource.volume = volume;
+    }
+
     public void PlayClick()
     {
         audioSource.PlayOneShot(clickSound);

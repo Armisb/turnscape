@@ -107,7 +107,7 @@ public class FightSc : MonoBehaviour
         {
             TurnText.text = "Enemy turn!";
         }
-        CheckEnd();
+        //CheckEnd();
     }
 
     public async void DamageEnemy(string attackType)
@@ -132,12 +132,15 @@ public class FightSc : MonoBehaviour
             endText.text = "You Lost!";
             panel.SetActive(true);
             rewardText.text = $"";
+            UIAudioManager.Instance.PlayCustomSound(Resources.Load<AudioClip>("Audio/loseSound"));
             return;
         }
         if (enemyHp <= 0) {
             endText.text = "You Won!";
             panel.SetActive(true);
             rewardText.text = $"Reward: ${QueueService.reward}";
+            UIAudioManager.Instance.PlayCustomSound(Resources.Load<AudioClip>("Audio/winSound"));
+            
             return;
         }
     }
