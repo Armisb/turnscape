@@ -1343,7 +1343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 241.452, y: 92.98801}
+  m_AnchoredPosition: {x: 241.45197, y: 92.98801}
   m_SizeDelta: {x: 482.904, y: 185.97601}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &705444739
@@ -1452,6 +1452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &718665109
 GameObject:
   m_ObjectHideFlags: 0
@@ -2398,6 +2399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &943972244
 GameObject:
   m_ObjectHideFlags: 0
@@ -2568,6 +2570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &954443238
 GameObject:
   m_ObjectHideFlags: 0
@@ -2738,6 +2741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &1004724549
 GameObject:
   m_ObjectHideFlags: 0
@@ -2884,6 +2888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &1028293183
 GameObject:
   m_ObjectHideFlags: 0
@@ -3623,6 +3628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &1363002002
 GameObject:
   m_ObjectHideFlags: 0
@@ -3793,6 +3799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &1381030474
 GameObject:
   m_ObjectHideFlags: 0
