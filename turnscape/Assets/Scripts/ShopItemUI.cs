@@ -27,14 +27,15 @@ public class ShopItemUI : MonoBehaviour
             priceField.readOnly = true;
             btn.GetComponentInChildren<TextMeshProUGUI>().text = "Buy";
             btn.onClick.AddListener(() => shopManager.BuyItem(itemId));
+            //shopManager.RefreshBuyShop();
         }
         else
         {
             priceField.readOnly = false;
             btn.GetComponentInChildren<TextMeshProUGUI>().text = "Sell";
             btn.onClick.AddListener(() => shopManager.SellItem(itemId, decimal.Parse(priceField.text)));
+            //shopManager.RefreshSellShop();
         }
-
     }
 }
 

@@ -52,7 +52,7 @@ public class ShopManager : MonoBehaviour
         ClearShop();
         GetShopItems();
         GetMoney();
-        //GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
+        GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
     }
     
     public void RefreshSellShop()
