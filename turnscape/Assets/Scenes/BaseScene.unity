@@ -206,6 +206,7 @@ GameObject:
   - component: {fileID: 24529263}
   - component: {fileID: 24529262}
   - component: {fileID: 24529261}
+  - component: {fileID: 24529264}
   m_Layer: 5
   m_Name: SwitchMode
   m_TagString: Untagged
@@ -3481,6 +3482,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1715476dafc77447b814a0e3380544f, type: 3}
+--- !u!1001 &573017129
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.76793
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5472
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916153560980927333, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7865079545443192961, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 08b18ce56bc2a0ce7b059e2fe6b93563, type: 3}
 --- !u!224 &580198811 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4733416719199439823, guid: d1715476dafc77447b814a0e3380544f, type: 3}
@@ -3642,6 +3700,7 @@ GameObject:
   - component: {fileID: 615131605}
   - component: {fileID: 615131604}
   - component: {fileID: 615131603}
+  - component: {fileID: 615131606}
   m_Layer: 5
   m_Name: JoinCombatBtn
   m_TagString: Untagged
@@ -3763,6 +3822,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 615131601}
   m_CullTransparentMesh: 1
+--- !u!114 &615131606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615131601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
 --- !u!1 &639062073
 GameObject:
   m_ObjectHideFlags: 0
@@ -4573,6 +4644,7 @@ GameObject:
   - component: {fileID: 742792936}
   - component: {fileID: 742792935}
   - component: {fileID: 742792934}
+  - component: {fileID: 742792937}
   m_Layer: 5
   m_Name: CloseShop
   m_TagString: Untagged
@@ -4856,6 +4928,7 @@ GameObject:
   - component: {fileID: 771166050}
   - component: {fileID: 771166049}
   - component: {fileID: 771166048}
+  - component: {fileID: 771166051}
   m_Layer: 5
   m_Name: LeaveQueueBtn (1)
   m_TagString: Untagged
@@ -4977,6 +5050,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771166046}
   m_CullTransparentMesh: 1
+--- !u!114 &771166051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771166046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
 --- !u!1001 &785909287
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10908,6 +10993,7 @@ GameObject:
   - component: {fileID: 2045321702}
   - component: {fileID: 2045321701}
   - component: {fileID: 2045321700}
+  - component: {fileID: 2045321703}
   m_Layer: 5
   m_Name: ShopBtn
   m_TagString: Untagged
@@ -11029,6 +11115,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2045321698}
   m_CullTransparentMesh: 1
+--- !u!114 &2045321703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045321698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
 --- !u!1 &2049502072
 GameObject:
   m_ObjectHideFlags: 0
@@ -11602,6 +11700,7 @@ SceneRoots:
   - {fileID: 490774663}
   - {fileID: 427020074}
   - {fileID: 2554212408255980687}
+  - {fileID: 573017129}
   - {fileID: 687143656}
   - {fileID: 448579009}
   - {fileID: 5384922073569694613}

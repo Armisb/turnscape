@@ -60,7 +60,6 @@ public class Entity : MonoBehaviour
             CurrentHealth = 0;
             alive = false;
         }
-
         UpdateHealthBar();
     }
 

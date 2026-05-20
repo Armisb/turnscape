@@ -213,6 +213,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 124558966}
     m_Modifications:
+    - target: {fileID: -2252875601792246714, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
+      propertyPath: sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 57a4d4b48f8e6dfc8b3007ffbf81954f, type: 3}
     - target: {fileID: 2553368583988967387, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -2785,6 +2789,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 124558966}
     m_Modifications:
+    - target: {fileID: -2252875601792246714, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
+      propertyPath: sound
+      value: 
+      objectReference: {fileID: 8300000, guid: e764e93da64776205af54bf6ebbbbbd8, type: 3}
     - target: {fileID: 2553368583988967387, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -6083,6 +6091,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2554212408255980687}
+  - {fileID: 139263044}
   - {fileID: 687143656}
   - {fileID: 448579009}
   - {fileID: 1104115149}
