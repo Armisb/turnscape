@@ -144,3 +144,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   audioSource: {fileID: 5060646651202815503}
   clickSound: {fileID: 8300000, guid: f0c6caa2365354e2d917cd9e0fb7282d, type: 3}
+  buySound: {fileID: 8300000, guid: 081d507a626e4887f98d28b92e9e5a8f, type: 3}

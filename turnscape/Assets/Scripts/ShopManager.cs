@@ -97,7 +97,7 @@ public class ShopManager : MonoBehaviour
         await Networking.SendPostGeneric(
             $"store/buy/{itemId}",
             "",
-            x => Debug.Log("Buy item: " + x),
+            x => UIAudioManager.Instance.PlayBuySound(),
             x => this.SetErrorText(x)
         );
 

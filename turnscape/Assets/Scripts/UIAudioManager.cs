@@ -7,6 +7,8 @@ public class UIAudioManager : MonoBehaviour
     
     public AudioSource audioSource;
     public AudioClip clickSound;
+    public AudioClip buySound;
+    
 
     private void Awake()
     {
@@ -16,5 +18,15 @@ public class UIAudioManager : MonoBehaviour
     public void PlayClick()
     {
         audioSource.PlayOneShot(clickSound);
+    }
+
+    public void PlayBuySound()
+    {
+        audioSource.PlayOneShot(buySound);
+    }
+
+    public void PlayCustomSound(AudioClip sound)
+    {
+        audioSource.PlayOneShot(sound);
     }
 }
