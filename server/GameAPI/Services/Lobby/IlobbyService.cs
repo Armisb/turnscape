@@ -9,5 +9,5 @@ public interface ILobbyService
     Task<Match> RemoveMatch(Guid MatchId);
     Task<bool> JoinLobby(Guid PlayerId);
     Task<bool> LeaveLobby(Guid PlayerId);
-    Task FindMatch();
+    Task<bool> FindMatch();
 }

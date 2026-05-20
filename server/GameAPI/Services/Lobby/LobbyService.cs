@@ -9,13 +9,13 @@ namespace GameAPI.Services.Lobby;
 
 public class LobbyService(AppDbContext context, IHubContext<MatchHub> matchHub, IUserService userService) : ILobbyService
 {
-    public async Task FindMatch()
+    public async Task<bool> FindMatch()
     {
         var players = await context.Lobby.Take(2).ToListAsync();
 
         if(players.Count != 2)
         {
-            return;
+            return false;
         }
 
         context.Lobby.Remove(players[0]);
@@ -44,6 +44,7 @@ public class LobbyService(AppDbContext context, IHubContext<MatchHub> matchHub, 
             .SendAsync("MatchFound", newMatch);
         await matchHub.Clients.User(players[1].GameUserId.ToString())
             .SendAsync("MatchFound", newMatch);
+        return true;
     }
 
     public async Task<List<Match>> GetMatchAll()

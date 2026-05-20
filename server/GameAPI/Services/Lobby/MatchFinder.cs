@@ -18,10 +18,14 @@ public class MatchFinder :  BackgroundService
         {
             try
             {
-                // Create a new scope for each iteration
-                using var scope = _services.CreateScope();
-                var lobbyService = scope.ServiceProvider.GetRequiredService<ILobbyService>();
-                await lobbyService.FindMatch();
+		bool match_found = true;
+		while (match_found && !stoppingToken.IsCancellationRequested) {
+                    // Create a new scope for each iteration
+                    using var scope = _services.CreateScope();
+                    var lobbyService = scope.ServiceProvider.GetRequiredService<ILobbyService>();
+                    match_found = await lobbyService.FindMatch();
+		    await Task.Delay(2, stoppingToken);
+		}
             }
             catch (Exception ex)
             {
