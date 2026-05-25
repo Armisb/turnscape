@@ -52,7 +52,7 @@ public class ShopManager : MonoBehaviour
         ClearShop();
         GetShopItems();
         GetMoney();
-        //GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
+        GameManagerSc.Instance.LoadAllAsyncWithoutSaving();
     }
     
     public void RefreshSellShop()
@@ -72,7 +72,7 @@ public class ShopManager : MonoBehaviour
             {
                 ShopItemUI ui = Instantiate(itemUIPrefab, contentParent);
                 // reiiktu pakeisti, koki price uzdet, tyngiu dabar
-                ui.Setup(this, ShopItemUIMode.Sell, item.name, 1337, item.category, item.id);
+                ui.Setup(this, ShopItemUIMode.Sell, item.name, 1337, item.category, item.id, item.level.ToString());
             }
         
         }
@@ -83,7 +83,7 @@ public class ShopManager : MonoBehaviour
         foreach (var x in items)
         {
             ShopItemUI ui = Instantiate(itemUIPrefab, contentParent);
-            ui.Setup(this, ShopItemUIMode.Buy, x.name, x.price, x.category, x.id);
+            ui.Setup(this, ShopItemUIMode.Buy, x.name, x.price, x.category, x.id, x.level.ToString());
         }
     }
 

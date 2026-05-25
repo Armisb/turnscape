@@ -10,21 +10,6 @@ public class DresserManSc : LoaderBehaviour<DresserManSc>
         typeof(InventoryManSc)
     };
 
-    protected override void Load()
-    {
-        dressers.Clear();
-
-        var found = FindObjectsByType<DresserSc>(FindObjectsSortMode.None);
-
-        foreach (var x in found)
-        {
-            if (x == null || string.IsNullOrEmpty(x.uniqueName))
-                continue;
-
-            dressers[x.uniqueName] = x;
-        }
-    }
-
     protected override void Apply()
     {
         ReloadDressed();
@@ -32,13 +17,29 @@ public class DresserManSc : LoaderBehaviour<DresserManSc>
 
     public void ReloadDressed()
     {
+
+        Debug.Log("attempt");
+        dressers.Clear();
+
+        var found = FindObjectsByType<DresserSc>(FindObjectsSortMode.None);
+
+        foreach (var x in found)
+        {
+            Debug.Log("found: " + x.uniqueName);
+
+            if (x == null || string.IsNullOrEmpty(x.uniqueName))
+                continue;
+
+            dressers[x.uniqueName] = x;
+        }
+
         if (!dressers.TryGetValue("Player", out var player))
             return;
 
         player.UnequipAll();
 
-        if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquiped"))
-            return;
+        /*if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquiped"))
+            return;*/
 
         List<string> items = new();
 

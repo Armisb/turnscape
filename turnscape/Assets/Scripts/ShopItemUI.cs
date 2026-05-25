@@ -13,12 +13,13 @@ public class ShopItemUI : MonoBehaviour
 
     private ShopManager shopManager;
 
-    public void Setup(ShopManager manager, ShopItemUIMode mode, string itemName, float itemPrice, string itemCategory, string itemId)
+    public void Setup(ShopManager manager, ShopItemUIMode mode, string itemName, float itemPrice, string itemCategory, string itemId, string itemLevel)
     {
         shopManager = manager;
 
         iconImage.sprite = FileReader.GetTextureSprite(itemName + ".png");
-        nameText.text = itemName;
+        nameText.text = itemName + " lvl " + itemLevel;
+        priceText.text = itemPrice + " coins";
         btn.onClick.RemoveAllListeners();
         if (mode == ShopItemUIMode.Buy)
         {
@@ -26,14 +27,15 @@ public class ShopItemUI : MonoBehaviour
             priceField.readOnly = true;
             btn.GetComponentInChildren<TextMeshProUGUI>().text = "Buy";
             btn.onClick.AddListener(() => shopManager.BuyItem(itemId));
+            //shopManager.RefreshBuyShop();
         }
         else
         {
             priceField.readOnly = false;
             btn.GetComponentInChildren<TextMeshProUGUI>().text = "Sell";
             btn.onClick.AddListener(() => shopManager.SellItem(itemId, decimal.Parse(priceField.text)));
+            //shopManager.RefreshSellShop();
         }
-
     }
 }
 

@@ -57,7 +57,7 @@ public class FightSc : MonoBehaviour
 
         if (match == null)
         {
-            Debug.LogError("No match data found!");
+            Debug.Log("No match data found!");
             return;
         }
 
@@ -88,6 +88,9 @@ public class FightSc : MonoBehaviour
         // [0] = damage
         // [1] = protection
         // [2] = HP
+
+        if (MatchSession.MyStats == null || MatchSession.MyStats.Count == 0) return;
+        if (MatchSession.EnemyStats == null || MatchSession.EnemyStats.Count == 0) return;
         
         Player.SetStats(myStats[2], myStats[1], myStats[0], hasLoadedstats);
         Enemy.SetStats(enemyStats[2], enemyStats[1], enemyStats[0], hasLoadedstats);
@@ -124,6 +127,9 @@ public class FightSc : MonoBehaviour
 
     public void CheckEnd()
     {
+        if (MatchSession.MyStats == null || MatchSession.MyStats.Count == 0) return;
+        if (MatchSession.EnemyStats == null || MatchSession.EnemyStats.Count == 0) return;
+
         int myHp = MatchSession.MyStats[2];
         int enemyHp = MatchSession.EnemyStats[2];
 
