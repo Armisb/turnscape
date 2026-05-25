@@ -617,6 +617,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438710884}
   m_CullTransparentMesh: 1
+--- !u!1001 &488300596
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 289986766549949184, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_Name
+      value: MusicManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.86885
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0118
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797438346770944544, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9856ae7bdedad78aabcbe16f2f248efa, type: 3}
 --- !u!1 &494610130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1347,6 +1404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &718665109
 GameObject:
   m_ObjectHideFlags: 0
@@ -2218,6 +2276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &943972244
 GameObject:
   m_ObjectHideFlags: 0
@@ -2388,6 +2447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &954443238
 GameObject:
   m_ObjectHideFlags: 0
@@ -2558,6 +2618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &1004724549
 GameObject:
   m_ObjectHideFlags: 0
@@ -2704,6 +2765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &1028293183
 GameObject:
   m_ObjectHideFlags: 0
@@ -3443,6 +3505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &1363002002
 GameObject:
   m_ObjectHideFlags: 0
@@ -3613,6 +3676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  sound: {fileID: 0}
 --- !u!1 &1381030474
 GameObject:
   m_ObjectHideFlags: 0
@@ -4415,3 +4479,4 @@ SceneRoots:
   - {fileID: 1556342219856641714}
   - {fileID: 1776078653}
   - {fileID: 1689134386}
+  - {fileID: 488300596}
