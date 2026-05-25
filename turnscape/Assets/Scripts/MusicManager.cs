@@ -1,0 +1,29 @@
+using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class MusicManager : MonoBehaviour
+{
+    private AudioSource audioSource; 
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.spatialBlend = 0f;
+    }
+
+    private void Start()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        AudioClip clip = Resources.Load<AudioClip>("Audio/BGM/" + sceneName + "BGM");
+
+        if (clip == null)
+        {
+            Debug.LogWarning("No Bgm found in the scene.");
+            return;
+        }
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+}
