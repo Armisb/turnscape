@@ -1346,7 +1346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Entity
   CurrentHealth: 100
-  MaxHealth: 0
+  MaxHealth: 100
   hasBeenDamged: 0
   healthBarFill: {fileID: 1440594371}
   damageTextPrefab: {fileID: 7443850357476783057, guid: a29e23a0bb874ff51b98d4814787fade, type: 3}
@@ -1502,6 +1502,10 @@ PrefabInstance:
     - target: {fileID: 1590220295289870633, guid: 2e07fda7b13ecc3da81e7463d6c37ed9, type: 3}
       propertyPath: m_SizeDelta.y
       value: 48.312
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085975461106380316, guid: 2e07fda7b13ecc3da81e7463d6c37ed9, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7338849103721406945, guid: 2e07fda7b13ecc3da81e7463d6c37ed9, type: 3}
       propertyPath: m_Name
@@ -1713,7 +1717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Entity
   CurrentHealth: 100
-  MaxHealth: 0
+  MaxHealth: 100
   hasBeenDamged: 0
   healthBarFill: {fileID: 82499956}
   damageTextPrefab: {fileID: 7443850357476783057, guid: a29e23a0bb874ff51b98d4814787fade, type: 3}
