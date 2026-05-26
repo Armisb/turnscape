@@ -4268,7 +4268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0b6f327d8d217442a819ceca9f05abd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DresserSc
-  uniqueName: Player
+  uniqueName: Enemy
   objects:
   - name: bottle
     obj: {fileID: 1433458859}
@@ -6073,12 +6073,48 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3079657488414977175, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3079657488414977175, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3079657488414977175, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3079657488414977175, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4977410872680699822, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
     - target: {fileID: 6300729689460684942, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7603098272172182977, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8886332102600199320, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8886332102600199320, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8886332102600199320, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8886332102600199320, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6091,7 +6127,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2554212408255980687}
-  - {fileID: 139263044}
   - {fileID: 687143656}
   - {fileID: 448579009}
   - {fileID: 1104115149}
