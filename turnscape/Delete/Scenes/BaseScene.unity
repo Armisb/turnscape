@@ -206,6 +206,7 @@ GameObject:
   - component: {fileID: 24529263}
   - component: {fileID: 24529262}
   - component: {fileID: 24529261}
+  - component: {fileID: 24529264}
   m_Layer: 5
   m_Name: SwitchMode
   m_TagString: Untagged
@@ -1174,8 +1175,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 372366114}
   - {fileID: 449326055}
+  - {fileID: 372366114}
   - {fileID: 2138357239}
   m_Father: {fileID: 1988835830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3833,7 +3834,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  sound: {fileID: 0}
 --- !u!1 &639062073
 GameObject:
   m_ObjectHideFlags: 0
@@ -4644,6 +4644,7 @@ GameObject:
   - component: {fileID: 742792936}
   - component: {fileID: 742792935}
   - component: {fileID: 742792934}
+  - component: {fileID: 742792937}
   m_Layer: 5
   m_Name: CloseShop
   m_TagString: Untagged
@@ -5061,7 +5062,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  sound: {fileID: 0}
 --- !u!1001 &785909287
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11127,7 +11127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b5e2a6f27e50b8fa09012379e4a057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  sound: {fileID: 0}
 --- !u!1 &2049502072
 GameObject:
   m_ObjectHideFlags: 0
