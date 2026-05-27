@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,68 +9,98 @@ public class ScreenManSc : MonoBehaviour
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private Toggle fullscreenToggle;
 
-    private Resolution[] resolutions;
-    private List<Resolution> filteredResolutions = new List<Resolution>();
+    [Header("Aspect Lock")]
+    [SerializeField] private Camera targetCamera;
 
+    private List<Resolution> resolutions = new();
     private bool initializing;
+
+    private const float targetAspect = 16f / 9f;
 
     private void Start()
     {
+        initializing = true;
+
+        if (targetCamera == null)
+            targetCamera = Camera.main;
+
         LoadResolutions();
         LoadSavedSettings();
+
+        initializing = false;
+    }
+
+    private void Update()
+    {
+        UpdateAspectRatio();
+    }
+
+    private void UpdateAspectRatio()
+    {
+        if (targetCamera == null) return;
+
+        float windowAspect = (float)Screen.width / Screen.height;
+        float scaleHeight = windowAspect / targetAspect;
+
+        Rect rect = targetCamera.rect;
+
+        if (scaleHeight < 1.0f)
+        {
+            // black bars top/bottom
+            rect.width = 1f;
+            rect.height = scaleHeight;
+            rect.x = 0;
+            rect.y = (1f - scaleHeight) / 2f;
+        }
+        else
+        {
+            // black bars left/right
+            float scaleWidth = 1f / scaleHeight;
+
+            rect.width = scaleWidth;
+            rect.height = 1f;
+            rect.x = (1f - scaleWidth) / 2f;
+            rect.y = 0;
+        }
+
+        targetCamera.rect = rect;
+        targetCamera.backgroundColor = Color.black;
     }
 
     private void LoadResolutions()
     {
-        resolutions = Screen.resolutions;
-
         resolutionDropdown.ClearOptions();
-        filteredResolutions.Clear();
+        resolutions.Clear();
 
-        List<string> options = new List<string>();
-        int currentIndex = 0;
+        Resolution[] all = Screen.resolutions;
+        List<string> options = new();
 
-        float currentWidth = Screen.currentResolution.width;
-        float currentHeight = Screen.currentResolution.height;
-
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < all.Length; i++)
         {
-            Resolution res = resolutions[i];
-
-            filteredResolutions.Add(res);
-            options.Add($"{res.width} x {res.height}");
-
-            if (res.width == currentWidth &&
-                res.height == currentHeight)
-            {
-                currentIndex = filteredResolutions.Count - 1;
-            }
+            Resolution r = all[i];
+            resolutions.Add(r);
+            options.Add($"{r.width} x {r.height} {(int)r.refreshRateRatio.value} Hz");
         }
 
         resolutionDropdown.AddOptions(options);
-
-        currentIndex = Mathf.Clamp(currentIndex, 0, options.Count - 1);
-
-        resolutionDropdown.value = currentIndex;
-        resolutionDropdown.RefreshShownValue();
     }
 
     public void SetResolution(int index)
     {
         if (initializing) return;
-        if (index < 0 || index >= filteredResolutions.Count) return;
+        if (index < 0 || index >= resolutions.Count) return;
 
-        Resolution res = filteredResolutions[index];
+        Resolution r = resolutions[index];
 
         Screen.SetResolution(
-            res.width,
-            res.height,
-            Screen.fullScreenMode);
+            r.width,
+            r.height,
+            Screen.fullScreenMode,
+            Mathf.RoundToInt((float)r.refreshRateRatio.value)
+        );
 
         PlayerPrefs.SetInt("ResolutionIndex", index);
         PlayerPrefs.Save();
-
-        StartCoroutine(RefreshUI());
     }
 
     public void SetFullscreen(bool fullscreen)
@@ -80,56 +108,34 @@ public class ScreenManSc : MonoBehaviour
         if (initializing) return;
 
         Screen.fullScreenMode = fullscreen
-            ? FullScreenMode.FullScreenWindow
+            ? FullScreenMode.ExclusiveFullScreen
             : FullScreenMode.Windowed;
 
         PlayerPrefs.SetInt("Fullscreen", fullscreen ? 1 : 0);
         PlayerPrefs.Save();
-
-        StartCoroutine(RefreshUI());
     }
 
     private void LoadSavedSettings()
     {
-        initializing = true;
-
+        int savedIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
         bool fullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
-        int resolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
 
         fullscreenToggle.isOn = fullscreen;
         SetFullscreen(fullscreen);
 
-        if (resolutionIndex >= 0 && resolutionIndex < filteredResolutions.Count)
-        {
-            resolutionDropdown.value = resolutionIndex;
-            SetResolution(resolutionIndex);
-        }
+        savedIndex = Mathf.Clamp(savedIndex, 0, resolutions.Count - 1);
 
-        initializing = false;
-    }
+        resolutionDropdown.value = savedIndex;
+        resolutionDropdown.RefreshShownValue();
 
-    private IEnumerator RefreshUI()
-    {
-        yield return null;
-
-        Canvas canvas = FindObjectOfType<Canvas>();
-
-        if (canvas != null)
-        {
-            Canvas.ForceUpdateCanvases();
-            LayoutRebuilder.ForceRebuildLayoutImmediate(
-                canvas.GetComponent<RectTransform>()
-            );
-        }
+        SetResolution(savedIndex);
     }
 
     public void ResetSettings()
     {
-        PlayerPrefs.DeleteKey("Fullscreen");
         PlayerPrefs.DeleteKey("ResolutionIndex");
-        PlayerPrefs.DeleteKey("Volume");
+        PlayerPrefs.DeleteKey("Fullscreen");
         PlayerPrefs.Save();
-
-        LoadSavedSettings();
+        Start();
     }
 }
