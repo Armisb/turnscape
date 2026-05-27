@@ -10,7 +10,7 @@ public class DresserManSc : LoaderBehaviour<DresserManSc>
         typeof(InventoryManSc)
     };
 
-    protected override void Apply()
+    protected override void Load()
     {
         ReloadDressed();
     }
