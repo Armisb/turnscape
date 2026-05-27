@@ -96,6 +96,7 @@ The server-side project is separated from Unity and contains its own C# codebase
 Turnscape is built as a modular Unity-based multiplayer system where gameplay, UI, and backend communication are separated into distinct layers. The architecture is designed to keep game logic centralized, while allowing UI and server interactions to remain loosely coupled and replaceable.
 
 Minimal architecture of the whole project visualized:
+
 ![minimal architecture](images/arc.png)
 
 Visualized Architecture of the Backend (.NET Core):
