@@ -626,11 +626,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 175
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_LocalPosition.x
@@ -662,11 +662,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1.721481
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -112
+      value: -105
       objectReference: {fileID: 0}
     - target: {fileID: 4622669319593405235, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -686,11 +686,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8519622412478846274, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_text
-      value: Main Menu
+      value: Continue
       objectReference: {fileID: 0}
     - target: {fileID: 8519622412478846274, guid: bc5c16b7804c90b1f9bce2f6795d2782, type: 3}
       propertyPath: m_fontSize
-      value: 30.2
+      value: 3.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6145,7 +6145,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Back to main menu
+  m_text: Abandon combat
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
