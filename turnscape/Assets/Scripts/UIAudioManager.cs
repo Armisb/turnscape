@@ -34,4 +34,9 @@ public class UIAudioManager : MonoBehaviour
     {
         audioSource.PlayOneShot(sound);
     }
+
+    public void SetVolume(float volume)
+    {
+        audioSource.volume = volume;
+    }
 }

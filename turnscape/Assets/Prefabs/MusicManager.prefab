@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3797438346770944544}
   - component: {fileID: 3918758874312419768}
-  - component: {fileID: 3090432557324423399}
+  - component: {fileID: 5687762495487755936}
   m_Layer: 0
   m_Name: MusicManager
   m_TagString: Untagged
@@ -46,7 +46,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -130,7 +130,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3090432557324423399
+--- !u!114 &5687762495487755936
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,4 +141,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7fa2a4cc79fc9a28a58f8a10d1979c9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::MusicManager
+  audioSource: {fileID: 3918758874312419768}

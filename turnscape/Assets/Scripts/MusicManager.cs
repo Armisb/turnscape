@@ -1,14 +1,14 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class MusicManager : MonoBehaviour
 {
-    private AudioSource audioSource; 
-
+    public AudioSource audioSource;
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        //audioSource = GetComponent<AudioSource>();
         audioSource.loop = true;
         audioSource.spatialBlend = 0f;
     }
@@ -25,5 +25,12 @@ public class MusicManager : MonoBehaviour
         }
         audioSource.clip = clip;
         audioSource.Play();
+    }
+
+    public void SetVolume(float vol)
+    {
+        audioSource.volume = vol;
+        
+        Debug.Log($"Volume: " + audioSource.volume);
     }
 }
