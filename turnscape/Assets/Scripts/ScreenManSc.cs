@@ -9,15 +9,62 @@ public class ScreenManSc : MonoBehaviour
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private Toggle fullscreenToggle;
 
+    [Header("Aspect Lock")]
+    [SerializeField] private Camera targetCamera;
+
     private List<Resolution> resolutions = new();
     private bool initializing;
+
+    private const float targetAspect = 16f / 9f;
 
     private void Start()
     {
         initializing = true;
+
+        if (targetCamera == null)
+            targetCamera = Camera.main;
+
         LoadResolutions();
         LoadSavedSettings();
+
         initializing = false;
+    }
+
+    private void Update()
+    {
+        UpdateAspectRatio();
+    }
+
+    private void UpdateAspectRatio()
+    {
+        if (targetCamera == null) return;
+
+        float windowAspect = (float)Screen.width / Screen.height;
+        float scaleHeight = windowAspect / targetAspect;
+
+        Rect rect = targetCamera.rect;
+
+        if (scaleHeight < 1.0f)
+        {
+            // black bars top/bottom
+            rect.width = 1f;
+            rect.height = scaleHeight;
+            rect.x = 0;
+            rect.y = (1f - scaleHeight) / 2f;
+        }
+        else
+        {
+            // black bars left/right
+            float scaleWidth = 1f / scaleHeight;
+
+            rect.width = scaleWidth;
+            rect.height = 1f;
+            rect.x = (1f - scaleWidth) / 2f;
+            rect.y = 0;
+        }
+
+        targetCamera.rect = rect;
+        targetCamera.backgroundColor = Color.black;
     }
 
     private void LoadResolutions()

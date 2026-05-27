@@ -825,34 +825,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4692154544656969912, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_fontSize
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4692154544656969912, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_margin.x
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 4692154544656969912, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_margin.y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4692154544656969912, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_margin.z
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4692154544656969912, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4692154544656969912, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_enableAutoSizing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4692154544656969912, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4977410872680699822, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
       propertyPath: m_Name
       value: GameManager
