@@ -1,19 +1,11 @@
 using System;
 using UnityEngine;
 
-public class UIAudioManager : MonoBehaviour
+public class UIAudioManager : LoaderBehaviour<UIAudioManager>
 {
-    public static UIAudioManager Instance;
-    
     public AudioSource audioSource;
     public AudioClip clickSound;
     public AudioClip buySound;
-    
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     public void ChangeVolume(int volume)
     {

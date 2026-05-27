@@ -3,19 +3,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class MusicManager : MonoBehaviour
+public class MusicManager : LoaderBehaviour<MusicManager>
 {
     public AudioSource audioSource;
-    private void Awake()
-    {
-        //audioSource = GetComponent<AudioSource>();
-        audioSource.loop = true;
-        audioSource.spatialBlend = 0f;
-    }
+    public string currentMusic = "";
 
     private void Start()
     {
+        audioSource.loop = true;
+        audioSource.spatialBlend = 0f;
+
         string sceneName = SceneManager.GetActiveScene().name;
+
+        if (sceneName == currentMusic) return;
+
         AudioClip clip = Resources.Load<AudioClip>("Audio/BGM/" + sceneName + "BGM");
 
         if (clip == null)
@@ -25,6 +26,8 @@ public class MusicManager : MonoBehaviour
         }
         audioSource.clip = clip;
         audioSource.Play();
+
+        currentMusic = sceneName;
     }
 
     public void SetVolume(float vol)
