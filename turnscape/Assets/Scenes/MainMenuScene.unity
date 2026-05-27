@@ -865,6 +865,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8025033197617888092, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: volumeSlider
+      value: 
+      objectReference: {fileID: 1323857993}
+    - target: {fileID: 8443087516125730866, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+      propertyPath: volumeSlider
+      value: 
+      objectReference: {fileID: 1560788870}
     - target: {fileID: 8704711907339953313, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -3729,6 +3737,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
   sound: {fileID: 0}
+--- !u!114 &1323857993 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5247952200245922074, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+  m_PrefabInstance: {fileID: 533781339}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &1363002002
 GameObject:
   m_ObjectHideFlags: 0
@@ -4037,6 +4056,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1381030474}
   m_CullTransparentMesh: 1
+--- !u!114 &1560788870 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 617724446614586245, guid: b7653eb4d4a0d174aabeb2af354dce0e, type: 3}
+  m_PrefabInstance: {fileID: 533781339}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &1689134383
 GameObject:
   m_ObjectHideFlags: 0

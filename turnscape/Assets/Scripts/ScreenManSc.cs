@@ -32,6 +32,7 @@ public class ScreenManSc : MonoBehaviour
 
     private void Update()
     {
+        fullscreenToggle.isOn = Screen.fullScreen;
         UpdateAspectRatio();
     }
 
@@ -46,7 +47,6 @@ public class ScreenManSc : MonoBehaviour
 
         if (scaleHeight < 1.0f)
         {
-            // black bars top/bottom
             rect.width = 1f;
             rect.height = scaleHeight;
             rect.x = 0;
@@ -54,7 +54,6 @@ public class ScreenManSc : MonoBehaviour
         }
         else
         {
-            // black bars left/right
             float scaleWidth = 1f / scaleHeight;
 
             rect.width = scaleWidth;
