@@ -7,21 +7,25 @@ using UnityEngine.Networking;
 
 public class Downloader : MonoBehaviour
 {
-    private Task<string> DownloadInventoryJsonAsyncHelper()
+    public Task<string> DownloadInventoryJsonAsyncHelper(string id = "")
     {
+        if (string.IsNullOrEmpty(id)) id = AuthManager.PlayerId;
+
         var tcs = new TaskCompletionSource<string>();
 
         StartCoroutine(DownloadInventoryJson(result =>
         {
             tcs.SetResult(result);
-        }));
+        }, id));
 
         return tcs.Task;
     }
 
-    public IEnumerator DownloadInventoryJson(Action<string> onComplete)
+    public IEnumerator DownloadInventoryJson(Action<string> onComplete, string id = "")
     {
-        string url = "https://turnscape-api.azurewebsites.net/Item/" + AuthManager.PlayerId;
+        if (string.IsNullOrEmpty(id)) id = AuthManager.PlayerId;
+
+        string url = "https://turnscape-api.azurewebsites.net/Item/" + id;
 
         using (UnityWebRequest request = UnityWebRequest.Get(url))
         {

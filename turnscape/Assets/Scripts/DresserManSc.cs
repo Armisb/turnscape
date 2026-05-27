@@ -33,13 +33,19 @@ public class DresserManSc : LoaderBehaviour<DresserManSc>
             dressers[x.uniqueName] = x;
         }
 
+        DressPlayer();
+        DressEnemy();
+    }
+
+    public void DressPlayer()
+    {
         if (!dressers.TryGetValue("Player", out var player))
             return;
 
         player.UnequipAll();
 
-        /*if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquiped"))
-            return;*/
+        if (!InventoryManSc.Instance.InventoryData.ContainsKey("PlayerEquiped"))
+            return;
 
         List<string> items = new();
 
@@ -55,6 +61,49 @@ public class DresserManSc : LoaderBehaviour<DresserManSc>
         }
 
         player.Equip(items);
+    }
+
+    public async void DressEnemy()
+    {
+        if (!dressers.TryGetValue("Enemy", out var enemy))
+            return;
+
+        enemy.UnequipAll();
+
+        string enemyId =
+            MatchSession.MyPlayerId == MatchSession.CurrentMatch.PlayerOneId
+                ? MatchSession.CurrentMatch.PlayerTwoId.ToString()
+                : MatchSession.CurrentMatch.PlayerOneId.ToString();
+
+        string json = await GameManagerSc.Instance.downloader.DownloadInventoryJsonAsyncHelper(enemyId);
+
+        if (string.IsNullOrEmpty(json))
+            return;
+
+        string wrapped = "{\"items\":" + json + "}";
+
+        ItemDataList list = JsonUtility.FromJson<ItemDataList>(wrapped);
+
+        if (list?.items == null)
+            return;
+
+        List<string> items = new();
+
+        foreach (var item in list.items)
+        {
+            if (item == null)
+                continue;
+
+            if (item.inventoryType != "PlayerEquiped")
+                continue;
+
+            if (string.IsNullOrEmpty(item.name))
+                continue;
+
+            items.Add(item.name);
+        }
+
+        enemy.Equip(items);
     }
 
     public void Equip(string uniqueName, string itemName)
