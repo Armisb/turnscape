@@ -1109,18 +1109,29 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 378215943}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1104115149}
+  m_Father: {fileID: 386265144}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -238, y: -18}
+  m_AnchoredPosition: {x: 0, y: 75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &379805483 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5085975461106380316, guid: 2e07fda7b13ecc3da81e7463d6c37ed9, type: 3}
+  m_PrefabInstance: {fileID: 1341523805}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &386265143
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,6 +1144,7 @@ GameObject:
   - component: {fileID: 386265147}
   - component: {fileID: 386265146}
   - component: {fileID: 386265145}
+  - component: {fileID: 386265148}
   m_Layer: 5
   m_Name: Player
   m_TagString: Untagged
@@ -1156,6 +1168,7 @@ RectTransform:
   - {fileID: 1858323708}
   - {fileID: 1539860694}
   - {fileID: 1660376080}
+  - {fileID: 378215944}
   m_Father: {fileID: 1104115149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
@@ -1233,6 +1246,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 386265143}
   m_CullTransparentMesh: 1
+--- !u!114 &386265148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386265143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a47da848597664aab9dc887f0f5c3955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Entity
+  CurrentHealth: 100
+  MaxHealth: 100
+  hasBeenDamged: 0
+  healthBarFill: {fileID: 1380052947}
+  damageTextPrefab: {fileID: 7443850357476783057, guid: a29e23a0bb874ff51b98d4814787fade, type: 3}
+  damageTextSpawnPoint: {fileID: 378215944}
+  protection: 1
+  damage: 1
+  healthBarText: {fileID: 1190556220}
+  alive: 1
 --- !u!1 &399828149
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,7 +1285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &399828150
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1836,7 +1871,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &629900931
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3291,8 +3326,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 696672209}
-  - {fileID: 378215944}
-  - {fileID: 1302836816}
   - {fileID: 577263119}
   - {fileID: 1427017438}
   - {fileID: 386265144}
@@ -3459,7 +3492,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1144177509
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3879,7 +3912,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1302836816}
   m_Layer: 5
-  m_Name: DamageTextPos (1)
+  m_Name: DamageTextPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3892,16 +3925,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302836815}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8648648, y: 0.8648648, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1104115149}
+  m_Father: {fileID: 1328719703}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 224, y: -18}
+  m_AnchoredPosition: {x: -281.03052, y: 49.297302}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1328719702
@@ -3916,6 +3949,7 @@ GameObject:
   - component: {fileID: 1328719706}
   - component: {fileID: 1328719705}
   - component: {fileID: 1328719704}
+  - component: {fileID: 1328719707}
   m_Layer: 5
   m_Name: Enemy
   m_TagString: Untagged
@@ -3939,6 +3973,7 @@ RectTransform:
   - {fileID: 160620258}
   - {fileID: 586585709}
   - {fileID: 419499705}
+  - {fileID: 1302836816}
   m_Father: {fileID: 1104115149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
@@ -4016,6 +4051,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328719702}
   m_CullTransparentMesh: 1
+--- !u!114 &1328719707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1328719702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a47da848597664aab9dc887f0f5c3955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Entity
+  CurrentHealth: 100
+  MaxHealth: 100
+  hasBeenDamged: 0
+  healthBarFill: {fileID: 379805483}
+  damageTextPrefab: {fileID: 7443850357476783057, guid: a29e23a0bb874ff51b98d4814787fade, type: 3}
+  damageTextSpawnPoint: {fileID: 1302836816}
+  protection: 1
+  damage: 1
+  healthBarText: {fileID: 874049855}
+  alive: 1
 --- !u!1001 &1341523805
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4344,6 +4401,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347602075}
   m_CullTransparentMesh: 1
+--- !u!114 &1380052947 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5085975461106380316, guid: 2e07fda7b13ecc3da81e7463d6c37ed9, type: 3}
+  m_PrefabInstance: {fileID: 254254971}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1405295402
 GameObject:
   m_ObjectHideFlags: 0
@@ -5213,7 +5281,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 213457460}
