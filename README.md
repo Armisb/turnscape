@@ -165,35 +165,33 @@ The server is treated as the single source of truth for persistent game state, w
 
 All visible assets are implemented as UI elements instead of sprites. This allows easier adaptation to different screen sizes and resolutions. Each scene has its own UI elements, which stay visible unless covered by opened panels.
 
-
-
-
+![Loading screen](images/loading.png)
 
 When the game launches, the player first sees a loading panel and then enters the Main Menu scene. The loading panel appears between scene loads. The loading panel consists of a circular loading bar (animated), percentage of stage loaded, loading stage indicator.
 
-
+![Main menu](images/mainmenu.png)
 
 Upon finishing the game loading process and entering the main menu scene, the player can log into an existing account, create a new account, open settings, or quit the game. Pressing the Log In or Sign Up buttons opens a panel where the player can enter a username and password. Besides that we can see the quit game button and settings button.
 
 After pressing log in button or sign up button a panel like this will open:
 
-
+![Login screen](images/login.png)
 
 We can see here Username input field, Password input field, Log in/Sign up confirm button.
 
-
+![Logged in](images/play.png)
 
 After successfully logging in, the available buttons change to Play and Log Out. Pressing Play switches the game to the Base Scene, starting the game.
 
- Pressing settings button opens a panel:
+Pressing settings button opens a panel:
 
-
+![Settings screen](images/settings.png)
 
 Here the player can change fullscreen mode, resolution dropdown selection, music volume slider, SFX volume slider.
 
 Upon pressing play button in main menu scene, base scene opens:
 
-
+![Base scene screen](images/base.png)
 
 In the Base Scene, the player can manage equipment, inventory, and matchmaking. The player statistics panel is shown on the left side of the screen, while the player model is positioned in the middle. Equipment slots surrounding the player model are used for equipping items. The inventory grid is displayed on the right side of the screen. Above the inventory grid is the shop button. The menu button is located in the top-left corner, and the Join Combat button is placed in the bottom-right corner.
 
@@ -201,31 +199,29 @@ The inventory consists of item slots that can contain items. Each item is visual
 
 Hovering over an item displays additional information such as its name, level, and statistics.
 
-
+![Shop screen](images/shop.png)
 
 The shop can be opened using the shop button above the inventory. The shop appears as a panel over the current scene and displays a buy/sell item list. The player can switch between buying and selling modes using the mode switch button, which allows listing owned items for sale. When in sell mode, the player can adjust item selling options using the sell price selection. The shop can be closed using the close button.
 
-
+![Menu tab screen](images/tab.png)
 
 The menu button in the top-left corner opens another panel containing settings, a Back to Main Menu option, and a Quit Game option.
 
-
+![Queue screen](images/queue.png)
 
 Pressing the Join Combat button in the bottom-right corner places the player into the matchmaking queue. While waiting for an opponent, a queue panel is displayed showing queue status, and the player may leave the queue at any time using the Leave Queue button. Once another player is found, the game automatically switches to the Combat Scene.
 
-
+![Combat scene screen](images/combat.png)
 
 In the Combat Scene, the player model is displayed on the left side while the enemy is shown on the right side. Health bars above both characters display remaining health. The current turn is shown at the top-center of the screen. During the player’s turn, attack buttons appear at the bottom of the screen. The player may choose between a Heavy Attack, which deals more damage but has a higher chance to miss, or a Light Attack, which is weaker but has a higher chance of hitting. The menu button is also available during combat.
 
 Whenever damage is dealt, a damage number briefly appears near the affected character. Damage text disappears after a short time.
 
-
-
-
+![Combat end screen](images/combatend.png)
 
 Combat ends when one player’s health reaches zero. A result panel then appears showing whether the player won or lost the match. If the player wins, they receive an in-game currency reward, which is displayed in the panel. The player can then return to the Base Scene using the provided return button.
 
-
+![Combat menu screen](images/combattab.png)
 
 The Combat Scene also contains a menu button that opens the Combat Menu Panel, which includes a Settings button, a Leave Combat button, and a Quit Game button.
 
