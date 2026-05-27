@@ -15,7 +15,7 @@ public class FightSc : MonoBehaviour
 
     public Entity Player;
     public Entity Enemy;
-    public Canvas canvas;
+    public GameObject attackButtonsParent;
     public bool turn;
     public GameObject panel;
     [SerializeField] private TextMeshProUGUI endText;
@@ -101,7 +101,7 @@ public class FightSc : MonoBehaviour
 
     private void RefreshTurn()
     {
-        canvas.enabled = MatchSession.IsMyTurn;
+        attackButtonsParent.SetActive(MatchSession.IsMyTurn);
         if (MatchSession.IsMyTurn)
         {
             TurnText.text = "My turn!";
@@ -121,7 +121,7 @@ public class FightSc : MonoBehaviour
             return;
         }
         await QueueService.Connection.InvokeAsync("Attack", MatchSession.CurrentMatch.Id, attackType);
-        canvas.enabled = false;
+        attackButtonsParent.SetActive(false);
         Enemy.hasBeenDamged = !Enemy.hasBeenDamged;
     }
 
